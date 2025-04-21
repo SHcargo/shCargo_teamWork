@@ -1,19 +1,18 @@
 import mongoose from "mongoose";
-//schema buyu model gej nerlej bna
-//collection ==> table
-// cluster dotor => database ternii dotor => collection
+
 const usersSchema = new mongoose.Schema({
-  email: { type: String, require: true },
-  password: { type: String, require: true },
-  phoneNumber: { type: String, require: false },
-  address: { type: String, require: false },
+  email: { type: String, required: true },
+  password: { type: String, required: true },
+  phoneNumber: { type: String, required: true },
+  address: { type: String, required: false },
   role: {
     type: String,
-    require: true,
+    required: true,
     enum: ["USER", "ADMIN"],
     default: "USER",
   },
-  isVerified: { type: Boolean, require: false, default: false },
-  createAt: { type: Date, require: Date.now },
+  isVerified: { type: Boolean, required: false, default: false },
+  createAt: { type: Date, default: Date.now },
 });
+
 export const Users = mongoose.model("users", usersSchema);
