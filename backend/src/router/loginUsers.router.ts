@@ -1,4 +1,4 @@
 import express from "express";
-import { CreateUserController } from "../controller/signUp/CreateUser.controller";
-export const UserRouter = express.Router();
-UserRouter.post("/", CreateUserController);
+import { DeleteLoginUserController } from "../controller/login/DeleteUser.controller";
+export const UserLoginRouter = express.Router();
+UserLoginRouter.delete("/", DeleteLoginUserController);
