@@ -1,0 +1,62 @@
+import { Request, Response } from "express";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import { Users } from "../../model/users.model";
+
+export const PostLoginUserController = async (req: Request, res: Response) => {
+  const { phoneNumber, password } = req.body;
+
+  if (!phoneNumber || !password) {
+    res.status(400).json({
+      success: false,
+      message: "Phone number and password are required",
+    });
+    return;
+  }
+
+  try {
+    const userFound = await Users.findOne({ phoneNumber });
+
+    if (!userFound) {
+      res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+      return;
+    }
+
+    const isMatch = await bcrypt.compare(password, userFound.password);
+
+    if (!isMatch) {
+      res.status(401).json({
+        success: false,
+        message: "Incorrect password",
+      });
+      return;
+    }
+
+    const token = jwt.sign(
+      {
+        userId: userFound._id,
+        email: userFound.email,
+        phoneNumber: userFound.phoneNumber,
+      },
+      process.env.JWT_SECRET || "default_secret",
+      { expiresIn: "1h" }
+    );
+
+    const userData = userFound.toObject();
+
+    res.status(200).json({
+      success: true,
+      user: userData,
+      token,
+    });
+  } catch (error) {
+    console.error("Login error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+};
