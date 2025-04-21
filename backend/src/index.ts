@@ -1,6 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
-import { UserRouter } from "./router/loginUsers.router";
+import { UserSignUpRouter } from "./router/signUpUsers.router";
+import { UserLoginRouter } from "./router/loginUsers.router";
 
 require("dotenv").config();
 
@@ -21,10 +22,8 @@ const connectDb = () => {
 };
 connectDb();
 
-app.use("/login", UserRouter);
-app.get("/", (req, res) => {
-  res.send({ message: "hellooo" });
-});
+app.use("/signUp", UserSignUpRouter);
+app.use("/login", UserLoginRouter);
 
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
