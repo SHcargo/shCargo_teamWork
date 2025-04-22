@@ -3,6 +3,7 @@
 import { Home, LocationEdit, Truck, User } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import Link from "next/link";
 
 const NavBar = ({
   setStep,
@@ -35,13 +36,15 @@ const NavBar = ({
           <Truck stroke={step === "cargo" ? "#5F2DF5" : "white"} />
           Cargo
         </button>
-        <button
-          className="text-sm inline-flex flex-col items-center"
-          onClick={() => setStep("logIn")}
-        >
-          <User stroke={step === "logIn" ? "#5F2DF5" : "white"} />
-          Sign In
-        </button>
+        <Link href={"/logIn"}>
+          <button
+            className="text-sm inline-flex flex-col items-center"
+            onClick={() => setStep("logIn")}
+          >
+            <User stroke={step === "logIn" ? "#5F2DF5" : "white"} />
+            Sign In
+          </button>
+        </Link>
       </div>
     </div>
   );
