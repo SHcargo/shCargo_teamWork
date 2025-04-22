@@ -23,7 +23,7 @@ export default function Home() {
         {step === "logIn" && <Auth />}
       </div>
 
-      <NavBar setStep={setStep} />
+      <NavBar setStep={setStep} step={step} />
     </div>
   );
 }
