@@ -1,15 +1,50 @@
-import { ChevronRight } from "lucide-react";
-import Card from "../components/card";
+import {  Calculator, Lightbulb, LocationEdit, MapPinHouse, Paperclip, ShoppingCart, Truck } from "lucide-react";
+import InfoCard from "../components/card2";
+import { useRouter } from "next/navigation";
 
-const HomePage = () => {
+const HomePage = ({setStep} :{setStep : (value: string) => void} ) => {
+  const router = useRouter()
   return (
-    <div className="max-w-2xl w-full h-full bg-[#e9ecef] px-8 flex flex-col gap-1 justify-center">
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
+    <div className="max-w-2xl w-full h-full bg-[#e9ecef] px-8 flex flex-col gap-2 justify-center">
+      <InfoCard
+        icon={LocationEdit}
+        title="Хаяг Холбох"
+        subtitle="Хятад дахь 5 салбар"
+        onClick={() => setStep("location")}
+      />
+      <InfoCard
+        icon={Calculator}
+        title="Тээврийн Зардал"
+        subtitle="Тооцоолуур"
+        onClick={() => router.push('/calculate')}
+      />
+      <InfoCard
+        icon={Truck}
+        title="Гэрт Хүргэх"
+        subtitle="Таны гэрийн хаягт хүргэх"
+        onClick={() => router.push('/deliveries')} 
+      />
+      <InfoCard
+        icon={MapPinHouse}
+        title="SH Cargo Салбар"
+        subtitle="УБ дахь 11 салбар"
+        onClick={() => router.push('/contact')}
+      />
+      <InfoCard
+        icon={Lightbulb}
+        title=" Ашиглах Заавар"
+        subtitle="Заавар, тайлбар"
+      />
+      <InfoCard
+        icon={Paperclip}
+        title="Үйлчилгээ Нөхцөл"
+        subtitle="HiCargo журам"
+      />
+       <InfoCard
+        icon={ShoppingCart}
+        title="Үйлчилгээ Нөхцөл"
+        subtitle="HiCargo журам"
+      />
     </div>
   );
 };
