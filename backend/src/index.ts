@@ -2,6 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import { UserSignUpRouter } from "./router/signUpUsers.router";
 import { UserLoginRouter } from "./router/loginUsers.router";
+import { AdminViewRouter } from "./router/adminView.router";
 
 require("dotenv").config();
 
@@ -24,6 +25,7 @@ connectDb();
 
 app.use("/signUp", UserSignUpRouter);
 app.use("/login", UserLoginRouter);
+app.use("/adminView", AdminViewRouter);
 
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);

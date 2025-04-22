@@ -1,10 +1,15 @@
 import mongoose from "mongoose";
+const STATUS = ["PENDING", "CANCELLED", "DELIVERED"];
 
-const truckCodeSchema = new mongoose.Schema({
+const itemsOrderSchema = new mongoose.Schema({
   user: {
     type: mongoose.Types.ObjectId,
     required: true,
     ref: "users",
+  },
+  deliveryAddress: {
+    type: String,
+    required: true,
   },
   totalPrice: {
     type: Number,
@@ -12,28 +17,25 @@ const truckCodeSchema = new mongoose.Schema({
   },
   goodsItems: [
     {
-      item: { type: String, required: true },
+      item: { type: mongoose.Types.ObjectId, ref: "truckItems" },
       quantity: { type: Number, required: true, min: 1 },
     },
   ],
   status: {
     type: String,
-    enum: ["PENDING", "CANCELLED", "DELIVERED"],
+    enum: STATUS,
     required: true,
   },
   createdAt: {
     type: Date,
     default: Date.now,
   },
-  pendingAt: Date,
-  cancelledAt: Date,
-  deliveredAt: Date,
 
   statusHistory: [
     {
       status: {
         type: String,
-        enum: ["PENDING", "CANCELLED", "DELIVERED"],
+        enum: STATUS,
       },
       changedAt: {
         type: Date,
@@ -44,18 +46,18 @@ const truckCodeSchema = new mongoose.Schema({
 });
 
 // Pre-save hook to track status changes and timestamps
-truckCodeSchema.pre("save", function (next) {
+itemsOrderSchema.pre("save", function (next) {
   if (this.isModified("status")) {
     const now = new Date();
 
-    // Update the corresponding timestamp
-    if (this.status === "PENDING") {
-      this.pendingAt = now;
-    } else if (this.status === "CANCELLED") {
-      this.cancelledAt = now;
-    } else if (this.status === "DELIVERED") {
-      this.deliveredAt = now;
-    }
+    // // Update the corresponding timestamp
+    // if (this.status === "PENDING") {
+    //   this.pendingAt = now;
+    // } else if (this.status === "CANCELLED") {
+    //   this.cancelledAt = now;
+    // } else if (this.status === "DELIVERED") {
+    //   this.deliveredAt = now;
+    // }
 
     // Add to status history
     this.statusHistory.push({
@@ -67,4 +69,4 @@ truckCodeSchema.pre("save", function (next) {
   next();
 });
 
-export const TruckCode = mongoose.model("TruckCode", truckCodeSchema);
+export const ItemsOrder = mongoose.model("itemsOrder", itemsOrderSchema);
