@@ -38,8 +38,7 @@ export const PostLoginUserController = async (req: Request, res: Response) => {
     const token = jwt.sign(
       {
         userId: userFound._id,
-        email: userFound.email,
-        phoneNumber: userFound.phoneNumber,
+        role: userFound.role,
       },
       process.env.JWT_SECRET || "default_secret",
       { expiresIn: "1h" }
