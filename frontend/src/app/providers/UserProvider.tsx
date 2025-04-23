@@ -50,7 +50,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, []);
 
-  //   console.log("client", client);
+  console.log("client", client);
   return (
     <UserContext.Provider
       value={{
