@@ -36,6 +36,7 @@ const Register = () => {
               //   position: "top-right",
               //   autoClose: 5000,
               // });
+              router.push("/logIn");
               console.log("user created successfuly", response);
             } catch (error) {
               console.log("error in registration:", error);
