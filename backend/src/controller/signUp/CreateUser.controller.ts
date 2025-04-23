@@ -3,7 +3,7 @@ import { Users } from "../../model/users.model";
 import bcrypt from "bcryptjs";
 
 export const CreateUserController = async (req: Request, res: Response) => {
-  const { email, password, phoneNumber } = req.body;
+  const { email, password, phoneNumber, name } = req.body;
 
   if (!email || !password || !phoneNumber) {
     res.status(400).json({
@@ -20,6 +20,7 @@ export const CreateUserController = async (req: Request, res: Response) => {
       email,
       phoneNumber,
       password: hashedPassword,
+      name,
     });
     res.status(201).json({
       success: true,
