@@ -1,7 +1,12 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { ChevronRight } from "lucide-react";
+import {
+  ChevronRight,
+  LocateIcon,
+  LocationEdit,
+  LucideLocationEdit,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 
 const Location = () => {
@@ -15,6 +20,16 @@ const Location = () => {
           onClick={() => router.push(`/address/${number}`)}
         >
           Эрээн агуулах
+          <ChevronRight />
+        </Button>
+      </div>
+      <div className="p-4 space-y-3">
+        <p className="font-bold">Тусламж</p>
+        <Button
+          className="w-full h-12 bg-white text-black justify-between rounded-lg flex font-bold"
+          onClick={() => router.push(`/help/${number}`)}
+        >
+          Хятад хаяг холбох болон Трак бүртгүүлэх заавар бичлэг үзэх
           <ChevronRight />
         </Button>
       </div>

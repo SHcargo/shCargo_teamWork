@@ -2,8 +2,6 @@
 
 import { Home, LocationEdit, Truck, User } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import Link from "next/link";
 
 const NavBar = ({
   setStep,
@@ -12,6 +10,8 @@ const NavBar = ({
   setStep: (value: string) => void;
   step: string;
 }) => {
+  const router = useRouter();
+  const token = localStorage.getItem("token");
   return (
     <div className="w-screen flex justify-center absolute bottom-0 h-[100px]">
       <div className="max-w-2xl w-full  bg-[#11043B] shadow-md flex justify-around items-center ">
@@ -36,15 +36,16 @@ const NavBar = ({
           <Truck stroke={step === "cargo" ? "#5F2DF5" : "white"} />
           Cargo
         </button>
-        <Link href={"/logIn"}>
-          <button
-            className="text-sm inline-flex flex-col items-center"
-            onClick={() => setStep("logIn")}
-          >
-            <User stroke={step === "logIn" ? "#5F2DF5" : "white"} />
-            Sign In
-          </button>
-        </Link>
+        <button
+          className="text-sm inline-flex flex-col items-center"
+          onClick={() => {
+            if (token) setStep("profile");
+            if (!token) router.push("/logIn");
+          }}
+        >
+          <User stroke={step === "logIn" ? "#5F2DF5" : "white"} />
+          Sign In
+        </button>
       </div>
     </div>
   );
