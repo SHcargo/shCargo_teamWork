@@ -15,7 +15,7 @@ const deliveries = () => {
             <ChevronLeft color="#fff" />
           </button>
           <div className="flex-1 flex flex-col items-center">
-            <h2>Хүргэлтүүд</h2>
+            <h2>Захиалгын түүх</h2>
             <p className="text-gray-500">{"0"} ачаа</p>
           </div>
         </div>
@@ -24,16 +24,19 @@ const deliveries = () => {
             Бүгд
           </button>
           <button className="px-4 py-2 bg-white text-[#5F2DF5] rounded-lg">
-            Хүргэлтэнд бүртгэсэн
+          Хятад дотор (0)
           </button>
           <button className="px-4 py-2 bg-white text-[#5F2DF5] rounded-lg">
-            Бүгд
+          Төлбөр хүлээгдэж буй (0)
           </button>
           <button className="px-4 py-2 bg-white text-[#5F2DF5] rounded-lg">
-            Бүгд
+          Замдаа (0)
           </button>
           <button className="px-4 py-2 bg-white text-[#5F2DF5] rounded-lg">
-            Бүгд
+          Хүргэгдсэн (0)
+          </button>
+          <button>
+          Гэрт Хүргэх
           </button>
         </div>
       </div>
