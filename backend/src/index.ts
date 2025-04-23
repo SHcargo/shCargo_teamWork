@@ -1,5 +1,6 @@
 import express from "express";
 import mongoose from "mongoose";
+import cors from "cors";
 import { UserSignUpRouter } from "./router/signUpUsers.router";
 import { UserLoginRouter } from "./router/loginUsers.router";
 import { AdminViewRouter } from "./router/adminView.router";
@@ -7,9 +8,10 @@ import { AdminViewRouter } from "./router/adminView.router";
 require("dotenv").config();
 
 const app = express();
-const port = process.env.PORT || 8888;
+const port = process.env.PORT;
 
 app.use(express.json());
+app.use(cors());
 
 const connectDb = () => {
   try {

@@ -35,22 +35,26 @@ export const PostLoginUserController = async (req: Request, res: Response) => {
       return;
     }
 
+    const decodePassword = "123";
+
     const token = jwt.sign(
       {
-        userId: userFound._id,
-        role: userFound.role,
+        userId: userFound?._id,
+        role: userFound?.role,
+        phoneNumber: userFound?.phoneNumber,
+        name: userFound?.name,
       },
-      process.env.JWT_SECRET || "default_secret",
-      { expiresIn: "1h" }
+      decodePassword,
+      { expiresIn: "2 days" }
     );
-
-    const userData = userFound.toObject();
 
     res.status(200).json({
       success: true,
-      user: userData,
-      token,
+      message: "Logged in successfully",
+      token: token,
     });
+
+    return;
   } catch (error) {
     console.error("Login error:", error);
     res.status(500).json({
