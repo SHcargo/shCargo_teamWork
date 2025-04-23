@@ -20,9 +20,9 @@ const HomePage = ({setStep} :{setStep : (value: string) => void} ) => {
       />
       <InfoCard
         icon={Truck}
-        title="Гэрт Хүргэх"
-        subtitle="Таны гэрийн хаягт хүргэх"
-        onClick={() => router.push('/deliveries')} 
+        title="Миний захиалга"
+        subtitle=""
+        onClick={() => setStep('cargo')} 
       />
       <InfoCard
         icon={MapPinHouse}
