@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 const HomePage = ({setStep} :{setStep : (value: string) => void} ) => {
   const router = useRouter()
   return (
-    <div className="max-w-2xl w-full h-full bg-[#e9ecef] px-8 flex flex-col gap-2 justify-center">
+    <div className="max-w-2xl w-full h-full bg-[#e9ecef] p-8 flex flex-col gap-2 items-center">
       <InfoCard
         icon={LocationEdit}
         title="Хаяг Холбох"
@@ -27,23 +27,20 @@ const HomePage = ({setStep} :{setStep : (value: string) => void} ) => {
       <InfoCard
         icon={MapPinHouse}
         title="SH Cargo Салбар"
-        subtitle="УБ дахь 11 салбар"
+        subtitle="УБ дахь 2 салбар"
         onClick={() => router.push('/contact')}
       />
       <InfoCard
         icon={Lightbulb}
-        title=" Ашиглах Заавар"
+        title="Ашиглах Заавар"
         subtitle="Заавар, тайлбар"
+        onClick={() => router.push('/guide')}
       />
       <InfoCard
         icon={Paperclip}
         title="Үйлчилгээ Нөхцөл"
         subtitle="HiCargo журам"
-      />
-       <InfoCard
-        icon={ShoppingCart}
-        title="Үйлчилгээ Нөхцөл"
-        subtitle="HiCargo журам"
+        onClick={() => router.push('/terms-conditions')}
       />
     </div>
   );
