@@ -2,24 +2,17 @@ import mongoose from "mongoose";
 const STATUS = ["Бүртгэсэн", "Замдаа", "УБ-д ирсэн", "Хаагдсан"];
 
 const itemsOrderSchema = new mongoose.Schema({
-  user: {
+  userId: {
     type: mongoose.Types.ObjectId,
     required: true,
     ref: "users",
   },
-  deliveryAddress: {
-    type: String,
-    required: true,
-  },
-  totalPrice: {
-    type: Number,
-    required: true,
-  },
   goodsItems: [
     {
-      item: { type: mongoose.Types.ObjectId, ref: "orderItems" },
+      item: { type: String, require: false },
       quantity: { type: Number, required: true, min: 1 },
       image: { type: String, require: false },
+      price: { type: Number, require: false },
     },
   ],
   status: {

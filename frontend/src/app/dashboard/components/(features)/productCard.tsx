@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Select,
@@ -8,6 +8,7 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import axios from "axios";
 
 const mockOrders = Array.from({ length: 32 }, (_, i) => ({
   id: i + 1,
@@ -26,7 +27,22 @@ const statuses = ["Pending", "Delivered", "Cancelled"];
 
 export default function DataTableDemo() {
   const [page, setPage] = useState(1);
+  const [users, setUsers] = useState([]);
   const itemsPerPage = 10;
+  const usersFetching = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/adminView`
+      );
+      setUsers(response.data);
+      console.log("Got Users:", response.data);
+    } catch (error) {
+      console.error("Error submitting tracking number:", error);
+    }
+  };
+  useEffect(() => {
+    usersFetching();
+  }, []);
 
   const paginatedOrders = mockOrders.slice(
     (page - 1) * itemsPerPage,
@@ -56,47 +72,24 @@ export default function DataTableDemo() {
           </tr>
         </thead>
         <tbody>
-          {paginatedOrders.map((order) => (
-            <tr key={order.id} className="border-b">
-              <td className="p-2">1</td>
-              <td className="p-2">{order.customer}</td>
-              <td className="p-2">
-                <details>
-                  <summary>{order.foods.length} foods</summary>
-                  <ul className="ml-4 mt-2">
-                    {order.foods.map((food, index) => (
-                      <li key={index}>
-                        {food.name} x{food.quantity}
-                      </li>
-                    ))}
-                  </ul>
-                </details>
-              </td>
-              <td className="p-2">{order.date}</td>
-              <td className="p-2 truncate max-w-[250px]">{order.address}</td>
-              <td className="p-2">
-                <Select defaultValue={order.status}>
-                  <SelectTrigger
-                    className={`w-32 ${
-                      order.status === "Pending"
-                        ? "border-red-500 text-red-500"
-                        : order.status === "Delivered"
-                        ? "border-green-500 text-green-500"
-                        : "border-gray-500 text-gray-500"
-                    }`}
-                  >
-                    {order.status}
-                  </SelectTrigger>
-                  <SelectContent>
-                    {statuses.map((status) => (
-                      <SelectItem key={status} value={status}>
-                        {status}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </td>
-            </tr>
+          {users.map((el, index) => (
+            <details>
+              <summary>{el.number}1</summary>
+              <ul className="ml-4 mt-2">
+                {/* {el.truckItems.map((el, index) => (
+                  <li key={index}>
+                    {el.items}x{el.quantity}
+                  </li>
+                ))} */}
+              </ul>
+              <tr key={index} className="border-b">
+                <td className="p-2">1</td>
+                <td className="p-2">{el.PhoneNumber}</td>
+                <td className="p-2">{el.createdAt}</td>
+                <td className="p-2 truncate max-w-[250px]">{el.address}</td>
+                <td className="p-2">{el.status}</td>
+              </tr>
+            </details>
           ))}
         </tbody>
       </table>
