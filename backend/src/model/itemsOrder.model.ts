@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-const STATUS = ["PENDING", "CANCELLED", "DELIVERED"];
+const STATUS = ["Бүртгэсэн", "Замдаа", "УБ-д ирсэн", "Хаагдсан"];
 
 const itemsOrderSchema = new mongoose.Schema({
   user: {
