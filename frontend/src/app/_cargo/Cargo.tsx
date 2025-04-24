@@ -1,8 +1,10 @@
 "use client";
+
 import { useRouter } from "next/navigation";
 import Post from "../components/post";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { UserOrderCard } from "../components/userOrderCard";
+import axios from "axios";
 
 const Cargo = () => {
   const [activeCategory, setActiveCategory] = useState("Бүгд");
