@@ -1,14 +1,39 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { useUser } from "../providers/UserProvider";
 
 export const Post = () => {
   const [select, setSelect] = useState(true);
+  const [trackingNumber, setTrackingNumber] = useState("");
+  const { userId } = useUser();
 
   const handleSelect = () => {
-    if (select) setSelect(false);
+    setSelect(false);
   };
 
   const handleBack = () => {
     setSelect(true);
+    setTrackingNumber("");
+  };
+
+  const handleSubmitTracking = async () => {
+    if (!trackingNumber) return;
+
+    try {
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/truckItems`,
+        {
+          userId,
+          trackingNumber,
+        }
+      );
+
+      console.log("Submitted tracking:", response.data);
+      // You can also reset or show success UI
+      handleBack();
+    } catch (error) {
+      console.error("Error submitting tracking number:", error);
+    }
   };
 
   return (
@@ -16,39 +41,47 @@ export const Post = () => {
       {/* Left Panel */}
       <div
         className={`bg-gray-100 p-4 rounded-xl border border-gray-200 cursor-pointer transform transition-all duration-500 ease-in-out ${
-          select ? "w-1/2" : "w-full translate-x-0"
+          select ? "w-1/2" : "w-full"
         }`}
-        onClick={handleSelect}
+        onClick={select ? handleSelect : undefined}
       >
-        <p className="text-sm font-semibold text-red-600 flex justify-between items-center">Илгээмж бүртгэх <button className={`text-gray-400 text-xl ${select ? "block" : "hidden"}`}>›</button></p>
-        
-        <div
-          className={`items-center mt-2 transition-all duration-500 ease-in-out ${
-            select ? "opacity-0 h-0 overflow-hidden" : "opacity-100 h-auto flex"
-          }`}
-        >
-          <span className="text-gray-500 mr-2">📦</span>
-          <input
-            type="text"
-            placeholder="Илгээмжийн дугаар бичих"
-            className="flex-1 p-2 border border-gray-300 rounded-lg text-gray-700"
-          />
-          <button
-            className="ml-2 px-3 py-2 bg-red-500 text-white rounded-lg"
-            onClick={handleBack}
-          >
-            ➤
-          </button>
-        </div>
+        <p className="text-sm font-semibold text-red-600 flex justify-between items-center">
+          Илгээмж бүртгэх
+          {select && <button className="text-gray-400 text-xl">›</button>}
+        </p>
+
+        {/* Input Form */}
+        {!select && (
+          <div className="items-center mt-2 flex transition-all duration-500">
+            <span className="text-gray-500 mr-2">📦</span>
+            <input
+              type="text"
+              value={trackingNumber}
+              onChange={(e) => setTrackingNumber(e.target.value)}
+              placeholder="Илгээмжийн дугаар бичих"
+              className="flex-1 p-2 border border-gray-300 rounded-lg text-gray-700"
+            />
+            <button
+              className="ml-2 px-3 py-2 bg-red-500 text-white rounded-lg"
+              onClick={handleSubmitTracking}
+            >
+              ➤
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Right Panel */}
       <div
-        className={`bg-red-100 p-4 rounded-xl transform transition-all duration-500 ease-in-out ${
-          select ? "w-1/2 opacity-100 translate-x-0 flex" : "w-0 opacity-0 translate-x-4 hidden"
+        className={`bg-red-100 p-4 rounded-xl transition-all duration-500 ease-in-out ${
+          select
+            ? "w-1/2 opacity-100 translate-x-0 flex"
+            : "w-0 opacity-0 translate-x-4 hidden"
         } items-center justify-between`}
       >
-        <span className="text-red-600 font-semibold text-lg">📍 Хүргэлтүүд</span>
+        <span className="text-red-600 font-semibold text-lg">
+          📍 Хүргэлтүүд
+        </span>
         <button className="text-gray-400 text-xl">›</button>
       </div>
     </div>
