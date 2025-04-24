@@ -20,38 +20,38 @@ const NavBar = ({
   }, []);
 
   return (
-    <div className="w-screen flex justify-center absolute bottom-0 h-[100px]">
-      <div className="max-w-2xl w-full  bg-[#11043B] shadow-md flex justify-around items-center ">
+    <div className="w-screen flex justify-center fixed bottom-0 h-[70px] z-50">
+      <div className="max-w-2xl w-full bg-[#11043B] shadow-md flex justify-around items-center">
         <button
-          className={`text-sm inline-flex flex-col items-center `}
+          className="text-xs flex flex-col items-center"
           onClick={() => setStep("home")}
         >
-          <Home stroke={step === "home" ? "#5F2DF5" : "white"} />
-          Home
+          <Home stroke={step === "home" ? "#5F2DF5" : "white"} size={20} />
+          <span className="mt-1 text-[#5F2DF5]">Home</span>
         </button>
         <button
-          className="text-sm inline-flex flex-col items-center"
+          className="text-xs flex flex-col items-center"
           onClick={() => setStep("location")}
         >
-          <LocationEdit stroke={step === "location" ? "#5F2DF5" : "white"} />
-          Location
+          <LocationEdit stroke={step === "location" ? "#5F2DF5" : "white"} size={20} />
+          <span className="mt-1 text-[#5F2DF5]">Location</span>
         </button>
         <button
-          className="text-sm inline-flex flex-col items-center"
+          className="text-xs flex flex-col items-center"
           onClick={() => setStep("cargo")}
         >
-          <Truck stroke={step === "cargo" ? "#5F2DF5" : "white"} />
-          Cargo
+          <Truck stroke={step === "cargo" ? "#5F2DF5" : "white"} size={20} />
+          <span className="mt-1 text-[#5F2DF5]">Cargo</span>
         </button>
         <button
-          className="text-sm inline-flex flex-col items-center"
+          className="text-xs flex flex-col items-center"
           onClick={() => {
             if (token) setStep("profile");
-            if (!token) router.push("/logIn");
+            else router.push("/logIn");
           }}
         >
-          <User stroke={step === "logIn" ? "#5F2DF5" : "white"} />
-          Sign In
+          <User stroke={step === "logIn" ? "#5F2DF5" : "white"} size={20} />
+          <span className="mt-1 text-[#5F2DF5]">Sign In</span>
         </button>
       </div>
     </div>

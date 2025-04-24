@@ -13,3 +13,9 @@
     }
   };
   
+type orderProps = {
+  id: number,
+  status: string,
+  description: string,
+  count: number,
+}
