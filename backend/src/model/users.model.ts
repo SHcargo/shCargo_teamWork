@@ -6,6 +6,12 @@ const usersSchema = new mongoose.Schema({
   password: { type: String, required: true },
   phoneNumber: { type: String, required: true },
   address: { type: String, default: "irj awna" },
+  deliveryAddresses: [
+    {
+      type: mongoose.Types.ObjectId,
+      ref: "deliveryAddress",
+    },
+  ],
 
   truckCodeItem: [
     {

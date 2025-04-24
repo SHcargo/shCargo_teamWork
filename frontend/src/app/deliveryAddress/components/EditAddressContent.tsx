@@ -5,9 +5,8 @@ import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import SelectField from "./SelectField";
 import TextareaField from "./TextAreaField";
-
+import { useEffect } from "react";
 import {
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogHeader,
@@ -19,6 +18,7 @@ import { Check } from "lucide-react";
 import { districts } from "../utils/address";
 import { useUser } from "@/app/providers/UserProvider";
 import { useDeliveryAddress } from "@/app/providers/DeliveryAddressProvider";
+import EditField from "./EditField";
 
 type DistrictKey = keyof typeof districts;
 
@@ -29,37 +29,51 @@ const validationSchema = Yup.object({
   detail: Yup.string().required("Дэлгэрэнгүй мэдээлэл шаардлагатай"),
 });
 
-const AddAddressContent = () => {
+const EditAddressContent = ({
+  selectedAddress,
+}: {
+  selectedAddress: string;
+}) => {
   const [selectedDistrict, setSelectedDistrict] = useState<DistrictKey | "">(
     ""
   );
   const { userId } = useUser();
-  const { fetchAddresses } = useDeliveryAddress();
+  const { addresses, fetchAddresses } = useDeliveryAddress();
+
+  const filtered = addresses.filter(
+    (address) => address._id === selectedAddress
+  );
+
+  useEffect(() => {
+    if (filtered[0]?.district) {
+      setSelectedDistrict(filtered[0].district as DistrictKey);
+    }
+  }, [filtered]);
 
   return (
     <DialogContent>
       <DialogHeader>
         <DialogTitle className="flex flex-col gap-2">
-          <p>Шинэ хаяг бүртгэх</p>
+          <p>Хаяг шинэчлэх</p>
           <p className="text-[14px] text-gray-400">
-            Доорх мэдээллийг бөглөнө үү
+            Доорх мэдээллийг шинэчилнэ үү
           </p>
         </DialogTitle>
         <DialogDescription />
 
         <Formik
           initialValues={{
-            city: "",
-            district: "",
-            khoroo: "",
-            detail: "",
+            city: filtered[0]?.city,
+            district: filtered[0]?.district,
+            khoroo: filtered[0]?.khoroo,
+            detail: filtered[0]?.detail,
             userId: userId,
           }}
           validationSchema={validationSchema}
           onSubmit={async (values) => {
             try {
-              const response = await axios.post(
-                `${process.env.NEXT_PUBLIC_BASE_URL}/deliveryAddress/${userId}`,
+              const response = await axios.put(
+                `${process.env.NEXT_PUBLIC_BASE_URL}/deliveryAddress/${userId}/${selectedAddress}`,
                 {
                   city: values.city,
                   district: values.district,
@@ -69,7 +83,7 @@ const AddAddressContent = () => {
               );
               fetchAddresses();
               console.log(
-                "Delivery address created successfully",
+                "Delivery address updated successfully",
                 response.data
               );
             } catch (error) {
@@ -84,6 +98,7 @@ const AddAddressContent = () => {
                 label="Хот / Аймаг"
                 placeholder="Хот сонгох"
                 options={["Улаанбаатар"]}
+                value={values.city}
               />
 
               <SelectField
@@ -96,6 +111,7 @@ const AddAddressContent = () => {
                   setFieldValue("khoroo", "");
                   setSelectedDistrict(value as DistrictKey);
                 }}
+                value={values.district}
               />
 
               <SelectField
@@ -112,6 +128,7 @@ const AddAddressContent = () => {
                 label="Дэлгэрэнгүй мэдээлэл (Хотхон, Баяр, Орц, Орцны код, Давхар, Тоот)"
                 placeholder="Дэлгэрэнгүй мэдээллээ оруулна уу"
               />
+
               <button
                 type="submit"
                 className="bg-[#5F2DF5] flex px-1 py-2.5 items-center justify-center gap-2 rounded-lg"
@@ -127,4 +144,4 @@ const AddAddressContent = () => {
   );
 };
 
-export default AddAddressContent;
+export default EditAddressContent;
