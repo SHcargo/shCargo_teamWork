@@ -29,7 +29,6 @@ export const Post = () => {
       );
 
       console.log("Submitted tracking:", response.data);
-      // You can also reset or show success UI
       handleBack();
     } catch (error) {
       console.error("Error submitting tracking number:", error);

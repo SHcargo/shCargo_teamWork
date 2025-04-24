@@ -1,7 +1,6 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { DataTableDemo } from "../components/(features)/productCard";
 
 const SalesProducts = ({ setStep }: { setStep: (value: string) => void }) => {
   const router = useRouter();

@@ -1,39 +1,51 @@
-import { Request, Response } from "express";
 import { ItemsOrder } from "../../model/truckOrders.model";
 import { Users } from "../../model/users.model";
-
+import { Request, Response } from "express";
 export const TruckItemsController = async (req: Request, res: Response) => {
-  const { _id, userId } = req.body;
-
+  const { userId, trackingNumber } = req.body;
   try {
-    if (!_id || !userId) {
-      res
-        .status(400)
-        .json({ message: "_id, userId, and trackingNumber are required." });
+    if (!userId) {
+      res.status(400).json({ message: "userId is required." });
       return;
     }
-    const order = await ItemsOrder.findById(_id).populate("goodsItems.item");
-
-    if (!order) {
-      res.status(404).json({ message: "Order not found." });
-      return;
-    }
-    const trackItem = await ItemsOrder.create({ userId });
-    await Users.findByIdAndUpdate(
+    const orders = await ItemsOrder.find({ userId });
+    const newTrackItem = await ItemsOrder.create({
       userId,
-      { $push: { truckCodeItem: trackItem._id } },
+      trackingNumber,
+      status: "Бүртгэсэн",
+      goodsItems: [
+        {
+          item: trackingNumber,
+          quantity: 1,
+        },
+      ],
+    });
+
+    const updatedUser = await Users.findByIdAndUpdate(
+      userId,
+      {
+        $push: {
+          truckCodeItem: {
+            item: newTrackItem._id,
+            quantity: 1,
+          },
+        },
+      },
       { new: true }
     );
-
     res.status(200).json({
-      message: "Order fetched and tracking item added successfully.",
-      order,
-      trackItem,
+      message: "Tracking item added successfully.",
+      newTrackItem,
+      orders,
+      updatedUser,
     });
     return;
   } catch (error) {
     console.error("Error in TruckItemsController:", error);
-    res.status(500).json({ message: "Internal server error." });
+    res.status(500).json({
+      message: "Internal server error.",
+      error: error instanceof Error ? error.message : error,
+    });
     return;
   }
 };
