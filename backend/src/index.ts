@@ -4,6 +4,7 @@ import cors from "cors";
 import { UserSignUpRouter } from "./router/signUpUsers.router";
 import { UserLoginRouter } from "./router/loginUsers.router";
 import { AdminViewRouter } from "./router/adminView.router";
+import { LocationRouter } from "./router/location.router";
 
 require("dotenv").config();
 
@@ -28,6 +29,7 @@ connectDb();
 app.use("/signUp", UserSignUpRouter);
 app.use("/login", UserLoginRouter);
 app.use("/adminView", AdminViewRouter);
+app.use("/location", LocationRouter);
 
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
