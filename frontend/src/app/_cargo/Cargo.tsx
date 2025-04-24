@@ -8,8 +8,19 @@ import axios from "axios";
 
 const Cargo = () => {
   const [activeCategory, setActiveCategory] = useState("Бүгд");
+  const [loading, isLoading] = useState(false);
 
   const categories = ["Бүгд", "Бүртгэсэн", "Замдаа", "УБ-д ирсэн", "Хаагдсан"];
+  const getCargoOrderItems = () => {
+    isLoading(true);
+    try {
+      const res = axios.get("api");
+    } catch (error) {
+      console.log("Cargo data error", error);
+    } finally {
+      isLoading(false);
+    }
+  };
 
   const deliveryCounts: Record<string, number> = {
     Бүгд: 10,
@@ -56,15 +67,17 @@ const Cargo = () => {
       : orders.filter((order) => order.status === activeCategory);
 
   return (
-    <div className="max-w-2xl w-full mx-auto p-4 bg-white shadow-md space-y-4 h-screen overflow-hidden">
-      <Post />
+    <div className="flex flex-col h-screen w-full max-w-2xl mx-auto p-4 bg-white overflow-hidden">
+      <div className="flex-shrink-0">
+        <Post />
+      </div>
 
-      <div className="mt-4 flex flex-wrap gap-4">
+      <div className="mt-4 flex gap-2 w-full overflow-x-auto">
         {categories.map((category) => (
           <button
             key={category}
             onClick={() => handleCategoryClick(category)}
-            className={`px-4 py-2 rounded-lg transition-all text-sm ${
+            className={` min-h-12 px-8 rounded-lg text-xs transition-all ${
               activeCategory === category
                 ? "bg-[#5F2DF5] text-white"
                 : "bg-gray-100 text-[#5F2DF5]"
@@ -75,7 +88,7 @@ const Cargo = () => {
         ))}
       </div>
 
-      <div className="space-y-4 overflow-y-auto h-6/12 bg-gray-50 rounded-xl p-2 shadow-inner">
+      <div className="flex-1 overflow-y-auto mt-4 bg-gray-50 rounded-xl p-2 shadow-inner mb-4">
         {filteredOrders.map((order) => (
           <UserOrderCard
             key={order.id}
@@ -83,6 +96,7 @@ const Cargo = () => {
             description={order.description}
           />
         ))}
+        <div className="h-10"></div>
       </div>
     </div>
   );
