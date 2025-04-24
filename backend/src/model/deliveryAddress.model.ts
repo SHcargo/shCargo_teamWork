@@ -1,12 +1,13 @@
 import mongoose from "mongoose";
 
 const deliveryAddressSchema = new mongoose.Schema({
-  province: { type: String, required: true },
+  city: { type: String, required: true },
   district: { type: String, required: true },
-  subdistrict: { type: String, required: true },
-  detailed: { type: String, required: true },
+  khoroo: { type: String, required: true },
+  detail: { type: String, required: true },
   isVerified: { type: Boolean, default: false },
   createdAt: { type: Date, default: Date.now },
+  userId: { type: String, required: true },
 });
 
 export const deliveryAddress = mongoose.model(

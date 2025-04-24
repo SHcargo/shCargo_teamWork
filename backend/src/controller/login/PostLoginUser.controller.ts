@@ -25,7 +25,10 @@ export const PostLoginUserController = async (req: Request, res: Response) => {
       return;
     }
 
-    const isMatch = await bcrypt.compare(password, userFound.password);
+    const isMatch = await bcrypt.compare(
+      password,
+      userFound.password as string
+    );
 
     if (!isMatch) {
       res.status(401).json({

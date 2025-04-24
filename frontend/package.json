@@ -27,7 +27,8 @@
     "react-jwt": "^1.3.0",
     "react-search-input": "^0.11.3",
     "tailwind-merge": "^3.2.0",
-    "tw-animate-css": "^1.2.8"
+    "tw-animate-css": "^1.2.8",
+    "yup": "^1.6.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

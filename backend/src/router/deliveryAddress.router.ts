@@ -1,0 +1,10 @@
+import express from "express";
+import createDeliveryAddress from "../controller/deliveryAddress/createDeliveryAddress.controller";
+import getDeliveryAddress from "../controller/deliveryAddress/getDeliveryAddress.controller";
+import { updateDeliveryAddress } from "../controller/deliveryAddress/updateDeliveryAddress.controller";
+import { deleteDeliveryAddress } from "../controller/deliveryAddress/deleteDeliveryAddress.controller";
+export const DeliveryAddressRouter = express.Router();
+DeliveryAddressRouter.get("/:userId", getDeliveryAddress);
+DeliveryAddressRouter.post("/:userId", createDeliveryAddress);
+DeliveryAddressRouter.put("/:userId/:addressId", updateDeliveryAddress);
+DeliveryAddressRouter.delete("/:userId/:addressId", deleteDeliveryAddress);
