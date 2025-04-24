@@ -25,9 +25,12 @@ export const UserOrderCard = ({
       </div>
       <p className="text-sm text-gray-500 mt-1">{description}</p>
       <p className="text-xl font-bold text-gray-800">{count} ачаа</p>
+      <div className="flex">
+        <button  className="mt-3 px-4 py-2 bg-gray-400 text-white rounded-lg w-full">Салбараас авах</button>
       <button className="mt-3 px-4 py-2 bg-gray-400 text-white rounded-lg w-full">
         🚚 Хүргүүлэх
       </button>
+      </div>
     </div>
   );
 };
