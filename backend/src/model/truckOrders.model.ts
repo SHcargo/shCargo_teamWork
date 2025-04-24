@@ -17,8 +17,9 @@ const itemsOrderSchema = new mongoose.Schema({
   },
   goodsItems: [
     {
-      item: { type: mongoose.Types.ObjectId, ref: "truckItems" },
+      item: { type: mongoose.Types.ObjectId, ref: "orderItems" },
       quantity: { type: Number, required: true, min: 1 },
+      image: { type: String, require: false },
     },
   ],
   status: {

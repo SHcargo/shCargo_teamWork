@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { ItemsOrder } from "../../model/itemsOrder.model";
+import { ItemsOrder } from "../../model/truckOrders.model";
 
 export const GetUsersToAdmin = async (req: Request, res: Response) => {
   //   const { _id } = req.body;
