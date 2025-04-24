@@ -3,7 +3,7 @@ import { FileCheck, Truck, MapPin, FileX } from "lucide-react";
 
 const Delivery = () => {
   return (
-    <div className="w-full h-auto flex flex-col gap-6 bg-white rounded-lg p-4">
+    <div className="w-full h-auto flex flex-col gap-4 bg-white rounded-lg p-4">
       <div className="flex gap-2">
         <LucideBoxes />
         <p className="font-medium">Карго</p>
