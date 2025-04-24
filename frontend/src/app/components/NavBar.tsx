@@ -2,6 +2,7 @@
 
 import { Home, LocationEdit, Truck, User } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
 
 const NavBar = ({
   setStep,
@@ -11,7 +12,13 @@ const NavBar = ({
   step: string;
 }) => {
   const router = useRouter();
-  const token = localStorage.getItem("token");
+  const [token, setToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem("token");
+    setToken(storedToken);
+  }, []);
+
   return (
     <div className="w-screen flex justify-center absolute bottom-0 h-[100px]">
       <div className="max-w-2xl w-full  bg-[#11043B] shadow-md flex justify-around items-center ">
