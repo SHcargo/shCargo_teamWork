@@ -5,6 +5,8 @@ import { UserSignUpRouter } from "./router/signUpUsers.router";
 import { UserLoginRouter } from "./router/loginUsers.router";
 import { AdminViewRouter } from "./router/adminView.router";
 import { LocationRouter } from "./router/location.router";
+import { OrderItemRouter } from "./router/orderItem.router";
+import { TruckOrdersRouter } from "./router/truckOrder.router";
 
 require("dotenv").config();
 
@@ -28,6 +30,8 @@ connectDb();
 
 app.use("/signUp", UserSignUpRouter);
 app.use("/login", UserLoginRouter);
+app.use("/orderitem", OrderItemRouter);
+app.use("/truckItems", TruckOrdersRouter);
 app.use("/adminView", AdminViewRouter);
 app.use("/location", LocationRouter);
 
