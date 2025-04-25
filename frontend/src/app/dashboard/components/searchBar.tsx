@@ -1,6 +1,6 @@
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
-import { Search, Star, Tag, ChevronDown } from "lucide-react";
+import { Search, Tag, ChevronDown } from "lucide-react";
 
 export const SearchBar = () => {
   const searchParams = useSearchParams();

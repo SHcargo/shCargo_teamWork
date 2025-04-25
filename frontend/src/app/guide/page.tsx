@@ -12,7 +12,7 @@ import {
 import { useRouter } from "next/navigation";
 import InfoCard from "../components/card2";
 
-const help = () => {
+const Help = () => {
   const router = useRouter();
 
   const sections = [
@@ -91,4 +91,4 @@ const help = () => {
   );
 };
 
-export default help;
+export default Help;

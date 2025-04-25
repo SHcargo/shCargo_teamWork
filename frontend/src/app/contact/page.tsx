@@ -5,23 +5,20 @@ import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-
 const Contact = () => {
   const router = useRouter();
   const [branch, setBranch] = useState<posterProps[]>([]);
-  const [loading , setLoading] = useState(true)
-  const branchData = ( ) =>{
-    setLoading(false)
-    try{
-const response = axios.get('')
-      
-    }
-    catch(error){
-console.log(error)
-    }finally{
-      setLoading(true)
-    }
-  }
+  // const [loading , setLoading] = useState(true)
+  // const branchData = () => {
+  //   // setLoading(false);
+  //   try {
+  //     const response = axios.get("");
+  //   } catch (error) {
+  //     console.log(error);
+  //   } finally {
+  //     // setLoading(true);
+  //   }
+  // };
 
   useEffect(() => {
     const dummyData: posterProps[] = [
@@ -47,7 +44,6 @@ console.log(error)
   return (
     <div className="w-screen h-screen flex items-center justify-center">
       <div className="max-w-2xl w-full h-full bg-[#e9ecef] p-4 flex flex-col gap-2 ">
-  
         <div className="flex gap-4 mb-4">
           <button
             onClick={() => router.back()}

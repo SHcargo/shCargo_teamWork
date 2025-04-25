@@ -1,7 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { TermsofConditionsCard } from "../components/TermsofConditionsCard";
-import { ChevronLeft, NotebookText, StickyNoteIcon } from "lucide-react";
+import { ChevronLeft, NotebookText } from "lucide-react";
 
 const Home = () => {
   const router = useRouter();

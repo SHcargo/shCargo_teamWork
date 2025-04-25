@@ -1,12 +1,12 @@
 "use client";
-import axios from "axios";
-import { useParams } from "next/navigation";
+// import axios from "axios";
+// import { useParams } from "next/navigation";
 
 const vidoe = () => {
-  const { number } = useParams<{ number: string }>();
-  const videoReplace = (number : string) => {
-const response = axios.get(`${number}`)
-  }
+  // const { number } = useParams<{ number: string }>();
+  // const videoReplace = (number: string) => {
+  //   const response = axios.get(`${number}`);
+  // };
   return (
     <div>
       <iframe
@@ -15,9 +15,7 @@ const response = axios.get(`${number}`)
         frameBorder="0"
         allowFullScreen
       ></iframe>
-   
     </div>
-
   );
 };
 export default vidoe;

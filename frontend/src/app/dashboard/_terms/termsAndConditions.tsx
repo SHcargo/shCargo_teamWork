@@ -1,10 +1,5 @@
 import { useRouter } from "next/navigation";
-const TermsAndConditions = ({
-  setStep,
-}: {
-  setStep: (value: string) => void;
-}) => {
-  const router = useRouter();
+const TermsAndConditions = () => {
   return <div>123123</div>;
 };
 export default TermsAndConditions;

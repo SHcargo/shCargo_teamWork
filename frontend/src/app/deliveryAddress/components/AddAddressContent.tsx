@@ -7,7 +7,6 @@ import SelectField from "./SelectField";
 import TextareaField from "./TextAreaField";
 
 import {
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogHeader,

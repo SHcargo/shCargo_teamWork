@@ -1,12 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import {
-  ChevronRight,
-  LocateIcon,
-  LocationEdit,
-  LucideLocationEdit,
-} from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 const Location = () => {

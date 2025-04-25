@@ -1,10 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-
-const PriceAddCards = ({ setStep }: { setStep: (value: string) => void }) => {
-  const router = useRouter();
-
+const PriceAddCards = () => {
   // You can navigate like this:
   // router.push('/some-route');
 

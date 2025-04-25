@@ -4,7 +4,7 @@ interface SetpOneProps {
   setStep: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const SetpFourth: React.FC<SetpOneProps> = ({ setStep }) => {
+const SetpFourth: React.FC<SetpOneProps> = () => {
   return <div>irsen</div>;
 };
 
