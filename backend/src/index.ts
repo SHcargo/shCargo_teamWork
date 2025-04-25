@@ -7,6 +7,7 @@ import { AdminViewRouter } from "./router/adminView.router";
 import { LocationRouter } from "./router/location.router";
 import { TruckOrdersRouter } from "./router/truckOrder.router";
 import { DeliveryAddressRouter } from "./router/deliveryAddress.router";
+import { UserRouter } from "./router/user.router";
 
 require("dotenv").config();
 
@@ -34,6 +35,7 @@ app.use("/truckItems", TruckOrdersRouter);
 app.use("/adminView", AdminViewRouter);
 app.use("/location", LocationRouter);
 app.use("/deliveryAddress", DeliveryAddressRouter);
+app.use("user", UserRouter);
 
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
