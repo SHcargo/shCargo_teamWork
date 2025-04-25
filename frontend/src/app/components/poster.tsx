@@ -1,12 +1,17 @@
+import Image from "next/image"; // Import Image from next/image
 import { Clock, PhoneCall } from "lucide-react";
 
 export const Poster = ({ data }: posterProps) => {
   return (
     <div className="w-full flex h-fit bg-white p-4 rounded-sm gap-3">
-      <img
+      {/* Use next/image component instead of <img> */}
+      <Image
         className="w-[121px] h-[170px] bg-amber-200 rounded-sm object-cover"
         src={data?.image || "/default.jpg"}
         alt={data?.title || "Branch"}
+        width={121} // Add width for optimization
+        height={170} // Add height for optimization
+        priority // Optional: Add 'priority' if this image is above-the-fold for faster loading
       />
 
       <div className="inline-flex flex-col gap-2">

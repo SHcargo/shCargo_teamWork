@@ -11,6 +11,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     typeof window !== "undefined" ? localStorage.getItem("token") : null
   );
   const { decodedToken, isExpired } = useJwt(token || "");
+
   useEffect(() => {
     const checkTokenAndRoute = () => {
       if (!token || isExpired) {
@@ -22,7 +23,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     };
 
     checkTokenAndRoute();
-  }, [token, isExpired, decodedToken]);
+  }, [token, isExpired, decodedToken, pathname, router]); // Add pathname and router as dependencies
 
   return <>{children}</>;
 };

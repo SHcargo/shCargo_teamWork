@@ -3,7 +3,6 @@ import { ChevronLeft } from "lucide-react";
 import { Poster } from "../components/poster";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import axios from "axios";
 
 const Contact = () => {
   const router = useRouter();

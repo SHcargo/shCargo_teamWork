@@ -1,6 +1,12 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+} from "react";
 import axios from "axios";
 import { useUser } from "@/app/providers/UserProvider";
 
@@ -30,7 +36,8 @@ export const DeliveryAddressProvider = ({
   const { userId } = useUser();
   const [addresses, setAddresses] = useState<DeliveryAddress[]>([]);
 
-  const fetchAddresses = async () => {
+  // Use useCallback to memoize the function and prevent unnecessary re-creations
+  const fetchAddresses = useCallback(async () => {
     if (!userId) return;
     try {
       const response = await axios.get(
@@ -40,11 +47,12 @@ export const DeliveryAddressProvider = ({
     } catch (error) {
       console.error("Failed to fetch delivery addresses", error);
     }
-  };
+  }, [userId]); // Only recreate fetchAddresses when userId changes
 
   useEffect(() => {
     fetchAddresses();
-  }, [userId]);
+  }, [fetchAddresses]); // Add fetchAddresses as a dependency
+
   return (
     <DeliveryAddressContext.Provider value={{ addresses, fetchAddresses }}>
       {children}

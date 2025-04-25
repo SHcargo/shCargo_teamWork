@@ -3,24 +3,23 @@
 import Post from "../components/post";
 import { useState } from "react";
 import { UserOrderCard } from "../components/userOrderCard";
-import axios from "axios";
 
 const Cargo = () => {
   const [activeCategory, setActiveCategory] = useState("Бүгд");
   // const [loading, isLoading] = useState(false);
 
   const categories = ["Бүгд", "Бүртгэсэн", "Замдаа", "УБ-д ирсэн", "Хаагдсан"];
-  const getCargoOrderItems = () => {
-    // isLoading(true);
-    try {
-      const res = axios.get("api");
-      console.log("success", res);
-    } catch (error) {
-      console.log("Cargo data error", error);
-    } finally {
-      // isLoading(false);
-    }
-  };
+  // const getCargoOrderItems = () => {
+  //   // isLoading(true);
+  //   try {
+  //     const res = axios.get("api");
+  //     console.log("success", res);
+  //   } catch (error) {
+  //     console.log("Cargo data error", error);
+  //   } finally {
+  //     // isLoading(false);
+  //   }
+  // };
 
   const deliveryCounts: Record<string, number> = {
     Бүгд: 10,
