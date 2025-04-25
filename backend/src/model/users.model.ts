@@ -13,12 +13,7 @@ const usersSchema = new mongoose.Schema({
     },
   ],
 
-  truckCodeItem: [
-    {
-      item: { type: mongoose.Types.ObjectId, ref: "truckItems" },
-      quantity: { type: Number, required: true, min: 1 },
-    },
-  ],
+  truckCodeItem: [{ type: mongoose.Types.ObjectId, ref: "itemsOrder" }],
 
   role: {
     type: String,

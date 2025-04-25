@@ -7,14 +7,12 @@ const itemsOrderSchema = new mongoose.Schema({
     required: true,
     ref: "users",
   },
-  goodsItems: [
-    {
-      item: { type: String, require: false },
-      quantity: { type: Number, required: true, min: 1 },
-      image: { type: String, require: false },
-      price: { type: Number, require: false },
-    },
-  ],
+
+  trackingNumber: {
+    type: String,
+    required: true,
+  },
+
   status: {
     type: String,
     enum: STATUS,
