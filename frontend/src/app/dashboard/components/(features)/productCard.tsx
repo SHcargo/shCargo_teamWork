@@ -68,8 +68,8 @@ export default function DataTableDemo() {
         </thead>
         <tbody>
           {users.map((el, index) => (
-            <details key={el.name}>
-              <summary>{el.number}1</summary>
+            <details key={index}>
+              {/* <summary>{el.number}1</summary> */}
               <ul className="ml-4 mt-2">
                 {/* {el.truckItems.map((el, index) => (
                   <li key={index}>
@@ -78,10 +78,10 @@ export default function DataTableDemo() {
                 ))} */}
               </ul>
               <tr key={index} className="border-b">
-                <td className="p-2">1</td>
+                {/* <td className="p-2">1</td>
                 <td className="p-2">{el.PhoneNumber}</td>
                 <td className="p-2">{el.createdAt}</td>
-                <td className="p-2 truncate max-w-[250px]">{el.address}</td>
+                <td className="p-2 truncate max-w-[250px]">{el.address}</td> */}
                 {/* <td className="p-2">{el.status}</td> */}
               </tr>
             </details>

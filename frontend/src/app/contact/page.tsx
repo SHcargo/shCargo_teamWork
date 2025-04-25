@@ -3,6 +3,20 @@ import { ChevronLeft } from "lucide-react";
 import { Poster } from "../components/poster";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
+type posterProps = {
+  title?: string | null;
+  address?: string | null;
+  phoneNumber?: number | null;
+  day?: string | null;
+  image?: string | null;
+  data?: {
+    title?: string | null;
+    address?: string | null;
+    phoneNumber?: number | null;
+    day?: string | null;
+    image?: string | null;
+  };
+};
 
 const Contact = () => {
   const router = useRouter();

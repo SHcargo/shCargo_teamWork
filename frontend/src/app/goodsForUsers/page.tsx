@@ -4,7 +4,7 @@ import { ChevronLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Image from "next/image"; // Import Image from next/image
 
-export const GoodsForUsers = () => {
+const GoodsForUsers = () => {
   const router = useRouter();
 
   const categories = ["Бүгд", "Бүртгэсэн", "Замдаа", "УБ-д ирсэн", "Хаагдсан"];
