@@ -13,7 +13,7 @@ const ShippingCalculator: React.FC = () => {
     const volume = (length * width * height) / 1000000;
     const volumeWeight = volume * 167;
 
-    // Use const instead of let since effectiveWeight is not reassigned
+    // Use the effective weight (higher of actual weight or volumetric weight)
     const effectiveWeight = Math.max(weight, volumeWeight);
 
     let cost = 0;
@@ -126,7 +126,9 @@ const ShippingCalculator: React.FC = () => {
       <div className="mt-6 text-sm text-gray-600">
         <h3 className="font-semibold mb-2">Тээврийн зардал бодох аргачлал:</h3>
         <ul className="list-disc pl-5">
-          <li>0–1кг хүртэл = 3,000 ₮ (1 кг тутамд 3,000 ₮, 1м3 = 599¥)</li>
+          <li>
+            0–1кг хүртэл = 3,000 ₮ (1 кг тутамд 3,000 ₮, 1м3 = 599&raquo;)
+          </li>
           <li>
             Тусдал ирсэн болон бусад дамжуулалтын барааг тус тусдад нь бодно
           </li>
@@ -136,8 +138,8 @@ const ShippingCalculator: React.FC = () => {
           </li>
           <li>Гутлын хайрцаг 4000₮–8000₮ хооронд</li>
           <li>
-            Тээврийн зардал нь тухайн барааны жин болон "Оврын жин" хоёрын аль
-            ихээр нь тооцно
+            Тээврийн зардал нь тухайн барааны жин болон {`"Оврын жин"`} хоёрын
+            аль ихээр нь тооцно
           </li>
         </ul>
       </div>

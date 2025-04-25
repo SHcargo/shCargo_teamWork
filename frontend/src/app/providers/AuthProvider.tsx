@@ -23,7 +23,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     };
 
     checkTokenAndRoute();
-  }, [token, isExpired, decodedToken, pathname, router]); // Add pathname and router as dependencies
+  }, [token, isExpired, decodedToken]); // Add pathname and router as dependencies
 
   return <>{children}</>;
 };

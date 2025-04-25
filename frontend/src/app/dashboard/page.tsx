@@ -10,7 +10,7 @@ import PriceAddCards from "./_price/priceAddCards";
 import LocationAdd from "./_location/locationAdd";
 import HelpForUsersAdd from "./_help/helpForUsers";
 
-export const DashboardAdmin = () => {
+const DashboardAdmin = () => {
   const [step, setStep] = useState("users");
   return (
     <div className="flex">
@@ -18,12 +18,12 @@ export const DashboardAdmin = () => {
       <div className="flex-1 ml-0">
         <Header />
         <main className="mt-16 p-4 sm:p-6">
-          {step === "users" && <UsersAdmin setStep={setStep} />}
-          {step === "terms" && <TermsAndConditions setStep={setStep} />}
-          {step === "sales" && <SalesProducts setStep={setStep} />}
-          {step === "price" && <PriceAddCards setStep={setStep} />}
-          {step === "location" && <LocationAdd setStep={setStep} />}
-          {step === "help" && <HelpForUsersAdd setStep={setStep} />}
+          {step === "users" && <UsersAdmin />}
+          {step === "terms" && <TermsAndConditions />}
+          {step === "sales" && <SalesProducts />}
+          {step === "price" && <PriceAddCards />}
+          {step === "location" && <LocationAdd />}
+          {step === "help" && <HelpForUsersAdd />}
         </main>
       </div>
     </div>
