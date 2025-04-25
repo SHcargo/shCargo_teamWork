@@ -2,10 +2,9 @@
 import { Button } from "@/components/ui/button";
 import { ChevronLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import Image from "next/image"; // Import Image from next/image
 
 export const GoodsForUsers = () => {
-  // const [step, setStep] = useState("Бүгд");
   const router = useRouter();
 
   const categories = ["Бүгд", "Бүртгэсэн", "Замдаа", "УБ-д ирсэн", "Хаагдсан"];
@@ -20,17 +19,19 @@ export const GoodsForUsers = () => {
         </div>
         <div className="flex gap-4 w-full p-4 rounded-sm bg-white ">
           <div>
-            <img
-              src="aa"
-              alt="aa"
+            {/* Replace <img> with <Image> */}
+            <Image
+              src="aa" // Update this with a valid image source or path
+              alt="Truck Image" // Provide a meaningful alt text
               className="w-40 h-40 bg-amber-300 rounded-sm"
+              width={160} // Add width
+              height={160} // Add height
             />
           </div>
           <div>
             <h1 className="text-sky-400">truck Number</h1>
             {categories.map((cat, index) => (
               <p key={index}>
-                {" "}
                 {cat} <span className="text-red-300">date</span>
               </p>
             ))}

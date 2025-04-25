@@ -18,7 +18,7 @@ const mockOrders = Array.from({ length: 32 }, (_, i) => ({
   status: i < 3 ? "Pending" : i < 6 ? "Delivered" : "Cancelled",
 }));
 
-const statuses = ["Pending", "Delivered", "Cancelled"];
+// const statuses = ["Pending", "Delivered", "Cancelled"];
 
 export default function DataTableDemo() {
   const [page, setPage] = useState(1);
@@ -82,7 +82,7 @@ export default function DataTableDemo() {
                 <td className="p-2">{el.PhoneNumber}</td>
                 <td className="p-2">{el.createdAt}</td>
                 <td className="p-2 truncate max-w-[250px]">{el.address}</td>
-                <td className="p-2">{el.status}</td>
+                {/* <td className="p-2">{el.status}</td> */}
               </tr>
             </details>
           ))}

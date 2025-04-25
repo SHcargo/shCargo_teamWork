@@ -71,7 +71,7 @@ const ShippingCalculator: React.FC = () => {
         </div>
       </div>
 
-      <div className={`mb-4  ${calculateBy === "volume" ? "hidden" : "block"}`}>
+      <div className={`mb-4 ${calculateBy === "volume" ? "hidden" : "block"}`}>
         <label className="block mb-1">Жин (кг)</label>
         <input
           type="number"
