@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
-import { decodeToken, useJwt } from "react-jwt";
+import { useJwt } from "react-jwt";
 
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();

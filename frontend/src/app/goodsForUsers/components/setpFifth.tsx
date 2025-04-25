@@ -4,7 +4,7 @@ interface SetpOneProps {
   setStep: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const SetpFifth: React.FC<SetpOneProps> = ({ setStep }) => {
+const SetpFifth: React.FC<SetpOneProps> = () => {
   return <div>hurgeleltend</div>;
 };
 

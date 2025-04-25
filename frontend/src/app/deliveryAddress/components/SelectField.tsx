@@ -1,6 +1,6 @@
 "use client";
 
-import { ErrorMessage, useFormikContext } from "formik";
+import { ErrorMessage, useFormikContext, FormikValues } from "formik";
 import {
   Select,
   SelectTrigger,
@@ -28,7 +28,7 @@ const SelectField = ({
   onChange,
   value,
 }: SelectFieldProps) => {
-  const { setFieldValue } = useFormikContext<any>();
+  const { setFieldValue } = useFormikContext<FormikValues>();
 
   return (
     <div className="flex flex-col gap-2">

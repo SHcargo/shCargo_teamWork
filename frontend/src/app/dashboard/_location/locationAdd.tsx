@@ -5,11 +5,10 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useUser } from "@/app/providers/UserProvider";
+// import { useUser } from "@/app/providers/UserProvider";
 
-const LocationAdd = ({ setStep }: { setStep: (value: string) => void }) => {
-  const router = useRouter();
-  const [location, setLocation] = useState();
+const LocationAdd = () => {
+  // const [location, setLocation] = useState();
   const [existingLocation, setExistingLocation] = useState(false);
   const [formData, setFormData] = useState({
     userPhoneNumber: "",
@@ -19,7 +18,7 @@ const LocationAdd = ({ setStep }: { setStep: (value: string) => void }) => {
     zipCode: "",
   });
 
-  const { phoneNumber } = useUser();
+  // const { phoneNumber } = useUser();
 
   useEffect(() => {
     const getLocationData = async () => {

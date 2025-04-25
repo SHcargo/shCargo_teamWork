@@ -1,6 +1,6 @@
 "use client";
 
-import { ErrorMessage, useFormikContext } from "formik";
+import { ErrorMessage, useFormikContext, FormikValues } from "formik";
 import {
   Select,
   SelectTrigger,
@@ -27,7 +27,8 @@ const EditField = ({
   onChange,
   value,
 }: SelectFieldProps) => {
-  const { setFieldValue } = useFormikContext<any>();
+  // Use FormikValues as the type for form context
+  const { setFieldValue } = useFormikContext<FormikValues>();
 
   return (
     <div className="flex flex-col gap-2">

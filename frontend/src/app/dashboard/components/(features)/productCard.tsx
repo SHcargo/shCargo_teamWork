@@ -1,12 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import {
-  Select,
-  SelectTrigger,
-  SelectContent,
-  SelectItem,
-} from "@/components/ui/select";
+import { Card } from "@/components/ui/card";
+
 import { Button } from "@/components/ui/button";
 import axios from "axios";
 
@@ -44,10 +39,10 @@ export default function DataTableDemo() {
     usersFetching();
   }, []);
 
-  const paginatedOrders = mockOrders.slice(
-    (page - 1) * itemsPerPage,
-    page * itemsPerPage
-  );
+  // const paginatedOrders = mockOrders.slice(
+  //   (page - 1) * itemsPerPage,
+  //   page * itemsPerPage
+  // );
 
   return (
     <Card className="p-4">
@@ -73,7 +68,7 @@ export default function DataTableDemo() {
         </thead>
         <tbody>
           {users.map((el, index) => (
-            <details>
+            <details key={el.name}>
               <summary>{el.number}1</summary>
               <ul className="ml-4 mt-2">
                 {/* {el.truckItems.map((el, index) => (

@@ -32,16 +32,14 @@ const getDecodedToken = async (token: string | null) => {
 const UserContext = createContext<UserContextType>({} as UserContextType);
 
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
-  const [token, setToken] = useState<string | null>(null);
   const [client, setClient] = useState<DecodedToken | null>(null);
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
 
   const getUser = async () => {
     const storedToken = localStorage.getItem("token");
-    setToken(storedToken);
     const user = await getDecodedToken(storedToken);
     setClient(user);
-    setLoading(false);
+    // setLoading(false);
   };
 
   useEffect(() => {

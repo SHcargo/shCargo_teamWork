@@ -11,14 +11,22 @@ import {
   Tag,
   User,
 } from "lucide-react";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 
+// Define a type for the location data to replace `any`
+interface LocationData {
+  userPhoneNumber: string | number;
+  factoryPhoneNumber: string | number;
+  region: string;
+  location: string;
+  zipCode: string | number;
+}
+
 const DetailedAddress = () => {
-  const { number } = useParams();
   const router = useRouter();
 
-  const [locationData, setLocationData] = useState<any>(null);
+  const [locationData, setLocationData] = useState<LocationData | null>(null); // Use LocationData type
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -28,7 +36,7 @@ const DetailedAddress = () => {
           `${process.env.NEXT_PUBLIC_BASE_URL}/location`
         );
         console.log("API Response:", response.data);
-        setLocationData(response.data.location);
+        setLocationData(response.data.location); // Assuming the response has a `location` field
         setLoading(false);
       } catch (err) {
         console.error("Failed to get location:", err);
@@ -43,11 +51,9 @@ const DetailedAddress = () => {
     return <div>Loading...</div>;
   }
 
-  if (!locationData || locationData.length === 0) {
+  if (!locationData) {
     return <div>No location data found.</div>;
   }
-
-  const location = locationData.at(-1);
 
   return (
     <div className="w-screen h-screen flex flex-col bg-[#dddddd] items-center justify-center">
@@ -75,29 +81,40 @@ const DetailedAddress = () => {
         </div>
 
         <div className="space-y-4">
+          {/* Add null checks before calling `toString()` */}
           <CopyField
             label="收件人 (Хүлээн авагч)"
-            text={location?.userPhoneNumber.toString()}
+            text={
+              locationData.userPhoneNumber
+                ? locationData.userPhoneNumber.toString()
+                : "N/A"
+            }
             Icon={User}
           />
           <CopyField
             label="电话 (Утас)"
-            text={location?.factoryPhoneNumber.toString()}
+            text={
+              locationData.factoryPhoneNumber
+                ? locationData.factoryPhoneNumber.toString()
+                : "N/A"
+            }
             Icon={Phone}
           />
           <CopyField
             label="所在地区 (Бүс нутаг)"
-            text={location?.region}
+            text={locationData.region || "N/A"}
             Icon={Globe}
           />
           <CopyField
             label="街道地址 (Хаяг)"
-            text={location?.location}
+            text={locationData.location || "N/A"}
             Icon={MapPin}
           />
           <CopyField
             label="邮编 (Зип код)"
-            text={location?.zipCode.toString()}
+            text={
+              locationData.zipCode ? locationData.zipCode.toString() : "N/A"
+            }
             Icon={Tag}
           />
         </div>
@@ -142,4 +159,5 @@ const CopyField = ({
     </div>
   );
 };
+
 export default DetailedAddress;

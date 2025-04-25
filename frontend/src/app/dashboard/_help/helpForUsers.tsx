@@ -2,11 +2,11 @@
 
 import { useRouter } from "next/navigation";
 
-const HelpForUsersAdd = ({ setStep }: { setStep: (value: string) => void }) => {
-  const router = useRouter();
+const HelpForUsersAdd = () => {
+  // const router = useRouter();
 
-  // You can navigate like this:
-  // router.push('/some-route');
+  // // You can navigate like this:
+  // // router.push('/some-route');
 
   return <div>help center add</div>;
 };

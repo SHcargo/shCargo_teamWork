@@ -1,7 +1,6 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import NavBar from "../components/NavBar";
 import Logo from "../ui/Logo";
 import { PhoneCallIcon, LockKeyhole, UserPlus2 } from "lucide-react";
 import { Field, Form, Formik } from "formik";
@@ -37,7 +36,7 @@ const Login = () => {
           }
         }}
       >
-        {({ values, setFieldValue }) => (
+        {({}) => (
           <Form className="max-w-2xl w-full h-full bg-[#e9ecef] py-3 px-6 flex flex-col gap-6">
             <div className="flex items-center gap-3">
               <Logo />
