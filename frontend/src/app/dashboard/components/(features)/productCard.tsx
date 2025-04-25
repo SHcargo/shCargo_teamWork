@@ -1,7 +1,12 @@
 "use client";
 import { useState, useEffect } from "react";
-import { Card } from "@/components/ui/card";
-
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  Select,
+  SelectTrigger,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
 
@@ -18,7 +23,7 @@ const mockOrders = Array.from({ length: 32 }, (_, i) => ({
   status: i < 3 ? "Pending" : i < 6 ? "Delivered" : "Cancelled",
 }));
 
-// const statuses = ["Pending", "Delivered", "Cancelled"];
+const statuses = ["Pending", "Delivered", "Cancelled"];
 
 export default function DataTableDemo() {
   const [page, setPage] = useState(1);
@@ -39,10 +44,10 @@ export default function DataTableDemo() {
     usersFetching();
   }, []);
 
-  // const paginatedOrders = mockOrders.slice(
-  //   (page - 1) * itemsPerPage,
-  //   page * itemsPerPage
-  // );
+  const paginatedOrders = mockOrders.slice(
+    (page - 1) * itemsPerPage,
+    page * itemsPerPage
+  );
 
   return (
     <Card className="p-4">
@@ -68,23 +73,14 @@ export default function DataTableDemo() {
         </thead>
         <tbody>
           {users.map((el, index) => (
-            <details key={el.name}>
-              <summary>{el.number}1</summary>
-              <ul className="ml-4 mt-2">
-                {/* {el.truckItems.map((el, index) => (
-                  <li key={index}>
-                    {el.items}x{el.quantity}
-                  </li>
-                ))} */}
-              </ul>
-              <tr key={index} className="border-b">
-                <td className="p-2">1</td>
-                <td className="p-2">{el.PhoneNumber}</td>
-                <td className="p-2">{el.createdAt}</td>
-                <td className="p-2 truncate max-w-[250px]">{el.address}</td>
-                {/* <td className="p-2">{el.status}</td> */}
-              </tr>
-            </details>
+            <tr key={index} className="border-b">
+              <td className="p-2">1</td>
+              <td className="p-2">{el.PhoneNumber}</td>
+              <td className="p-2">{el.createdAt}</td>
+              <td className="p-2 truncate max-w-[250px]">{el.address}</td>
+              <td></td>
+              <td className="p-2">{el.status}</td>
+            </tr>
           ))}
         </tbody>
       </table>
