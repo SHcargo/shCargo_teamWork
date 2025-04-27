@@ -6,6 +6,7 @@ const usersSchema = new mongoose.Schema({
   password: { type: String, required: true },
   phoneNumber: { type: String, required: true },
   address: { type: String, default: "irj awna" },
+
   deliveryAddresses: [
     {
       type: mongoose.Types.ObjectId,
@@ -13,7 +14,13 @@ const usersSchema = new mongoose.Schema({
     },
   ],
 
-  truckCodeItem: [{ type: mongoose.Types.ObjectId, ref: "itemsOrder" }],
+  // ✅ Updated: store objects with item and quantity
+  truckCodeItem: [
+    {
+      item: { type: mongoose.Types.ObjectId, ref: "itemsOrder" },
+      quantity: { type: Number, default: 1 },
+    },
+  ],
 
   role: {
     type: String,

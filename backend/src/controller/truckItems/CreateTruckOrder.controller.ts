@@ -1,14 +1,20 @@
 import { ItemsOrder } from "../../model/truckOrders.model";
 import { Users } from "../../model/users.model";
 import { Request, Response } from "express";
+
 export const TruckItemsController = async (req: Request, res: Response) => {
   const { userId, trackingNumber } = req.body;
+
   try {
     if (!userId) {
       res.status(400).json({ message: "userId is required." });
       return;
     }
+
+    // Optional: get user's current orders
     const orders = await ItemsOrder.find({ userId });
+
+    // Create a new order entry
     const newTrackItem = await ItemsOrder.create({
       userId,
       trackingNumber,
@@ -21,6 +27,7 @@ export const TruckItemsController = async (req: Request, res: Response) => {
       ],
     });
 
+    // Push the new item + quantity to the user
     const updatedUser = await Users.findByIdAndUpdate(
       userId,
       {
@@ -33,6 +40,7 @@ export const TruckItemsController = async (req: Request, res: Response) => {
       },
       { new: true }
     );
+
     res.status(200).json({
       message: "Tracking item added successfully.",
       newTrackItem,
@@ -41,7 +49,7 @@ export const TruckItemsController = async (req: Request, res: Response) => {
     });
     return;
   } catch (error) {
-    console.error("Error in TruckItemsController:", error);
+    console.error("❌ Error in TruckItemsController:", error);
     res.status(500).json({
       message: "Internal server error.",
       error: error instanceof Error ? error.message : error,

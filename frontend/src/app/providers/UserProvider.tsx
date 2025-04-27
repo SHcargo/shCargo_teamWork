@@ -11,35 +11,39 @@ type DecodedToken = {
 };
 
 type UserContextType = {
-  phoneNumber: string | undefined;
-  role: string | undefined;
-  userId: string | undefined;
-  name: string | undefined;
+  phoneNumber?: string;
+  role?: string;
+  userId?: string;
+  name?: string;
   getUser: () => Promise<void>;
+  loading: boolean;
 };
 
+// Decode token safely
 const getDecodedToken = async (token: string | null) => {
   if (!token) return null;
 
   try {
     return jwtDecode<DecodedToken>(token);
   } catch (error) {
-    console.error("Invalid token:", error);
+    console.error("❌ Invalid token:", error);
     return null;
   }
 };
 
+// Create context
 const UserContext = createContext<UserContextType>({} as UserContextType);
 
+// Provider component
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [client, setClient] = useState<DecodedToken | null>(null);
-  // const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
 
   const getUser = async () => {
     const storedToken = localStorage.getItem("token");
     const user = await getDecodedToken(storedToken);
     setClient(user);
-    // setLoading(false);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -48,7 +52,6 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, []);
 
-  console.log("client", client);
   return (
     <UserContext.Provider
       value={{
@@ -57,6 +60,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
         role: client?.role,
         name: client?.name,
         getUser,
+        loading,
       }}
     >
       {children}
@@ -64,10 +68,11 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
+// Custom hook
 export const useUser = () => {
   const context = useContext(UserContext);
   if (!context) {
-    console.log("UserContext not available");
+    console.warn("UserContext not available");
   }
   return context;
 };

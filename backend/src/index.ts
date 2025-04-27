@@ -35,7 +35,7 @@ app.use("/truckItems", TruckOrdersRouter);
 app.use("/adminView", AdminViewRouter);
 app.use("/location", LocationRouter);
 app.use("/deliveryAddress", DeliveryAddressRouter);
-app.use("user", UserRouter);
+app.use("/user", UserRouter);
 
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
