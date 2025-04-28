@@ -5,6 +5,32 @@ import Logo from "../ui/Logo";
 import { PhoneCallIcon, LockKeyhole, User, Mail } from "lucide-react";
 import { Formik, Form, Field } from "formik";
 import axios from "axios";
+import { toast } from "react-toastify";
+import * as Yup from "yup";
+
+const registerValidationSchema = Yup.object().shape({
+  name: Yup.string()
+    .required("Нэрээ оруулна уу")
+    .min(2, "Нэр хамгийн багадаа 2 тэмдэгт байх ёстой")
+    .max(50, "Нэр хамгийн ихдээ 50 тэмдэгт байх ёстой"),
+
+  email: Yup.string()
+    .required("Имэйл хаяг оруулна уу")
+    .email("Буруу имэйл хаяг байна"),
+
+  phoneNumber: Yup.string()
+    .required("Утасны дугаар оруулна уу")
+    .matches(/^[0-9]{8}$/, "Утасны дугаар яг 8 оронтой байх ёстой"),
+
+  password: Yup.string()
+    .required("Нууц үг оруулна уу")
+    .min(6, "Нууц үг хамгийн багадаа 6 тэмдэгт байх ёстой")
+    .max(32, "Нууц үг хамгийн ихдээ 32 тэмдэгт байх ёстой"),
+
+  confirmPassword: Yup.string()
+    .required("Нууц үг баталгаажуулна уу")
+    .oneOf([Yup.ref("password")], "Нууц үг таарахгүй байна"),
+});
 
 const Register = () => {
   const router = useRouter();
@@ -20,6 +46,7 @@ const Register = () => {
             password: "",
             confirmPassword: "",
           }}
+          validationSchema={registerValidationSchema}
           enableReinitialize
           onSubmit={async (values) => {
             try {
@@ -32,15 +59,15 @@ const Register = () => {
                   name: values.name,
                 }
               );
-              // toast.success("✅ Амжилттай бүртгэгдлээ!", {
-              //   position: "top-right",
-              //   autoClose: 5000,
-              // });
+              toast.success("✅ Хэрэглэгч амжилттай бүртгэгдлээ!", {
+                position: "top-right",
+                autoClose: 5000,
+              });
               router.push("/logIn");
               console.log("user created successfuly", response);
             } catch (error) {
               console.log("error in registration:", error);
-              // toast.error("😕 Бүртгэхэд алдаа гарлаа.");
+              toast.error("😕 Хэрэглэгч бүртгэхэд алдаа гарлаа.");
             }
           }}
         >

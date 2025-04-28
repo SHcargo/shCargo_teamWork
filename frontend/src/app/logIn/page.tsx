@@ -5,7 +5,14 @@ import Logo from "../ui/Logo";
 import { PhoneCallIcon, LockKeyhole, UserPlus2 } from "lucide-react";
 import { Field, Form, Formik } from "formik";
 import axios from "axios";
-// import { toast } from "react-toastify"; // assuming you're using react-toastify
+import * as Yup from "yup";
+import { toast } from "react-toastify";
+
+const loginValidationSchema = Yup.object().shape({
+  phoneNumber: Yup.string()
+    .required("Утасны дугаар оруулна уу")
+    .matches(/^[0-9]{8}$/, "Утасны дугаар 8 оронтой тоо байх ёстой"),
+});
 
 const Login = () => {
   const router = useRouter();
@@ -18,6 +25,7 @@ const Login = () => {
           password: "",
         }}
         enableReinitialize
+        validationSchema={loginValidationSchema}
         onSubmit={async (values) => {
           try {
             const response = await axios.post(
@@ -27,16 +35,20 @@ const Login = () => {
                 password: values.password,
               }
             );
-            router.push("/");
+
             localStorage.setItem("token", response.data.token);
             localStorage.setItem("phoneNumber", values.phoneNumber);
+
+            toast.success("Амжилттай нэвтэрлээ!");
+            router.push("/");
             console.log("log in success", response);
           } catch (error) {
             console.log("error in login:", error);
+            toast.error("Нэвтрэх нэр эсвэл нууц үг буруу байна!");
           }
         }}
       >
-        {({}) => (
+        {() => (
           <Form className="max-w-2xl w-full h-full bg-[#e9ecef] py-3 px-6 flex flex-col gap-6">
             <div className="flex items-center gap-3">
               <Logo />
