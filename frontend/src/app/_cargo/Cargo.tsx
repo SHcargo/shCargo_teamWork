@@ -23,7 +23,7 @@ type GoodsItem = {
   quamtity: number ;
   _id:string
 }
-
+//
 
 const categories: string[] = ["Бүгд", "Бүртгэсэн", "Замдаа", "УБ-д ирсэн", "Хаагдсан"];
 
