@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -13,16 +14,9 @@ type StatusHistory = {
   _id: string;
 };
 
-type GoodsItem = {
-  item: string;
-  quantity: number;
-  _id: string;
-};
-
 type Order = {
   _id: string;
   userId: string;
-  goodsItems: GoodsItem[];
   status: string;
   createdAt: string;
   statusHistory: StatusHistory[];
@@ -34,7 +28,7 @@ export const GoodsForUsers = () => {
   const value = useUser();
   const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-
+console.log(order)
   const getCargoOrderItems = async () => {
     setLoading(true);
     try {
@@ -52,7 +46,7 @@ export const GoodsForUsers = () => {
 
   useEffect(() => {
     getCargoOrderItems();
-  }, []);
+  }, [id, value.userId]);
 
   return (
     <div className="w-screen h-screen flex flex-col bg-gray-200 items-center justify-center">
@@ -74,14 +68,12 @@ export const GoodsForUsers = () => {
           <div className="flex flex-col gap-4">
             {/* Main Order Info */}
             <div className="flex gap-6 items-start">
-              <img
-                src="/placeholder.jpg"
+            {/*   <img
+                src="\"
                 alt="Cargo image"
                 className="w-48 h-48 object-cover bg-gray-100 rounded-md shadow"
-              />
+              /> */}
               <div className="flex flex-col gap-2 text-gray-700">
-                <p><span className="font-semibold">Бараа:</span> {order.goodsItems[0].item}</p>
-                <p><span className="font-semibold">Тоо ширхэг:</span> {order.goodsItems[0].quantity}</p>
                 <p><span className="font-semibold">Статус:</span> {order.status}</p>
                 <p><span className="font-semibold">Огноо:</span> {new Date(order.createdAt).toLocaleString()}</p>
               </div>
@@ -90,14 +82,18 @@ export const GoodsForUsers = () => {
             {/* Status History */}
             <div className="mt-4">
               <h2 className="text-lg font-medium text-blue-600 mb-2">Статусын түүх</h2>
-              <div className="flex flex-col gap-2">
-                {order.statusHistory.map((entry) => (
-                  <div key={entry._id} className="text-sm text-gray-600">
-                    <span className="font-medium">{entry.status}</span> —{" "}
-                    <span className="text-red-400">{new Date(entry.changedAt).toLocaleString()}</span>
-                  </div>
-                ))}
-              </div>
+              {order.statusHistory.length > 0 ? (
+                <div className="flex flex-col gap-2">
+                  {order.statusHistory.map((entry) => (
+                    <div key={entry._id} className="text-sm text-gray-600">
+                      <span className="font-medium">{entry.status}</span> —{" "}
+                      <span className="text-red-400">{new Date(entry.changedAt).toLocaleString()}</span>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-gray-500">Статусын түүх байхгүй.</p>
+              )}
             </div>
           </div>
         ) : (
