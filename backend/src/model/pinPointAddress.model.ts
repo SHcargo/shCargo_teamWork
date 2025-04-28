@@ -1,16 +1,28 @@
-import mongoose from "mongoose";
+// models/Location.js
+const mongoose = require("mongoose");
 
-const deliveryAddressSchema = new mongoose.Schema({
-  city: { type: String, required: true },
-  district: { type: String, required: true },
-  khoroo: { type: String, required: true },
+const PinPointAddressSchema = new mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "users",
+    required: true,
+  },
+  latitude: {
+    type: Number,
+    required: true,
+  },
+  longitude: {
+    type: Number,
+    required: true,
+  },
   detail: { type: String, required: true },
   isVerified: { type: Boolean, default: false },
   createdAt: { type: Date, default: Date.now },
-  userId: { type: String, required: true },
 });
 
-export const deliveryAddress = mongoose.model(
-  "deliveryAddress",
-  deliveryAddressSchema
+const PinPointAddress = mongoose.model(
+  "PinPointAddress",
+  PinPointAddressSchema
 );
+
+module.exports = Location;

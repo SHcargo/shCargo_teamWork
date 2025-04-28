@@ -14,7 +14,6 @@ const usersSchema = new mongoose.Schema({
     },
   ],
 
-  // ✅ Updated: store objects with item and quantity
   truckCodeItem: [
     {
       item: { type: mongoose.Types.ObjectId, ref: "itemsOrder" },
