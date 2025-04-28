@@ -2,7 +2,7 @@ import { useState,} from "react";
 import axios from "axios";
 import { useUser } from "../providers/UserProvider";
 
-export const Post = () => {
+export const Post = ({ref , loading} : {ref: () => void , loading :boolean}) => {
   const [select, setSelect] = useState(true);
   const [trackingNumber, setTrackingNumber] = useState("");
   const { userId } = useUser();
@@ -30,6 +30,7 @@ export const Post = () => {
 
       console.log("Submitted tracking:", response.data);
       handleBack();
+      ref();
     } catch (error) {
       console.error("Error submitting tracking number:", error);
     }
@@ -64,7 +65,7 @@ export const Post = () => {
               className="ml-2 px-3 py-2 bg-red-500 text-white rounded-lg"
               onClick={handleSubmitTracking}
             >
-              ➤
+             {loading ?   <div className="w-5 h-5 border-l-[2px] border-t-[2px] border-white rounded-full animate-spin" /> : "➤" } 
             </button>
           </div>
         )}

@@ -14,10 +14,10 @@ export const UserOrderCard = ({
 
   return (
     <div
-      onClick={() => router.push(`/goodsForUsers/${id}`)}
+     
       className="bg-white p-4 rounded-xl border border-gray-200 shadow-sm cursor-pointer mb-4"
     >
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between"  onClick={() => router.push(`/goodsForUsers/${id}`)}>
         <h2 className="text-lg font-semibold flex items-center">
           📦 Ачаа
           <span className="ml-2 text-xs bg-red-100 text-red-500 px-2 py-0.5 rounded-full">
@@ -33,7 +33,7 @@ export const UserOrderCard = ({
         {statusHistory.length} updates
       </p>
       <div className="flex gap-4">
-        <button className="mt-3 h-16 px-2 py-2 bg-gray-400 text-white rounded-lg w-full cursor-pointer hover:bg-[#5F2DF590]">
+        <button className="mt-3 h-16 px-2 py-2 bg-gray-400 text-white rounded-lg w-full cursor-pointer hover:bg-[#5F2DF590]" onClick={() => router.push('/contact')}>
           Салбараас авах
         </button>
         <button className="mt-3 h-16 px-2 py-2 bg-gray-400 text-white rounded-lg w-full cursor-pointer hover:bg-[#5F2DF590]">

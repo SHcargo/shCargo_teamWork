@@ -39,7 +39,7 @@ const HomePage = ({ setStep }: { setStep: (value: string) => void }) => {
       <InfoCard
         icon={Paperclip}
         title="Үйлчилгээ Нөхцөл"
-        subtitle="HiCargo журам"
+        subtitle="SH Cargo журам"
         onClick={() => router.push("/terms-conditions")}
       /> 
       <div className="w-35 h-35 "></div>
