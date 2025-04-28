@@ -1,14 +1,15 @@
-
- 
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from "react";
-import { UserOrderCard } from "../components/userOrderCard";
+
 import { useUser } from "../providers/UserProvider";
 import Post from "../components/post";
 import axios from "axios";
+import { UserOrderCard } from "../components/userOrderCard";
+
+
 type Order = {
   _id: string;
   userId: string;
-  goodsItems: GoodsItem[];
   status: string;
   createdAt: string;
   statusHistory: {
@@ -18,12 +19,6 @@ type Order = {
   }[];
   __v: number;
 };
-type GoodsItem = {
-  item: string;
-  quamtity: number ;
-  _id:string
-}
-//
 
 const categories: string[] = ["Бүгд", "Бүртгэсэн", "Замдаа", "УБ-д ирсэн", "Хаагдсан"];
 
@@ -32,7 +27,6 @@ const Cargo = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [activeCategory, setActiveCategory] = useState<string>("Бүгд");
   const [loading, setLoading] = useState<boolean>(false);
-console.log(orders)
   const [deliveryCounts, setDeliveryCounts] = useState<Record<string, number>>({
     Бүгд: 0,
     Бүртгэсэн: 0,
@@ -50,7 +44,6 @@ console.log(orders)
       const data: Order[] = response.data.orders;
 
       setOrders(data);
-
       const counts: Record<string, number> = categories.reduce((acc, category) => {
         if (category === "Бүгд") {
           acc[category] = data.length;
@@ -116,9 +109,9 @@ console.log(orders)
               filteredOrders.map((order) => (
                 <div key={order._id}>
                   <UserOrderCard
-                    count={order.goodsItems.length}
                     description={`Order Status: ${order.status}`}
                     id={order._id}
+                    statusHistory={order.statusHistory}
                   />
                 </div>
               ))
@@ -132,6 +125,7 @@ console.log(orders)
 };
 
 export default Cargo;
+
 
 /* {order.goodsItems.map((item) => (
   <div key={item._id} className="flex flex-row justify-between">

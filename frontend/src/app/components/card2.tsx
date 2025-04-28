@@ -10,7 +10,7 @@ type InfoCardProps = {
 
 const InfoCard = ({ icon: Icon, title, subtitle, onClick }: InfoCardProps) => (
   <div
-    className="w-60 h-60 bg-white rounded-lg flex p-5 overflow-hidden"
+    className="w-35 h-35 bg-white rounded-lg flex p-5 overflow-hidden"
     onClick={onClick}
   >
     <div className=" gap-5 w-full">
@@ -19,7 +19,7 @@ const InfoCard = ({ icon: Icon, title, subtitle, onClick }: InfoCardProps) => (
         <Icon stroke="#5F2DF5" />{" "}
         <button
           onClick={onClick}
-          className="bg-[#5F2DF5] h-10 w-10 flex items-center justify-center rounded-sm"
+          className="bg-[#5F2DF5] h-7 w-7 flex items-center justify-center rounded-sm"
         >
           <ChevronRight color="#fff" />
         </button>
