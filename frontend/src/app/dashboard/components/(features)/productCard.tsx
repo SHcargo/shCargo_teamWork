@@ -11,8 +11,7 @@ export default function DataTableDemo() {
       const response = await axios.get(
         `${process.env.NEXT_PUBLIC_BASE_URL}/adminView`
       );
-      setUsers(response.data);
-      console.log("Got Users:", response.data);
+      console.log("Got Users:", response.data.users);
     } catch (error) {
       console.error("Error fetching users:", error);
     }
@@ -45,7 +44,7 @@ export default function DataTableDemo() {
           </tr>
         </thead>
         <tbody>
-          {users.map((el, index) => (
+          {users?.map((el, index) => (
             <tr key={index}>
               <td className="p-2">{index + 1}</td>
               {/* Display the row number */}
