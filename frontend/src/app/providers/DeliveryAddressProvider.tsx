@@ -9,6 +9,8 @@ import {
 } from "react";
 import axios from "axios";
 import { useUser } from "@/app/providers/UserProvider";
+import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
 type DeliveryAddress = {
   _id: string;
@@ -35,23 +37,32 @@ export const DeliveryAddressProvider = ({
 }) => {
   const { userId } = useUser();
   const [addresses, setAddresses] = useState<DeliveryAddress[]>([]);
+  const router = useRouter();
 
-  // Use useCallback to memoize the function and prevent unnecessary re-creations
   const fetchAddresses = useCallback(async () => {
     if (!userId) return;
     try {
       const response = await axios.get(
         `${process.env.NEXT_PUBLIC_BASE_URL}/deliveryAddress/${userId}`
       );
-      setAddresses(response.data.data);
+
+      const { success, data } = response.data;
+
+      if (!success) {
+        toast.error("Хүргэлтийн хаягаа оруулна уу");
+        router.push("/deliveryAddress");
+        return;
+      }
+
+      setAddresses(data);
     } catch (error) {
       console.error("Failed to fetch delivery addresses", error);
     }
-  }, [userId]); // Only recreate fetchAddresses when userId changes
+  }, [userId, router]);
 
   useEffect(() => {
     fetchAddresses();
-  }, [fetchAddresses]); // Add fetchAddresses as a dependency
+  }, [fetchAddresses]);
 
   return (
     <DeliveryAddressContext.Provider value={{ addresses, fetchAddresses }}>

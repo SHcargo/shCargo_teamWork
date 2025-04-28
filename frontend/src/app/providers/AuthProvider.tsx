@@ -10,6 +10,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [token] = useState(() =>
     typeof window !== "undefined" ? localStorage.getItem("token") : null
   );
+
   const { decodedToken, isExpired } = useJwt(token || "");
 
   useEffect(() => {
@@ -17,13 +18,14 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       if (!token || isExpired) {
         router.push("/logIn");
       }
+
       if (pathname === "/logIn" && decodedToken) {
         router.push("/");
       }
     };
-
     checkTokenAndRoute();
-  }, [token, isExpired, decodedToken, pathname, router]); // Add pathname and router as dependencies
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token, isExpired, decodedToken]);
 
   return <>{children}</>;
 };

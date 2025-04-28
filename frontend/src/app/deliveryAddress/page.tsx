@@ -64,10 +64,18 @@ const DeliveryAddress = () => {
           <DialogTrigger>
             <div className="flex justify-center items-center py-2 cursor-pointer px-4 bg-[#5F2DF5] w-full text-white gap-2 rounded-lg">
               <Plus width={16} height={16} stroke="white" />{" "}
-              <p>Шинэ хаяг нэмэх</p>
+              <p>Шинэ хаяг гараар нэмэх</p>
             </div>
           </DialogTrigger>
           <AddAddressContent />
+        </Dialog>
+        <Dialog>
+          <DialogTrigger>
+            <div className="flex justify-center items-center py-2 cursor-pointer px-4 bg-[#5F2DF5] w-full text-white gap-2 rounded-lg">
+              <Plus width={16} height={16} stroke="white" />{" "}
+              <p>Шинэ хаяг газрын зурагаас нэмэх</p>
+            </div>
+          </DialogTrigger>
         </Dialog>
       </div>
     </div>
