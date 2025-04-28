@@ -1,7 +1,8 @@
 "use client";
 
+import { useUser } from "@/app/providers/UserProvider";
 import { Button } from "@/components/ui/button";
-import axios from "axios";
+
 import {
   ChevronLeft,
   ClipboardCopy,
@@ -12,48 +13,17 @@ import {
   User,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
-// Define a type for the location data to replace `any`
-interface LocationData {
-  userPhoneNumber: string | number;
-  factoryPhoneNumber: string | number;
-  region: string;
-  location: string;
-  zipCode: string | number;
-}
-
-const DetailedAddress = () => {
+const DeliveryAddress = () => {
   const router = useRouter();
-
-  const [locationData, setLocationData] = useState<LocationData | null>(null); // Use LocationData type
-  const [loading, setLoading] = useState(true);
-
+  const { phoneNumber, getUser } = useUser();
   useEffect(() => {
-    const getLocationData = async () => {
-      try {
-        const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/location`
-        );
-        console.log("API Response:", response.data);
-        setLocationData(response.data.location); // Assuming the response has a `location` field
-        setLoading(false);
-      } catch (err) {
-        console.error("Failed to get location:", err);
-        setLoading(false);
-      }
-    };
+    getUser();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [phoneNumber]);
 
-    getLocationData();
-  }, []);
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (!locationData) {
-    return <div>No location data found.</div>;
-  }
+  console.log(phoneNumber);
 
   return (
     <div className="w-screen h-screen flex flex-col bg-[#dddddd] items-center justify-center">
@@ -81,42 +51,28 @@ const DetailedAddress = () => {
         </div>
 
         <div className="space-y-4">
-          {/* Add null checks before calling `toString()` */}
           <CopyField
             label="收件人 (Хүлээн авагч)"
             text={
-              locationData.userPhoneNumber
-                ? locationData.userPhoneNumber.toString()
-                : "N/A"
+              `烸嵪 UWPTHA (${phoneNumber})` || "烸嵪 (Өөрийн утасны дугаар)"
             }
             Icon={User}
           />
-          <CopyField
-            label="电话 (Утас)"
-            text={
-              locationData.factoryPhoneNumber
-                ? locationData.factoryPhoneNumber.toString()
-                : "N/A"
-            }
-            Icon={Phone}
-          />
+          <CopyField label="电话 (Утас)" text={"15847901990"} Icon={Phone} />
           <CopyField
             label="所在地区 (Бүс нутаг)"
-            text={locationData.region || "N/A"}
+            text={"内蒙古自治区 锡林郭勒盟 二连浩特市社区建设管理局"}
             Icon={Globe}
           />
           <CopyField
             label="街道地址 (Хаяг)"
-            text={locationData.location || "N/A"}
+            text={
+              `浩特汇通物流园区C05号 UWPTHA (${phoneNumber})` ||
+              "浩特汇通物流园区C05号 (Өөрийн утасны дугаар)"
+            }
             Icon={MapPin}
           />
-          <CopyField
-            label="邮编 (Зип код)"
-            text={
-              locationData.zipCode ? locationData.zipCode.toString() : "N/A"
-            }
-            Icon={Tag}
-          />
+          <CopyField label="邮编 (Зип код)" text={"011100"} Icon={Tag} />
         </div>
       </div>
     </div>
@@ -159,5 +115,4 @@ const CopyField = ({
     </div>
   );
 };
-
-export default DetailedAddress;
+export default DeliveryAddress;
