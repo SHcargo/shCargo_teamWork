@@ -1,18 +1,11 @@
-import {
-  Calculator,
-  Lightbulb,
-  LocationEdit,
-  MapPinHouse,
-  Paperclip,
-  Truck,
-} from "lucide-react";
+import { Calculator, Lightbulb, LocationEdit, MapPinHouse, Paperclip, Truck } from "lucide-react";
 import InfoCard from "../components/card2";
 import { useRouter } from "next/navigation";
 
 const HomePage = ({ setStep }: { setStep: (value: string) => void }) => {
   const router = useRouter();
   return (
-    <div className="max-w-2xl w-full h-full bg-[#e9ecef] p-8 flex flex-wrap justify-center gap-10 items-center">
+    <div className="w-full fit-full bg-[#e9ecef] p-4 sm:p-6 md:p-8 flex flex-wrap justify-center gap-6 items-center overflow-y-scroll">
       <InfoCard
         icon={LocationEdit}
         title="Хаяг Холбох"
@@ -48,7 +41,8 @@ const HomePage = ({ setStep }: { setStep: (value: string) => void }) => {
         title="Үйлчилгээ Нөхцөл"
         subtitle="HiCargo журам"
         onClick={() => router.push("/terms-conditions")}
-      />
+      /> 
+      <div className="w-35 h-35 "></div>
     </div>
   );
 };
