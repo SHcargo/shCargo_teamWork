@@ -9,6 +9,7 @@ import { NotebookPen, Trash2Icon } from "lucide-react";
 import EditAddressContent from "./components/EditAddressContent";
 import { useState } from "react";
 import { DeleteConfirm } from "./components/DeleteConfirm";
+import AddPinPointContent from "./components/AddPinPointContent";
 
 const DeliveryAddress = () => {
   const { addresses } = useDeliveryAddress();
@@ -76,6 +77,7 @@ const DeliveryAddress = () => {
               <p>Шинэ хаяг газрын зурагаас нэмэх</p>
             </div>
           </DialogTrigger>
+          <AddPinPointContent />
         </Dialog>
       </div>
     </div>
