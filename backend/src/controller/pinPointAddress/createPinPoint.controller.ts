@@ -3,11 +3,11 @@ const express = require("express");
 const router = express.Router();
 import { Request, Response } from "express";
 const createPinPoint = async (req: Request, res: Response) => {
-  const { latitude, longitude, detail } = req.body;
+  const { lat, lng, detail } = req.body;
   const userId = req.params.userId;
 
   try {
-    if (!latitude || !longitude) {
+    if (!lat || !lng) {
       res.status(400).json({
         success: false,
         message: "Something is missing in body",
@@ -17,8 +17,8 @@ const createPinPoint = async (req: Request, res: Response) => {
 
     const newPinPoint = await PinPointAddress.create({
       userId: userId,
-      latitude: latitude,
-      longitude: longitude,
+      lat: lat,
+      lng: lng,
       detail: detail,
     });
 

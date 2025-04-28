@@ -15,7 +15,6 @@ import { Check } from "lucide-react";
 import { useUser } from "@/app/providers/UserProvider";
 import { useDeliveryAddress } from "@/app/providers/DeliveryAddressProvider";
 
-// Geolocation validation schema
 const validationSchema = Yup.object({
   city: Yup.string().required("Хот сонгоно уу"),
   district: Yup.string().required("Дүүрэг сонгоно уу"),
@@ -66,9 +65,6 @@ const AddPinPointContent = () => {
 
         <Formik
           initialValues={{
-            city: userLocation.lat && userLocation.lng ? "Улаанбаатар" : "",
-            district: "",
-            khoroo: "",
             detail: "",
             userId: userId,
           }}
@@ -78,11 +74,9 @@ const AddPinPointContent = () => {
               const response = await axios.post(
                 `${process.env.NEXT_PUBLIC_BASE_URL}/deliveryAddress/${userId}`,
                 {
-                  ...values,
-                  location: {
-                    lat: userLocation.lat,
-                    lng: userLocation.lng,
-                  },
+                  lat: userLocation.lat,
+                  lng: userLocation.lng,
+                  detail: values.detail,
                 }
               );
               fetchAddresses();
