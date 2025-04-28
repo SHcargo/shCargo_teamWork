@@ -12,7 +12,7 @@ import { useRouter } from "next/navigation";
 const HomePage = ({ setStep }: { setStep: (value: string) => void }) => {
   const router = useRouter();
   return (
-    <div className="max-w-2xl w-full h-full bg-[#e9ecef] p-8 flex flex-col gap-2 items-center">
+    <div className="max-w-2xl w-full h-full bg-[#e9ecef] p-8 flex flex-wrap justify-center gap-10 items-center">
       <InfoCard
         icon={LocationEdit}
         title="Хаяг Холбох"

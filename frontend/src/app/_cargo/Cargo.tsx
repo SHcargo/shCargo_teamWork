@@ -5,6 +5,24 @@ import { UserOrderCard } from "../components/userOrderCard";
 import { useUser } from "../providers/UserProvider";
 import Post from "../components/post";
 import axios from "axios";
+type Order = {
+  _id: string;
+  userId: string;
+  goodsItems: GoodsItem[];
+  status: string;
+  createdAt: string;
+  statusHistory: {
+    status: string;
+    changedAt: string;
+    _id: string;
+  }[];
+  __v: number;
+};
+type GoodsItem = {
+  item: string;
+  quamtity: number ;
+  _id:string
+}
 
 
 const categories: string[] = ["Бүгд", "Бүртгэсэн", "Замдаа", "УБ-д ирсэн", "Хаагдсан"];
@@ -14,7 +32,7 @@ const Cargo = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [activeCategory, setActiveCategory] = useState<string>("Бүгд");
   const [loading, setLoading] = useState<boolean>(false);
-
+console.log(orders)
   const [deliveryCounts, setDeliveryCounts] = useState<Record<string, number>>({
     Бүгд: 0,
     Бүртгэсэн: 0,
