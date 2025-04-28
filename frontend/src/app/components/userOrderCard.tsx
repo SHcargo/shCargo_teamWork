@@ -4,14 +4,16 @@ import { useRouter } from "next/navigation";
 export const UserOrderCard = ({
   count,
   description,
+  id,
 }: {
   count: number;
   description: string;
+  id:string
 }) => {
   const router = useRouter();
   return (
     <div
-      onClick={() => router.push("/goodsForUsers")}
+    onClick={() => router.push(`/goodsForUsers/${id}`)}
       className="bg-white p-4 rounded-xl border border-gray-200 shadow-sm cursor-pointer mb-4"
     >
       <div className="flex items-center justify-between">
@@ -26,10 +28,10 @@ export const UserOrderCard = ({
       <p className="text-sm text-gray-500 mt-1">{description}</p>
       <p className="text-xl font-bold text-gray-800">{count} ачаа</p>
       <div className="flex gap-4">
-        <button className="mt-3 h-16 px-2 py-2 bg-gray-400 text-white rounded-lg w-full">
+        <button className="mt-3 h-16 px-2 py-2 bg-gray-400 text-white rounded-lg w-full cursor-pointer hover:bg-[#5F2DF590]">
           Салбараас авах
         </button>
-        <button className="mt-3 h-16 px-2 py-2 bg-gray-400 text-white rounded-lg w-full">
+        <button className="mt-3 h-16 px-2 py-2 bg-gray-400 text-white rounded-lg w-full cursor-pointer hover:bg-[#5F2DF590]">
           🚚 Хүргүүлэх
         </button>
       </div>
