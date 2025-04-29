@@ -2,6 +2,8 @@
 
 import DataTableDemo from "../components/(features)/productCard";
 
+// import DataTableDemo from "../components/(features)/productCard";
+
 const UsersAdmin = () => {
   return (
     <div>
