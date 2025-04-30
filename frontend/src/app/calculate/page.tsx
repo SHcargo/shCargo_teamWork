@@ -1,8 +1,8 @@
 "use client";
-import React, { useState } from "react";
+/* import React, { useState } from "react"; */
 
 const ShippingCalculator: React.FC = () => {
-  const [length, setLength] = useState<number>(0);
+/*   const [length, setLength] = useState<number>(0);
   const [width, setWidth] = useState<number>(0);
   const [height, setHeight] = useState<number>(0);
   const [weight, setWeight] = useState<number>(0);
@@ -25,11 +25,11 @@ const ShippingCalculator: React.FC = () => {
     }
 
     setResult(cost);
-  };
+  }; */
 
   return (
-    <div className="p-4 max-w-md mx-auto">
-     {/*  <h1 className="text-2xl font-bold mb-4">Тооцролуур</h1>
+  /*   <div className="p-4 max-w-md mx-auto">
+      <h1 className="text-2xl font-bold mb-4">Тооцролуур</h1>
 
       <div className="mb-6">
         <h2 className="text-xl font-semibold mb-2">Эрзен агуулах</h2>
@@ -79,10 +79,10 @@ const ShippingCalculator: React.FC = () => {
           onChange={(e) => setWeight(Number(e.target.value))}
           className="w-full p-2 border rounded"
         />
-      </div> */}
+      </div>
 
       <div className="mb-4">
-        <label className="block mb-2">{/* Тооцооллын арга */}</label>
+        <label className="block mb-2">Тооцооллын арга</label>
         <div className="flex gap-4">
           <button
             onClick={() => setCalculateBy("weight")}
@@ -92,7 +92,7 @@ const ShippingCalculator: React.FC = () => {
                 : "bg-gray-200"
             }`}
           >
-          {/*   Жингээр */}
+            Жингээр
           </button>
           <button
             onClick={() => setCalculateBy("volume")}
@@ -102,7 +102,7 @@ const ShippingCalculator: React.FC = () => {
                 : "bg-gray-200"
             }`}
           >
-            {/* Овроор бодох */}
+            Овроор бодох
           </button>
         </div>
       </div>
@@ -111,37 +111,38 @@ const ShippingCalculator: React.FC = () => {
         onClick={calculateCost}
         className="w-full bg-green-500 text-white py-2 rounded mb-4"
       >
-        {/* Тооцоолох */}
+        Тооцоолох
       </button>
 
       {result !== null && (
         <div className="p-4 bg-gray-100 rounded">
-          <h3 className="font-semibold">{/* Тооцооллын үр дүн: */}</h3>
+          <h3 className="font-semibold">Тооцооллын үр дүн:</h3>
           <p className="text-xl">
-         {/*    {result} {calculateBy === "weight" ? "¥" : "₮"} */}
+            {result} {calculateBy === "weight" ? "¥" : "₮"}
           </p>
         </div>
       )}
 
       <div className="mt-6 text-sm text-gray-600">
-        <h3 className="font-semibold mb-2">{/* Тээврийн зардал бодох аргачлал: */}</h3>
+        <h3 className="font-semibold mb-2">Тээврийн зардал бодох аргачлал:</h3>
         <ul className="list-disc pl-5">
-          <li>{/* 0–1кг хүртэл = 3,000 ₮ (1 кг тутамд 3,000 ₮, 1м3 = 599¥) */}</li>
+          <li>0–1кг хүртэл = 3,000 ₮ (1 кг тутамд 3,000 ₮, 1м3 = 599¥)</li>
           <li>
-          {/*   Тусдал ирсэн болон бусад дамжуулалтын барааг тус тусдад нь бодно */}
+            Тусдал ирсэн болон бусад дамжуулалтын барааг тус тусдад нь бодно
           </li>
           <li>
-           {/*  Овор ихтэй ууттай куртик, хүнжил гэх мэт ауулын овор хэмжээнээс
-            хамаараад ойролцоогоор 5000₮–10000₮ хооронд байдаг */}
+            Овор ихтэй ууттай куртик, хүнжил гэх мэт ауулын овор хэмжээнээс
+            хамаараад ойролцоогоор 5000₮–10000₮ хооронд байдаг
           </li>
-          <li>{/* Гутлын хайрцаг 4000₮–8000₮ хооронд */}</li>
+          <li>Гутлын хайрцаг 4000₮–8000₮ хооронд</li>
           <li>
-          {/*   Тээврийн зардал нь тухайн барааны жин болон "Оврын жин" хоёрын аль
-            ихээр нь тооцно */}
+            Тээврийн зардал нь тухайн барааны жин болон "Оврын жин" хоёрын аль
+            ихээр нь тооцно
           </li>
         </ul>
       </div>
-    </div>
+    </div> */
+    <div>as</div>
   );
 };
 
