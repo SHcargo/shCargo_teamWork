@@ -10,6 +10,9 @@ const itemsOrderSchema = new mongoose.Schema({
     required: true,
     ref: "users",
   },
+  phoneNumber: {
+    type: Number,
+  },
   trackingNumber: {
     type: String,
     required: true,

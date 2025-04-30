@@ -9,6 +9,7 @@ import { TruckOrdersRouter } from "./router/truckOrder.router";
 import { DeliveryAddressRouter } from "./router/deliveryAddress.router";
 import { UserRouter } from "./router/user.router";
 import { SalesProductRouter } from "./router/salesProduct.router";
+import { TermsRouter } from "./router/terms.router";
 
 require("dotenv").config();
 
@@ -31,6 +32,7 @@ const connectDb = () => {
 connectDb();
 
 app.use("/signUp", UserSignUpRouter);
+app.use("/terms", TermsRouter);
 app.use("/login", UserLoginRouter);
 app.use("/truckItems", TruckOrdersRouter);
 app.use("/adminView", AdminViewRouter);

@@ -9,6 +9,7 @@ import { UserProvider } from "./providers/UserProvider";
 import { DeliveryAddressProvider } from "./providers/DeliveryAddressProvider";
 import { SalesProvider } from "./providers/SalesProvider";
 
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -37,8 +38,7 @@ export default function RootLayout({
         <SalesProvider>
           <AuthProvider>
             <UserProvider>
-              {children}
-              {/* <DeliveryAddressProvider>{children}</DeliveryAddressProvider> */}
+             <DeliveryAddressProvider>{children}</DeliveryAddressProvider> 
             </UserProvider>
           </AuthProvider>
         </SalesProvider>

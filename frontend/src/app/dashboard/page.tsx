@@ -4,11 +4,12 @@ import { useState } from "react";
 import Header from "./components/header";
 import Sidebar from "./components/sideBar";
 import UsersAdmin from "./_users/UserAdmin";
-import TermsAndConditions from "./_terms/termsAndConditions";
+
 import SalesProducts from "./_sales/salesProducts";
 import PriceAddCards from "./_price/priceAddCards";
 import LocationAdd from "./_location/locationAdd";
 import HelpForUsersAdd from "./_help/helpForUsers";
+import { TermsAndConditions } from "./_terms/termsAndConditions";
 
 export const DashboardAdmin = () => {
   const [step, setStep] = useState("users");

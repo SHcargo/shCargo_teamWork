@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useState } from "react";
+import { Suspense } from "react";
 import SearchBar from "./searchBar";
 type HeaderProps = {
   searchValue: string;

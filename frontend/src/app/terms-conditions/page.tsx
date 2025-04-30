@@ -22,7 +22,7 @@ const Home = () => {
         <p className="text-sm p-10 inline-flex flex-col items-center gap-5">
           <NotebookText size={35} />
           <span>
-            Хэрэглэгч нь Hicargo.mn веб сайтад хандсан үеэс эхлэн Үйлчилгээны
+            Хэрэглэгч нь Shcargo.mn веб сайтад хандсан үеэс эхлэн Үйлчилгээны
             нөхцөлийг мөрдөгдөх бөгөөд тухайн үеэс уг нөхцөлийг хүлээн
             зөвшөөрсөнд тооцно.
           </span>
