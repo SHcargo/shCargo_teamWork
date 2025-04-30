@@ -14,7 +14,7 @@ export const CreateLocationController = async (req: Request, res: Response) => {
   ) {
     res.status(400).json({
       success: false,
-      message: "Email and password are required",
+      message: "Inputs are required",
     });
     return;
   }
