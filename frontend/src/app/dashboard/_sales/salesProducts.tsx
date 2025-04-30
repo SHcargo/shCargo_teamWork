@@ -1,10 +1,15 @@
 "use client";
 
-const SalesProducts = () => {
-  // You can navigate like this:
-  // router.push('/some-route');
+import AddSalesProducts from "./_components/AddProduct";
+import Products from "./_components/Products";
 
-  return <div>product for sales</div>;
+const SalesProducts = () => {
+  return (
+    <div className="w-full h-full border p-4 rounded-2xl">
+      <AddSalesProducts />
+      <Products />
+    </div>
+  );
 };
 
 export default SalesProducts;

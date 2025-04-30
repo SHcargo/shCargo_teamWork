@@ -7,6 +7,7 @@ import "./globals.css";
 import AuthProvider from "./providers/AuthProvider";
 import { UserProvider } from "./providers/UserProvider";
 import { DeliveryAddressProvider } from "./providers/DeliveryAddressProvider";
+import { SalesProvider } from "./providers/SalesProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,12 +34,14 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <AuthProvider>
-          <UserProvider>
-            {children}
-            {/* <DeliveryAddressProvider>{children}</DeliveryAddressProvider> */}
-          </UserProvider>
-        </AuthProvider>
+        <SalesProvider>
+          <AuthProvider>
+            <UserProvider>
+              {children}
+              {/* <DeliveryAddressProvider>{children}</DeliveryAddressProvider> */}
+            </UserProvider>
+          </AuthProvider>
+        </SalesProvider>
 
         <ToastContainer
           position="top-right"
