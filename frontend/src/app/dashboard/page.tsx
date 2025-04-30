@@ -12,13 +12,14 @@ import HelpForUsersAdd from "./_help/helpForUsers";
 
 export const DashboardAdmin = () => {
   const [step, setStep] = useState("users");
+  const [searchValue, setSearchValue] = useState("");
   return (
     <div className="flex">
       <Sidebar step={step} setStep={setStep} />
       <div className="flex-1 ml-0">
-        <Header />
+        <Header searchValue={searchValue} setSearchValue={setSearchValue} />
         <main className="mt-16 p-4 sm:p-6">
-          {step === "users" && <UsersAdmin />}
+          {step === "users" && <UsersAdmin searchValue={searchValue} />}
           {step === "terms" && <TermsAndConditions />}
           {step === "sales" && <SalesProducts />}
           {step === "price" && <PriceAddCards />}

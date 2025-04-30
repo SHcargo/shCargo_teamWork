@@ -1,18 +1,19 @@
 import mongoose from "mongoose";
+
+// Define valid statuses
 const STATUS = ["Бүртгэсэн", "Замдаа", "УБ-д ирсэн", "Хаагдсан"];
 
+// Create schema for item orders
 const itemsOrderSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Types.ObjectId,
     required: true,
     ref: "users",
   },
-
   trackingNumber: {
     type: String,
     required: true,
   },
-
   status: {
     type: String,
     enum: STATUS,
@@ -22,7 +23,6 @@ const itemsOrderSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-
   statusHistory: [
     {
       status: {
@@ -37,28 +37,24 @@ const itemsOrderSchema = new mongoose.Schema({
   ],
 });
 
-// Pre-save hook to track status changes and timestamps
+// Pre-save hook to track status changes and convert to Mongolia time
 itemsOrderSchema.pre("save", function (next) {
   if (this.isModified("status")) {
     const now = new Date();
 
-    // // Update the corresponding timestamp
-    // if (this.status === "PENDING") {
-    //   this.pendingAt = now;
-    // } else if (this.status === "CANCELLED") {
-    //   this.cancelledAt = now;
-    // } else if (this.status === "DELIVERED") {
-    //   this.deliveredAt = now;
-    // }
+    // Convert UTC time to Mongolia time (Asia/Ulaanbaatar)
+    const mongoliaTime = new Date(
+      now.toLocaleString("en-US", { timeZone: "Asia/Ulaanbaatar" })
+    );
 
-    // Add to status history
     this.statusHistory.push({
       status: this.status,
-      changedAt: now,
+      changedAt: mongoliaTime,
     });
   }
 
   next();
 });
 
+// Export the model
 export const ItemsOrder = mongoose.model("itemsOrder", itemsOrderSchema);
