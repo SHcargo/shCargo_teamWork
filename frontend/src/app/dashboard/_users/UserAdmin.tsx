@@ -1,13 +1,11 @@
-"use client";
-
-import DataTableDemo from "../components/(features)/productCard";
-
-// import DataTableDemo from "../components/(features)/productCard";
-
-const UsersAdmin = () => {
+import MainDataTable from "../components/(features)/productCard";
+type Props = {
+  searchValue: string;
+};
+const UsersAdmin = ({ searchValue }: Props) => {
   return (
     <div>
-      <DataTableDemo />
+      <MainDataTable searchValue={searchValue} />
     </div>
   );
 };

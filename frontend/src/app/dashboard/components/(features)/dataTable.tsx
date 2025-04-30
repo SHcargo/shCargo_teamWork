@@ -1,0 +1,174 @@
+import React, { useState } from "react";
+
+type OrderItem = {
+  trackingNumber: string;
+  status: string;
+  imageUrl?: string;
+  statusHistory?: { status: string; changedAt: string }[];
+};
+
+type UserType = {
+  phoneNumber: string;
+  createdAt: string;
+  truckCodeItem: {
+    item: OrderItem;
+    status: string;
+  }[];
+  date?: string;
+  address?: string;
+  status?: string;
+};
+
+type Props = {
+  users: UserType[];
+};
+
+export default function DataTable({ users }: Props) {
+  const [expandedRow, setExpandedRow] = useState<number | null>(null);
+  const [startDate, setStartDate] = useState<string>("");
+  const [endDate, setEndDate] = useState<string>("");
+
+  const toggleExpand = (index: number) => {
+    setExpandedRow(expandedRow === index ? null : index);
+  };
+
+  // Date filtering function
+  const filterByDate = (statusHistory: { changedAt: string }[]) => {
+    if (!startDate && !endDate) return true; // No date filter applied
+
+    return statusHistory.some((status) => {
+      const changedAtDate = new Date(status.changedAt);
+      const start = startDate ? new Date(startDate) : null;
+      const end = endDate ? new Date(endDate) : null;
+
+      const afterStart = start ? changedAtDate >= start : true;
+      const beforeEnd = end ? changedAtDate <= end : true;
+
+      return afterStart && beforeEnd;
+    });
+  };
+
+  return (
+    <div>
+      {/* Date Filter Inputs */}
+      <div className="flex gap-2 mb-4">
+        <input
+          type="date"
+          className="border p-2 rounded"
+          value={startDate}
+          onChange={(e) => setStartDate(e.target.value)}
+        />
+        <span>—</span>
+        <input
+          type="date"
+          className="border p-2 rounded"
+          value={endDate}
+          onChange={(e) => setEndDate(e.target.value)}
+        />
+      </div>
+
+      <table className="w-full text-sm">
+        <thead>
+          <tr className="text-left border-b">
+            <th className="p-2">№</th>
+            <th className="p-2">Phone Number</th>
+            <th className="p-2">Items</th>
+            <th className="p-2">Date</th>
+            <th className="p-2">Delivery Address</th>
+          </tr>
+        </thead>
+        <tbody>
+          {users.map((user, index) => (
+            <React.Fragment key={index}>
+              <tr
+                className="border-b cursor-pointer hover:bg-gray-50"
+                onClick={() => toggleExpand(index)}
+              >
+                <td className="p-2">{index + 1}</td>
+                <td className="p-2">{user.phoneNumber || "-"}</td>
+                <td className="p-2">
+                  {user.truckCodeItem?.length
+                    ? `${user.truckCodeItem.length} бараа`
+                    : "-"}
+                </td>
+                <td className="p-2">
+                  {user.createdAt
+                    ? new Date(user.createdAt).toLocaleDateString()
+                    : "-"}
+                </td>
+                <td className="p-2">{user.address || "-"}</td>
+              </tr>
+
+              {/* Expanded Row for Orders */}
+              {expandedRow === index && user.truckCodeItem.length > 0 && (
+                <tr className="bg-gray-50">
+                  <td colSpan={6} className="p-4">
+                    <table className="w-full text-sm">
+                      <thead>
+                        <tr className="text-left border-b">
+                          <th className="p-2">№</th>
+                          <th className="p-2">Tracking Number</th>
+                          <th className="p-2">Status</th>
+                          <th className="p-2">Date</th>
+                          <th className="p-2">Image</th>
+                          <th className="p-2">Лангуу</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {user.truckCodeItem
+                          .filter((order) =>
+                            filterByDate(order.item.statusHistory || [])
+                          )
+                          .map((order, idx) => (
+                            <tr key={idx}>
+                              <td className="p-2">{idx + 1}</td>
+                              <td className="p-2">
+                                {order.item.trackingNumber}
+                              </td>
+                              <td className="p-2">
+                                {order.item.statusHistory?.map((el, index) => (
+                                  <div key={index}>{el.status}</div>
+                                ))}
+                              </td>
+                              <td className="p-2">
+                                {order.item.statusHistory?.map((el, idx) => (
+                                  <div key={idx}>
+                                    {new Date(el.changedAt).toLocaleString(
+                                      "en-US",
+                                      {
+                                        timeZone: "Asia/Ulaanbaatar",
+                                        year: "numeric",
+                                        month: "long",
+                                        day: "numeric",
+                                        hour: "2-digit",
+                                        minute: "2-digit",
+                                      }
+                                    )}
+                                  </div>
+                                ))}
+                              </td>
+                              <td className="p-2">
+                                <img
+                                  src={
+                                    order.item.imageUrl ||
+                                    "/placeholder-image.png"
+                                  }
+                                  alt={`Order ${order.item.trackingNumber}`}
+                                  className="w-12 h-12 object-cover rounded-md"
+                                />
+                              </td>
+                              <td className="p-2">2-3</td>
+                            </tr>
+                          ))}
+                      </tbody>
+                    </table>
+                  </td>
+                </tr>
+              )}
+            </React.Fragment>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
