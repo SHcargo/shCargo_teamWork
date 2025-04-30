@@ -5,8 +5,10 @@ export const UserOrderCard = ({
   description,
   id,
   statusHistory,
+  trackingNumber,
 }: {
   description: string;
+  trackingNumber:string;
   id: string;
   statusHistory: { status: string; changedAt: string }[];
 }) => {
@@ -32,6 +34,7 @@ export const UserOrderCard = ({
       <p className="text-xl font-bold text-gray-800">
         {statusHistory.length} updates
       </p>
+      <p>track Number {trackingNumber}</p>
       <div className="flex gap-4">
         <button className="mt-3 h-16 px-2 py-2 bg-gray-400 text-white rounded-lg w-full cursor-pointer hover:bg-[#5F2DF590]" onClick={() => router.push('/contact')}>
           Салбараас авах

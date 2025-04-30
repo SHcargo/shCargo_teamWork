@@ -6,6 +6,7 @@ const STATUS = ["Бүртгэсэн", "Замдаа", "УБ-д ирсэн", "Х�
 // Update order status to the next status in the array
 export const updateOrderStatus = async (req: Request, res: Response) => {
   const { trackingNumber } = req.params; // Access trackingNumber from URL parameters
+  const {phoneNumber} = req.body
 
   try {
     // Find the order by trackingNumber
@@ -35,6 +36,7 @@ export const updateOrderStatus = async (req: Request, res: Response) => {
 
     // Update the status to the next status
     order.status = nextStatus;
+    order.phoneNumber = phoneNumber
 
     // Add the new status to the status history
 
