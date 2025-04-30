@@ -1,7 +1,7 @@
 "use client";
 /* import React, { useState } from "react"; */
 
-const ShippingCalculator: React.FC = () => {
+const ShippingCalculator = () => {
 /*   const [length, setLength] = useState<number>(0);
   const [width, setWidth] = useState<number>(0);
   const [height, setHeight] = useState<number>(0);
