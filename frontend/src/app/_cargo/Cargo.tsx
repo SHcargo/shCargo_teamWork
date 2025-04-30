@@ -6,7 +6,6 @@ import Post from "../components/post";
 import axios from "axios";
 import { UserOrderCard } from "../components/userOrderCard";
 
-
 type Order = {
   _id: string;
   userId: string;
@@ -21,7 +20,13 @@ type Order = {
   __v: number;
 };
 
-const categories: string[] = ["Бүгд", "Бүртгэсэн", "Замдаа", "УБ-д ирсэн", "Хаагдсан"];
+const categories: string[] = [
+  "Бүгд",
+  "Бүртгэсэн",
+  "Замдаа",
+  "УБ-д ирсэн",
+  "Хаагдсан",
+];
 
 const Cargo = () => {
   const value = useUser();
@@ -44,14 +49,19 @@ const Cargo = () => {
       const data: Order[] = response.data.orders;
 
       setOrders(data);
-      const counts: Record<string, number> = categories.reduce((acc, category) => {
-        if (category === "Бүгд") {
-          acc[category] = data.length;
-        } else {
-          acc[category] = data.filter((order) => order.status === category).length;
-        }
-        return acc;
-      }, {} as Record<string, number>);
+      const counts: Record<string, number> = categories.reduce(
+        (acc, category) => {
+          if (category === "Бүгд") {
+            acc[category] = data.length;
+          } else {
+            acc[category] = data.filter(
+              (order) => order.status === category
+            ).length;
+          }
+          return acc;
+        },
+        {} as Record<string, number>
+      );
 
       setDeliveryCounts(counts);
     } catch (error) {
@@ -77,7 +87,7 @@ console.log(filteredOrders)
   return (
     <div className="flex flex-col h-screen w-full max-w-2xl mx-auto p-4 bg-white overflow-hidden">
       <div className="flex-shrink-0">
-        <Post ref={getCargoOrderItems} loading={loading}/>
+        <Post ref={getCargoOrderItems} loading={loading} />
       </div>
 
       {loading ? (
@@ -104,7 +114,9 @@ console.log(filteredOrders)
 
           <div className="flex-1 overflow-y-auto mt-4 bg-gray-50 rounded-xl p-2 shadow-inner mb-4">
             {filteredOrders.length === 0 ? (
-              <p className="text-center text-gray-500">No orders found for this category.</p>
+              <p className="text-center text-gray-500">
+                No orders found for this category.
+              </p>
             ) : (
               filteredOrders.map((order) => (
                 <div key={order._id}>
@@ -126,7 +138,6 @@ console.log(filteredOrders)
 };
 
 export default Cargo;
-
 
 /* {order.goodsItems.map((item) => (
   <div key={item._id} className="flex flex-row justify-between">

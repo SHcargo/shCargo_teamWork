@@ -37,16 +37,17 @@ export const DeleteConfirm = ({
         </DialogDescription>
       </DialogHeader>
       <div className="flex justify-center gap-4">
-        <DialogClose>
+        <DialogClose asChild>
           <Button
-            type="submit"
+            type="button"
             className="bg-red-500"
             onClick={handleDeleteButton}
           >
             Тийм
           </Button>
         </DialogClose>
-        <DialogClose>
+
+        <DialogClose asChild>
           <Button className="bg-white text-black border">Үгүй</Button>
         </DialogClose>
       </div>
