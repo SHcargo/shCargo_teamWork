@@ -1,8 +1,8 @@
 "use client";
-/* import React, { useState } from "react"; */
+import React, { useState } from "react";
 
 const ShippingCalculator = () => {
-/*   const [length, setLength] = useState<number>(0);
+  const [length, setLength] = useState<number>(0);
   const [width, setWidth] = useState<number>(0);
   const [height, setHeight] = useState<number>(0);
   const [weight, setWeight] = useState<number>(0);
@@ -25,10 +25,10 @@ const ShippingCalculator = () => {
     }
 
     setResult(cost);
-  }; */
+  };
 
   return (
-  /*   <div className="p-4 max-w-md mx-auto">
+    <div className="p-4 max-w-md mx-auto">
       <h1 className="text-2xl font-bold mb-4">Тооцролуур</h1>
 
       <div className="mb-6">
@@ -141,8 +141,7 @@ const ShippingCalculator = () => {
           </li>
         </ul>
       </div>
-    </div> */
-    <div>as</div>
+    </div>
   );
 };
 
