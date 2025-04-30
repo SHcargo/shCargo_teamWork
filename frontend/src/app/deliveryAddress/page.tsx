@@ -3,12 +3,12 @@
 import SubHeader from "./components/SubHeader";
 import { Plus } from "lucide-react";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
-import AddAddressContent from "./components/AddAddressContent";
+import AddAddressContent from "../_profile/_components/AddAddressContent";
 import { useDeliveryAddress } from "../providers/DeliveryAddressProvider";
 import { NotebookPen, Trash2Icon } from "lucide-react";
 import EditAddressContent from "./components/EditAddressContent";
 import { useState } from "react";
-import { DeleteConfirm } from "./components/DeleteConfirm";
+import { DeleteConfirm } from "../_profile/_components/DeleteConfirm";
 import AddPinPointContent from "./components/AddPinPointContent";
 
 const DeliveryAddress = () => {

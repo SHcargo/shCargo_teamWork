@@ -13,6 +13,8 @@ import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 
 type DeliveryAddress = {
+  lng: number;
+  lat: number;
   _id: string;
   city: string;
   district: string;
@@ -37,7 +39,6 @@ export const DeliveryAddressProvider = ({
 }) => {
   const { userId } = useUser();
   const [addresses, setAddresses] = useState<DeliveryAddress[]>([]);
-  const router = useRouter();
 
   const fetchAddresses = useCallback(async () => {
     if (!userId) return;
@@ -46,19 +47,13 @@ export const DeliveryAddressProvider = ({
         `${process.env.NEXT_PUBLIC_BASE_URL}/deliveryAddress/${userId}`
       );
 
-      const { success, data } = response.data;
-
-      if (!success) {
-        toast.error("Хүргэлтийн хаягаа оруулна уу");
-        router.push("/deliveryAddress");
-        return;
-      }
+      const { data } = response.data;
 
       setAddresses(data);
     } catch (error) {
       console.error("Failed to fetch delivery addresses", error);
     }
-  }, [userId, router]);
+  }, [userId]);
 
   useEffect(() => {
     fetchAddresses();
