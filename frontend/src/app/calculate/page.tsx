@@ -1,4 +1,4 @@
-"use client";
+/* "use client";
 import React, { useState } from "react";
 
 const ShippingCalculator: React.FC = () => {
@@ -146,3 +146,4 @@ const ShippingCalculator: React.FC = () => {
 };
 
 export default ShippingCalculator;
+ */
