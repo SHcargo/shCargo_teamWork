@@ -13,7 +13,14 @@ export const TruckItemsController = async (req: Request, res: Response) => {
 
     // Optional: get user's current orders
     const orders = await ItemsOrder.find({ userId });
-
+    const track = await ItemsOrder.findOne({ trackingNumber });
+    if (track) {
+      res.status(409).json({
+        message: "Tracking number already exists.",
+        existingItem: track,
+      });
+      return;
+    }
     // Create a new order entry
     const newTrackItem = await ItemsOrder.create({
       userId,

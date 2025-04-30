@@ -36,6 +36,7 @@ export const Post = ({ref , loading} : {ref: () => void , loading :boolean}) => 
     }
   };
 
+
   return (
     <div className="w-full flex gap-4 overflow-hidden">
       {/* Left Panel */}

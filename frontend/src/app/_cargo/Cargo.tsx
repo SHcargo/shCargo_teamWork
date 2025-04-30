@@ -12,6 +12,7 @@ type Order = {
   userId: string;
   status: string;
   createdAt: string;
+  trackingNumber:string;
   statusHistory: {
     status: string;
     changedAt: string;
@@ -34,7 +35,6 @@ const Cargo = () => {
     "УБ-д ирсэн": 0,
     Хаагдсан: 0,
   });
-
   const getCargoOrderItems = async () => {
     setLoading(true);
     try {
@@ -69,7 +69,7 @@ const Cargo = () => {
     activeCategory === "Бүгд"
       ? orders
       : orders.filter((order) => order.status === activeCategory);
-
+console.log(filteredOrders)
   const handleCategoryClick = (category: string) => {
     setActiveCategory(category);
   };
@@ -112,6 +112,7 @@ const Cargo = () => {
                     description={`Order Status: ${order.status}`}
                     id={order._id}
                     statusHistory={order.statusHistory}
+                    trackingNumber={order.trackingNumber}
                   />
                 </div>
               ))
