@@ -41,7 +41,7 @@ app.use("/location", LocationRouter);
 app.use("/deliveryAddress", DeliveryAddressRouter);
 app.use("/user", UserRouter);
 app.use("/sales", SalesProductRouter);
-app.use("notification", NotificationRouter);
+app.use("/notification", NotificationRouter);
 
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);

@@ -3,32 +3,48 @@
 import axios from "axios";
 import { useState, useEffect, createContext, useContext } from "react";
 import { useUser } from "./UserProvider";
+import { useCallback } from "react";
 
-// Create context
-const NotificationContext = createContext(null);
+type NotificationType = {
+  title: string;
+  read: boolean;
+  _id: string;
+  createdAt: string;
+};
 
-// Provider component
-export const UserProvider = ({ children }: { children: React.ReactNode }) => {
-  const userId = useUser();
-  const [notifications, setNotifications] = useState([]);
-  const [loading, setLoading] = useState(true);
+type NotificationContextType = {
+  notifications: NotificationType[];
+  getNotification: () => Promise<void>;
+};
 
-  const getNotification = async () => {
+const NotificationContext = createContext<NotificationContextType | undefined>(
+  undefined
+);
+
+export const NotificationProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
+  const { userId } = useUser();
+  const [notifications, setNotifications] = useState<NotificationType[]>([]);
+
+  const getNotification = useCallback(async () => {
     try {
-      const response = await axios.get(`/notification/${userId}`);
-      setNotifications(response);
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/notification/${userId}`
+      );
+      setNotifications(response.data.data);
     } catch (error) {
-      console.log("error in notification provider:", error);
+      console.log("Error in NotificationProvider:", error);
     }
-  };
+  }, [userId]);
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
+    if (typeof window !== "undefined" && userId) {
       getNotification();
     }
-  }, []);
-
-  console.log(notifications);
+  }, [getNotification, userId]);
 
   return (
     <NotificationContext.Provider
@@ -42,7 +58,6 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-// Custom hook
 export const useNotification = () => {
   const context = useContext(NotificationContext);
   if (!context) {

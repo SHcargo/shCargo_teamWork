@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { Users } from "../../model/users.model";
+import { notification } from "../../model/notification.model";
 
 export const PostLoginUserController = async (req: Request, res: Response) => {
   const { phoneNumber, password } = req.body;
@@ -51,6 +52,10 @@ export const PostLoginUserController = async (req: Request, res: Response) => {
       decodePassword,
       { expiresIn: "2 days" }
     );
+    await notification.create({
+      title: "Хэрэглэгч амжилттай нэвтэрлээ",
+      userId: userFound._id,
+    });
 
     res.status(200).json({
       success: true,

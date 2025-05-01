@@ -23,8 +23,9 @@ export const CreateUserController = async (req: Request, res: Response) => {
       password: hashedPassword,
       name,
     });
+
     await notification.create({
-      title: `Хэрэглэгч амжилттай бүртгэгдлээ: ${name}`,
+      title: `Хэрэглэгч амжилттай бүртгэгдлээ`,
     });
     res.status(201).json({
       success: true,
