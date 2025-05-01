@@ -214,12 +214,42 @@ const PhoneScanner = () => {
       setLoading(false);
     }
   };
+  const postItemsTruck = async (trackingNumber: string, phone: string) => {
+    console.log("Fetching data for tracking number:", trackingNumber);
+    setLoading(true);
+  
+    try {
+      // Dynamically use the scanned trackingNumber and pass the phone number in the request
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/truckItems/scan/${trackingNumber}`,
+        { phoneNumber: phone } // Sending the phone number as part of the request body
+      );
+  
+      console.log("🚚 Truck item response:", response.data);
+  
+      // Check if the response data is a string and parse it accordingly
+      const truckData =
+        typeof response.data === "string" ? JSON.parse(response.data) : response.data;
+  
+      // Assuming the response contains the truck number, status, and location (adjust as needed)
+      alert(
+        `Truck Number: ${truckData.trackingNumber}\nStatus: ${truckData.status}\nLocation: ${truckData.location}`
+      );
+    } catch (error) {
+      console.error("❌ Error fetching truck item:", error);
+      alert("Error fetching tracking data. Please try again.");
+    } finally {
+      setLoading(false); // Ensure loading state is always reset after the request completes
+    }
+  };
+  
 
   const extractTrackingData = (decodedText: string) => {
     try {
       const data = JSON.parse(decodedText); // Assuming the QR code value is a JSON string
       if (data && data.truck) {
         fetchTruckItem(data.truck, data.phone); // Use the 'truck' number from the QR code
+        postItemsTruck(data.truck, data.phone)
       } else {
         alert("Invalid QR code format");
       }
@@ -227,7 +257,28 @@ const PhoneScanner = () => {
       console.error("Error parsing QR code:", error);
       alert("Error processing QR code");
     }
-  };
+  }; 
+
+  /////textqr scanner
+/*   const extractTrackingData = (decodedText: string) => {
+    try {
+      const [truck, phone] = decodedText.split("|");
+  console.log(decodedText , 'decodedText')
+      if (truck && phone) {
+        console.log(`📦 Extracted truck: ${truck.trim()}, phone: ${phone.trim()}`);
+        alert(`Extracted Tracking Number:\nTruck: ${truck.trim()}\nPhone: ${phone.trim()}`);
+        fetchTruckItem(truck.trim(), phone.trim());
+        console.log('1231231231')
+      } else {
+        alert("Invalid QR code format. Expected format: truck|phone");
+        console.log('9999999')
+      }
+    } catch (error) {
+      console.error("Error processing QR code:", error);
+      alert("Error processing QR code");
+    }
+  }; */
+  
 
   useEffect(() => {
     const scanner = new Html5QrcodeScanner(
@@ -243,9 +294,10 @@ const PhoneScanner = () => {
       (decodedText: string) => {
         console.log("✅ Scanned QR code:", decodedText);
         scanner.clear(); // Stop scanner
-        extractTrackingData(decodedText);
+
         console.log("🚚 Extracted Tracking Number:", decodedText);
         alert(`QR Code Scanned: ${decodedText}`);
+                extractTrackingData(decodedText);
       },
       (error: string) => {
         console.warn("⚠️ QR scan error:", error);

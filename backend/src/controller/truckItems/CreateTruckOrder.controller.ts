@@ -16,7 +16,7 @@ export const TruckItemsController = async (req: Request, res: Response) => {
     const track = await ItemsOrder.findOne({ trackingNumber });
     if (track) {
       res.status(409).json({
-        message: "Tracking number already exists.",
+        message: "Хяналтын дугаар аль хэдийн байна.",
         existingItem: track,
       });
       return;
