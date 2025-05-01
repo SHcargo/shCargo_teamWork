@@ -9,9 +9,10 @@ const QRCodeGenerator = () => {
   
   // Example JSON object
   const exampleJson = {
-    name: "John Doe",
-    email: "johndoe@example.com",
-    address: "1234 Main St, City, Country",
+    
+      truck: "1234",
+      phone: "12345678"
+    
   };
   
   // Convert JSON to a string (QR code needs string data)

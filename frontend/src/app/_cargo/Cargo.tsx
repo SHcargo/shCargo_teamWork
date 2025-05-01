@@ -87,7 +87,7 @@ console.log(filteredOrders)
   return (
     <div className="flex flex-col h-screen w-full max-w-2xl mx-auto p-4 bg-white overflow-hidden">
       <div className="flex-shrink-0">
-        <Post ref={getCargoOrderItems} loading={loading} />
+        <Post refreshFn={getCargoOrderItems} loading={loading} />
       </div>
 
       {loading ? (
