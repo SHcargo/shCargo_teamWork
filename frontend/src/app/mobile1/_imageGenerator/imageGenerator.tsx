@@ -45,8 +45,8 @@ const ImageGenerator = () => {
     }
 
     try {
-      await axios.post(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/${trackingNumber}`,
+      await axios.put(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/truckItems/image/${trackingNumber}`,
         {
           image: imageUrl,
         }
