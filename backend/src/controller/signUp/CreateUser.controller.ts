@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { Users } from "../../model/users.model";
 import bcrypt from "bcryptjs";
+import { notification } from "../../model/notification.model";
 
 export const CreateUserController = async (req: Request, res: Response) => {
   const { email, password, phoneNumber, name } = req.body;
@@ -21,6 +22,9 @@ export const CreateUserController = async (req: Request, res: Response) => {
       phoneNumber,
       password: hashedPassword,
       name,
+    });
+    await notification.create({
+      title: `Хэрэглэгч амжилттай бүртгэгдлээ: ${name}`,
     });
     res.status(201).json({
       success: true,

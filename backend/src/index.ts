@@ -10,6 +10,7 @@ import { DeliveryAddressRouter } from "./router/deliveryAddress.router";
 import { UserRouter } from "./router/user.router";
 import { SalesProductRouter } from "./router/salesProduct.router";
 import { TermsRouter } from "./router/terms.router";
+import { NotificationRouter } from "./router/notification.router";
 
 require("dotenv").config();
 
@@ -40,6 +41,7 @@ app.use("/location", LocationRouter);
 app.use("/deliveryAddress", DeliveryAddressRouter);
 app.use("/user", UserRouter);
 app.use("/sales", SalesProductRouter);
+app.use("notification", NotificationRouter);
 
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);

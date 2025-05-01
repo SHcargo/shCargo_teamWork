@@ -42,6 +42,7 @@ const Login = () => {
             toast.success("Амжилттай нэвтэрлээ!");
             router.push("/");
             console.log("log in success", response);
+            localStorage.setItem("loginTime", new Date().toISOString());
           } catch (error) {
             console.log("error in login:", error);
             toast.error("Нэвтрэх нэр эсвэл нууц үг буруу байна!");

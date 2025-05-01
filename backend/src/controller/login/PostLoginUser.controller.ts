@@ -46,6 +46,7 @@ export const PostLoginUserController = async (req: Request, res: Response) => {
         role: userFound?.role,
         phoneNumber: userFound?.phoneNumber,
         name: userFound?.name,
+        createdAt: userFound?.createdAt,
       },
       decodePassword,
       { expiresIn: "2 days" }
@@ -56,7 +57,6 @@ export const PostLoginUserController = async (req: Request, res: Response) => {
       message: "Logged in successfully",
       token: token,
     });
-
     return;
   } catch (error) {
     console.error("Login error:", error);

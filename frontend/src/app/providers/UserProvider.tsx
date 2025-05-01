@@ -8,6 +8,7 @@ type DecodedToken = {
   role: string;
   userId: string;
   name: string;
+  createdAt: Date;
 };
 
 type UserContextType = {
@@ -17,6 +18,7 @@ type UserContextType = {
   name?: string;
   getUser: () => Promise<void>;
   loading: boolean;
+  createdAt?: Date;
 };
 
 // Decode token safely
@@ -52,6 +54,8 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, []);
 
+  console.log(client);
+
   return (
     <UserContext.Provider
       value={{
@@ -59,6 +63,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
         userId: client?.userId,
         role: client?.role,
         name: client?.name,
+        createdAt: client?.createdAt,
         getUser,
         loading,
       }}
