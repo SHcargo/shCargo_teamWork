@@ -8,7 +8,7 @@ import AuthProvider from "./providers/AuthProvider";
 import { UserProvider } from "./providers/UserProvider";
 import { DeliveryAddressProvider } from "./providers/DeliveryAddressProvider";
 import { SalesProvider } from "./providers/SalesProvider";
-
+import { NotificationProvider } from "./providers/NotificationProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -38,7 +38,9 @@ export default function RootLayout({
         <SalesProvider>
           <AuthProvider>
             <UserProvider>
-             <DeliveryAddressProvider>{children}</DeliveryAddressProvider> 
+              <NotificationProvider>
+                <DeliveryAddressProvider>{children}</DeliveryAddressProvider>
+              </NotificationProvider>
             </UserProvider>
           </AuthProvider>
         </SalesProvider>
