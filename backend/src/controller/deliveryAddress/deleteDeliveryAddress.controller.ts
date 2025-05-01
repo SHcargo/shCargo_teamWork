@@ -1,6 +1,7 @@
 import { deliveryAddress } from "../../model/deliveryAddress.model";
 import { Users } from "../../model/users.model"; // Import Users model
 import { Request, Response } from "express";
+import { notification } from "../../model/notification.model";
 
 export const deleteDeliveryAddress = async (req: Request, res: Response) => {
   const { userId, addressId } = req.params;
@@ -21,6 +22,11 @@ export const deleteDeliveryAddress = async (req: Request, res: Response) => {
       { $pull: { deliveryAddresses: addressId } },
       { new: true }
     );
+
+    await notification.create({
+      title: "Хаяг амжилттай усгагдлаа",
+      userId: userId,
+    });
 
     res.status(200).json({ message: "Address deleted successfully", deleted });
     return;

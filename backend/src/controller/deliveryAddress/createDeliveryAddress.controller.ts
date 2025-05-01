@@ -1,6 +1,7 @@
 import { deliveryAddress } from "../../model/deliveryAddress.model";
 import { Request, Response } from "express";
 import { Users } from "../../model/users.model";
+import { notification } from "../../model/notification.model";
 
 const createDeliveryAddress = async (req: Request, res: Response) => {
   const { lng, lat, detail } = req.body;
@@ -25,6 +26,11 @@ const createDeliveryAddress = async (req: Request, res: Response) => {
     await Users.findByIdAndUpdate(userId, {
       $push: { deliveryAddresses: newAddress._id },
       $set: { primaryDeliveryAddress: newAddress._id },
+    });
+
+    await notification.create({
+      title: "Шинэ хаяг амжилттай бүртгэгдлээ",
+      userId: userId,
     });
 
     res.status(201).json({

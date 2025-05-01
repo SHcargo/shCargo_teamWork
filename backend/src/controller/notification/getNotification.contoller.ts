@@ -5,10 +5,10 @@ const getNotification = async (req: Request, res: Response) => {
     const userId = req.params.userId;
     const notifications = await notification.find({ userId: userId });
 
-    if (!notifications.length) {
+    if (notifications.length === 0) {
       res.status(404).json({
         success: false,
-        message: "There is no notification in this user",
+        message: "There is no notification for this user",
       });
       return;
     }
