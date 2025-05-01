@@ -6,7 +6,7 @@ const STATUS = ["Бүртгэсэн", "Замдаа", "УБ-д ирсэн", "Х�
 // Update order status to the next status in the array
 export const updateOrderStatus = async (req: Request, res: Response) => {
   const { trackingNumber } = req.params; // Access trackingNumber from URL parameters
-  const {phoneNumber} = req.body
+  const { phoneNumber } = req.body;
 
   try {
     // Find the order by trackingNumber
@@ -23,11 +23,9 @@ export const updateOrderStatus = async (req: Request, res: Response) => {
 
     // If the order's status is already at the last status, return a message
     if (currentStatusIndex === -1 || currentStatusIndex === STATUS.length - 1) {
-      res
-        .status(400)
-        .json({
-          message: "No next status available or invalid current status",
-        });
+      res.status(400).json({
+        message: "No next status available or invalid current status",
+      });
       return;
     }
 
@@ -36,7 +34,7 @@ export const updateOrderStatus = async (req: Request, res: Response) => {
 
     // Update the status to the next status
     order.status = nextStatus;
-    order.phoneNumber = phoneNumber
+    order.phoneNumber = phoneNumber;
 
     // Add the new status to the status history
 
