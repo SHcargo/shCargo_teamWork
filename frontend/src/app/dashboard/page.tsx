@@ -11,7 +11,7 @@ import LocationAdd from "./_location/locationAdd";
 import HelpForUsersAdd from "./_help/helpForUsers";
 import { TermsAndConditions } from "./_terms/termsAndConditions";
 
-export const DashboardAdmin = () => {
+const DashboardAdmin = () => {
   const [step, setStep] = useState("users");
   const [searchValue, setSearchValue] = useState("");
   return (

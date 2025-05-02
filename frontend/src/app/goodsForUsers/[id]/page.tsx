@@ -22,13 +22,13 @@ type Order = {
   statusHistory: StatusHistory[];
 };
 
-export const GoodsForUsers = () => {
+export default function GoodsForUsersDetail() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
   const value = useUser();
   const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-console.log(order)
+  console.log(order);
   const getCargoOrderItems = async () => {
     setLoading(true);
     try {
@@ -53,10 +53,15 @@ console.log(order)
       <div className="w-full max-w-2xl h-full bg-white px-6 py-4 rounded-md shadow-md flex flex-col gap-6 overflow-auto">
         {/* Header */}
         <div className="flex items-center gap-4">
-          <Button className="bg-[#5F2DF5] p-2 shadow" onClick={() => router.back()}>
+          <Button
+            className="bg-[#5F2DF5] p-2 shadow"
+            onClick={() => router.back()}
+          >
             <ChevronLeft className="text-black" />
           </Button>
-          <h1 className="text-2xl font-semibold text-gray-800">Захиалгын дэлгэрэнгүй</h1>
+          <h1 className="text-2xl font-semibold text-gray-800">
+            Захиалгын дэлгэрэнгүй
+          </h1>
         </div>
 
         {/* Loading */}
@@ -68,26 +73,35 @@ console.log(order)
           <div className="flex flex-col gap-4">
             {/* Main Order Info */}
             <div className="flex gap-6 items-start">
-            {/*   <img
+              {/*   <img
                 src="\"
                 alt="Cargo image"
                 className="w-48 h-48 object-cover bg-gray-100 rounded-md shadow"
               /> */}
               <div className="flex flex-col gap-2 text-gray-700">
-                <p><span className="font-semibold">Статус:</span> {order.status}</p>
-                <p><span className="font-semibold">Огноо:</span> {new Date(order.createdAt).toLocaleString()}</p>
+                <p>
+                  <span className="font-semibold">Статус:</span> {order.status}
+                </p>
+                <p>
+                  <span className="font-semibold">Огноо:</span>{" "}
+                  {new Date(order.createdAt).toLocaleString()}
+                </p>
               </div>
             </div>
 
             {/* Status History */}
             <div className="mt-4">
-              <h2 className="text-lg font-medium text-blue-600 mb-2">Статусын түүх</h2>
+              <h2 className="text-lg font-medium text-blue-600 mb-2">
+                Статусын түүх
+              </h2>
               {order.statusHistory.length > 0 ? (
                 <div className="flex flex-col gap-2">
                   {order.statusHistory.map((entry) => (
                     <div key={entry._id} className="text-sm text-gray-600">
                       <span className="font-medium">{entry.status}</span> —{" "}
-                      <span className="text-red-400">{new Date(entry.changedAt).toLocaleString()}</span>
+                      <span className="text-red-400">
+                        {new Date(entry.changedAt).toLocaleString()}
+                      </span>
                     </div>
                   ))}
                 </div>
@@ -102,6 +116,6 @@ console.log(order)
       </div>
     </div>
   );
-};
+}
 
-export default GoodsForUsers;
+// export default GoodsForUsers;

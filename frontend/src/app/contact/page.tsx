@@ -1,12 +1,12 @@
 "use client";
-import { ChevronLeft } from "lucide-react";
-import { Poster } from "../components/poster";
-import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+// import { ChevronLeft } from "lucide-react";
+// import { Poster } from "../components/poster";
+// import { useRouter } from "next/navigation";
+// import { useState, useEffect } from "react";
 
 const Contact = () => {
-  const router = useRouter();
-  const [branch, setBranch] = useState<posterProps[]>([]);
+  // const router = useRouter();
+  // const [branch, setBranch] = useState<posterProps[]>([]);
   // const [loading , setLoading] = useState(true)
   // const branchData = () => {
   //   // setLoading(false);
@@ -19,30 +19,30 @@ const Contact = () => {
   //   }
   // };
 
-  useEffect(() => {
-    const dummyData: posterProps[] = [
-      {
-        title: "Салбар 1",
-        address: "Улаанбаатар, Сүхбаатар дүүрэг",
-        phoneNumber: 99112233,
-        day: "Даваа-Баасан",
-        image: "/images/branch1.jpg",
-      },
-      {
-        title: "Салбар 2",
-        address: "Улаанбаатар, Хан-Уул дүүрэг",
-        phoneNumber: 88112233,
-        day: "Бүх өдөр",
-        image: "/images/branch2.jpg",
-      },
-    ];
+  // useEffect(() => {
+  //   const dummyData: posterProps[] = [
+  //     {
+  //       title: "Салбар 1",
+  //       address: "Улаанбаатар, Сүхбаатар дүүрэг",
+  //       phoneNumber: 99112233,
+  //       day: "Даваа-Баасан",
+  //       image: "/images/branch1.jpg",
+  //     },
+  //     {
+  //       title: "Салбар 2",
+  //       address: "Улаанбаатар, Хан-Уул дүүрэг",
+  //       phoneNumber: 88112233,
+  //       day: "Бүх өдөр",
+  //       image: "/images/branch2.jpg",
+  //     },
+  //   ];
 
-    setBranch(dummyData);
-  }, []);
+  //   setBranch(dummyData);
+  // }, []);
 
   return (
     <div className="w-screen h-screen flex items-center justify-center">
-      <div className="max-w-2xl w-full h-full bg-[#e9ecef] p-4 flex flex-col gap-2 ">
+      {/* <div className="max-w-2xl w-full h-full bg-[#e9ecef] p-4 flex flex-col gap-2 ">
         <div className="flex gap-4 mb-4">
           <button
             onClick={() => router.back()}
@@ -60,7 +60,8 @@ const Contact = () => {
         ) : (
           <p>not found</p>
         )}
-      </div>
+      </div> */}
+      <h1>hello world</h1>
     </div>
   );
 };
