@@ -148,14 +148,14 @@ export default function DataTable({ users }: Props) {
                                 ))}
                               </td>
                               <td className="p-2">
-                                <img
+                                {/* <img
                                   src={
                                     order.item.imageUrl ||
                                     "/placeholder-image.png"
                                   }
                                   alt={`Order ${order.item.trackingNumber}`}
                                   className="w-12 h-12 object-cover rounded-md"
-                                />
+                                /> */}
                               </td>
                               <td className="p-2">2-3</td>
                             </tr>

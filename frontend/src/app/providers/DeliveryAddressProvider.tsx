@@ -9,8 +9,6 @@ import {
 } from "react";
 import axios from "axios";
 import { useUser } from "@/app/providers/UserProvider";
-import { useRouter } from "next/navigation";
-import { toast } from "react-toastify";
 
 type DeliveryAddress = {
   lng: number;

@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { Formik, Form } from "formik";
-import * as Yup from "yup";
 import {
   DialogContent,
   DialogHeader,
@@ -20,9 +19,11 @@ const LeafletMap = dynamic(() => import("./LeafletMap"), {
   ssr: false,
 });
 const AddAddressContent = () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [location, setLocation] = useState<{ lat: number; lng: number } | null>(
     null
   );
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [error, setError] = useState<string | null>(null);
   const { userId } = useUser();
   const { fetchAddresses } = useDeliveryAddress();

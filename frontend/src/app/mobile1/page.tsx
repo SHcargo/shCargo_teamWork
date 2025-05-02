@@ -4,7 +4,7 @@ import QrGenerator from "./_qrGenerator/qrGenerator";
 import ScanCode from "./_scan/scanCode";
 import ImageGenerator from "./_imageGenerator/imageGenerator";
 
-export const PhoneScanner = () => {
+export default function PhoneScanner() {
   const [step, setStep] = useState("qrGenerator");
 
   const handleNextStep = () => {
@@ -29,6 +29,4 @@ export const PhoneScanner = () => {
       </button>
     </div>
   );
-};
-
-export default PhoneScanner;
+}
