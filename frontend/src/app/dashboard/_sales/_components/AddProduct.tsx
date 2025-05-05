@@ -80,69 +80,71 @@ const AddSalesProducts = () => {
 
   return (
     <div className="w-full">
-      <p className="text-lg font-semibold mb-4">Products</p>
-      <Dialog>
-        <DialogTrigger asChild>
-          <Button variant="outline">Add product</Button>
-        </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>Add Product</DialogTitle>
-          </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="title" className="text-right">
-                Title
-              </Label>
-              <Input
-                id="title"
-                className="col-span-3"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-              />
-            </div>
+      <div className="flex justify-between">
+        <p className="text-lg font-semibold mb-4">Products</p>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button variant="outline">Add product</Button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle>Add Product</DialogTitle>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="title" className="text-right">
+                  Title
+                </Label>
+                <Input
+                  id="title"
+                  className="col-span-3"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                />
+              </div>
 
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="price" className="text-right">
-                Price
-              </Label>
-              <Input
-                id="price"
-                type="number"
-                className="col-span-3"
-                value={price}
-                onChange={(e) => setPrice(e.target.value)}
-              />
-            </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="price" className="text-right">
+                  Price
+                </Label>
+                <Input
+                  id="price"
+                  type="number"
+                  className="col-span-3"
+                  value={price}
+                  onChange={(e) => setPrice(e.target.value)}
+                />
+              </div>
 
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="image" className="text-right">
-                Image
-              </Label>
-              <Input
-                id="image"
-                type="file"
-                className="col-span-3"
-                onChange={handleImageChange}
-              />
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="image" className="text-right">
+                  Image
+                </Label>
+                <Input
+                  id="image"
+                  type="file"
+                  className="col-span-3"
+                  onChange={handleImageChange}
+                />
+              </div>
+              <div>
+                <Label>Description</Label>
+                <Input
+                  id="description"
+                  type="text"
+                  className="col-span-3"
+                  onChange={(e) => setDescription(e.target.value)}
+                />
+              </div>
             </div>
-            <div>
-              <Label>Description</Label>
-              <Input
-                id="description"
-                type="text"
-                className="col-span-3"
-                onChange={(e) => setDescription(e.target.value)}
-              />
-            </div>
-          </div>
-          <DialogFooter>
-            <Button onClick={handleSubmit} disabled={uploading}>
-              {uploading ? "Uploading..." : "Save changes"}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+            <DialogFooter>
+              <Button onClick={handleSubmit} disabled={uploading}>
+                {uploading ? "Uploading..." : "Save changes"}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      </div>
     </div>
   );
 };

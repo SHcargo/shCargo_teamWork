@@ -87,7 +87,7 @@ const EditSalesProduct = ({ selectedId }: { selectedId: string }) => {
   };
 
   if (!selectedProduct) {
-    return <div>Loading...</div>;
+    return <div></div>;
   }
 
   return (
@@ -170,6 +170,5 @@ const EditSalesProduct = ({ selectedId }: { selectedId: string }) => {
     </DialogContent>
   );
 };
-//finish
 
 export default EditSalesProduct;
