@@ -9,22 +9,22 @@ import NotifContent from "./NotifContent";
 
 const Header = () => {
   return (
-    <div className="w-screen flex abslote z-0 top-0 justify-center h-[100px]">
-      <div className="max-w-2xl w-full px-6 bg-[#11043B] shadow-md flex justify-between items-center">
+    <div className="w-screen flex abslote top-0 justify-center h-[100px] sticky">
+      <div className="max-w-2xl w-full px-6 bg-[#101010] shadow-md flex justify-between items-center">
         <div className="flex gap-3">
           <Logo />
-          <h1 className="text-2xl font-semibold flex items-center text-[#5F2DF5]">
+          <h1 className="text-2xl font-semibold flex items-center text-[#ffff]">
             SH Cargo
           </h1>
         </div>
         <div className="flex items-center gap-3">
-          <button className="rounded-lg p-2 bg-[#5F2DF5]">
+          <button className="rounded-lg p-2 bg-[#303030]">
             <SearchIcon />
           </button>
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild className="cursor-pointer">
-              <button className="rounded-lg p-2 cursor-pointer bg-[#5F2DF5]">
+              <button className="rounded-lg p-2 cursor-pointer bg-[#303030]">
                 <NotfIcon />
               </button>
             </DropdownMenuTrigger>
