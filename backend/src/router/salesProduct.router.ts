@@ -3,8 +3,10 @@ import { CreateSalesController } from "../controller/sales/createSales.controlle
 import { GetAllSalesProductController } from "../controller/sales/getSales.controller";
 import { updateSalesProductController } from "../controller/sales/updateSales.controller";
 import getProductById from "../controller/sales/getSalesById.controller";
+import deleteProduct from "../controller/sales/deleteSales.controller";
 export const SalesProductRouter = express.Router();
 SalesProductRouter.get("/", GetAllSalesProductController);
 SalesProductRouter.post("/", CreateSalesController);
 SalesProductRouter.put("/:selectedId", updateSalesProductController);
 SalesProductRouter.get("/:selectedId", getProductById);
+SalesProductRouter.delete("/:selectedId", deleteProduct);

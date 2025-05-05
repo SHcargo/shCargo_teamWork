@@ -87,7 +87,7 @@ const EditSalesProduct = ({ selectedId }: { selectedId: string }) => {
   };
 
   if (!selectedProduct) {
-    return <div>Loading...</div>;
+    return <div></div>;
   }
 
   return (
