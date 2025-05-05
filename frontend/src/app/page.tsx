@@ -8,6 +8,7 @@ import Location from "./_location/Location";
 import Cargo from "./_cargo/Cargo";
 import Auth from "./_sign/auth";
 import Profile from "./_profile/Profile";
+import Sales from "./_sales/_features/Sales";
 
 export default function Home() {
   const [step, setStep] = useState("home");
@@ -16,9 +17,9 @@ export default function Home() {
     <div className="w-screen h-screen flex flex-col ">
       <Header />
       <div className="w-screen h-full flex justify-center">
-        {step === "home" && <HomePage setStep={setStep} />}
-        {step === "location" && <Location setStep={setStep}/>}
-        {step === "cargo" && <Cargo />}
+        {step === "home" && <Cargo />}
+        {step === "location" && <Location setStep={setStep} />}
+        {step === "cargo" && <Sales />}
         {step === "logIn" && <Auth />}
         {step === "profile" && <Profile />}
       </div>
