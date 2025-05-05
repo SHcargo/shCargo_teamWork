@@ -32,7 +32,7 @@ const Products = () => {
 
   return (
     <div>
-      <div className="flex gap-8">
+      <div className="flex gap-8 flex-wrap">
         {products.map((product) => (
           <div
             key={product._id}
