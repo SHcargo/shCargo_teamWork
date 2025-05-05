@@ -5,6 +5,7 @@ import { GetUserSelectOneOrderItems } from "../controller/truckItems/GetUserSele
 import { updateOrderStatus } from "../controller/truckItems/UpdateTruckOrder.controller";
 import { create } from "../controller/truckItems/createDeliveryCargo";
 import { UpdateImageController } from "../controller/truckItems/UpdateImage.Controller";
+import { DeleteTruckByTrackingNumber } from "../controller/truckItems/DeleteTruckByTrackingNumber.controller";
 export const TruckOrdersRouter = express.Router();
 
 TruckOrdersRouter.post("/", TruckItemsController);
@@ -13,3 +14,4 @@ TruckOrdersRouter.get("/:userId/:id", GetUserSelectOneOrderItems);
 TruckOrdersRouter.put("/scan/:trackingNumber", updateOrderStatus);
 TruckOrdersRouter.put("image/:trackingNumber", UpdateImageController);
 TruckOrdersRouter.post("/scan/:trackingNumber", create);
+TruckOrdersRouter.delete("/:trackingNumber", DeleteTruckByTrackingNumber)

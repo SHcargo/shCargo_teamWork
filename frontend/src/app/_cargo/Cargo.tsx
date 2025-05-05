@@ -83,7 +83,9 @@ const Cargo = () => {
   const handleCategoryClick = (category: string) => {
     setActiveCategory(category);
   };
-
+if(loading){
+  return <div>is loading...</div>
+}
   return (
     <div className="flex flex-col h-screen w-full max-w-2xl mx-auto p-4 bg-white overflow-hidden">
       <div className="flex-shrink-0">
@@ -103,8 +105,8 @@ const Cargo = () => {
                 onClick={() => handleCategoryClick(category)}
                 className={`min-h-12 px-8 rounded-lg text-xs transition-all cursor-pointer ${
                   activeCategory === category
-                    ? "bg-[#5F2DF5] text-white"
-                    : "bg-gray-100 text-[#5F2DF5]"
+                    ? "bg-black text-white"
+                    : "bg-gray-200 text-black/90"
                 }`}
               >
                 {category} ({deliveryCounts[category] ?? 0})
@@ -121,10 +123,12 @@ const Cargo = () => {
               filteredOrders.map((order) => (
                 <div key={order._id}>
                   <UserOrderCard
-                    description={`Order Status: ${order.status}`}
+                    description={`${order.status}`}
                     id={order._id}
                     statusHistory={order.statusHistory}
                     trackingNumber={order.trackingNumber}
+                    activeCategory={activeCategory}
+                    ref={getCargoOrderItems}
                   />
                 </div>
               ))
