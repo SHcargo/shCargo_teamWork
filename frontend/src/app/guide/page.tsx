@@ -10,7 +10,6 @@ import {
   Calculator,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import InfoCard from "../components/card2";
 import { UserManualCard } from "../components/UserManualCard";
 
 const Help = () => {
