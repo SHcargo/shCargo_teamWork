@@ -13,7 +13,7 @@ export default function Home() {
   const [step, setStep] = useState("home");
 
   return (
-    <div className="w-screen h-screen flex flex-col  bg-[rgb(221,221,221)]">
+    <div className="w-screen h-screen flex flex-col ">
       <Header />
       <div className="w-screen h-full flex justify-center">
         {step === "home" && <HomePage setStep={setStep} />}

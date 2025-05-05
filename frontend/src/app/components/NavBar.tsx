@@ -24,30 +24,48 @@ const NavBar = ({
 
   return (
     <div className="w-screen flex justify-center fixed bottom-0 h-[70px] z-50">
-      <div className="max-w-2xl w-full bg-[#11043B] shadow-md flex justify-around items-center">
+      <div className="max-w-2xl w-full bg-[#101010] shadow-md flex justify-around items-center">
         <button
           className="text-xs flex flex-col items-center cursor-pointer"
           onClick={() => setStep("home")}
         >
-          <Home stroke={step === "home" ? "#5F2DF5" : "white"} size={20} />
-          <span className="mt-1 text-[#5F2DF5]">Home</span>
+          <Home stroke={step === "home" ? "#7B61FF" : "#E0E0E0"} size={20} />
+          <span
+            className={`mt-1 ${
+              step === "home" ? "text-[#7B61FF]" : "text-[#E0E0E0]"
+            }`}
+          >
+            Home
+          </span>
         </button>
         <button
           className="text-xs flex flex-col items-center cursor-pointer"
           onClick={() => setStep("location")}
         >
           <LocationEdit
-            stroke={step === "location" ? "#5F2DF5" : "white"}
+            stroke={step === "location" ? "#7B61FF" : "#E0E0E0"}
             size={20}
           />
-          <span className="mt-1 text-[#5F2DF5]">Location</span>
+          <span
+            className={`mt-1 ${
+              step === "location" ? "text-[#7B61FF]" : "text-[#E0E0E0]"
+            }`}
+          >
+            Help
+          </span>
         </button>
         <button
           className="text-xs flex flex-col items-center cursor-pointer"
           onClick={() => setStep("cargo")}
         >
-          <Truck stroke={step === "cargo" ? "#5F2DF5" : "white"} size={20} />
-          <span className="mt-1 text-[#5F2DF5]">Cargo</span>
+          <Truck stroke={step === "cargo" ? "#7B61FF" : "#E0E0E0"} size={20} />
+          <span
+            className={`mt-1 ${
+              step === "cargo" ? "text-[#7B61FF]" : "text-[#E0E0E0]"
+            }`}
+          >
+            Shop
+          </span>
         </button>
         <button
           className="text-xs flex flex-col items-center cursor-pointer"
@@ -59,17 +77,30 @@ const NavBar = ({
           {phoneNumber.phoneNumber ? (
             <>
               <User
-                stroke={step === "profile" ? "#5F2DF5" : "white"}
+                stroke={step === "profile" ? "#5F2DF5" : "#E0E0E0"}
                 size={20}
               />
-              <span className="mt-1 text-[#5F2DF5]">
+              <span
+                className={`mt-1 ${
+                  step === "profile" ? "text-[#7B61FF]" : "text-[#E0E0E0]"
+                }`}
+              >
                 {phoneNumber.phoneNumber}
               </span>
             </>
           ) : (
             <>
-              <User stroke={step === "logIn" ? "#5F2DF5" : "white"} size={20} />
-              <span className="mt-1 text-[#5F2DF5]">Sign In</span>
+              <User
+                stroke={step === "profile" ? "#7B61FF" : "#E0E0E0"}
+                size={20}
+              />
+              <span
+                className={`mt-1 ${
+                  step === "profile" ? "text-[#7B61FF]" : "text-[#E0E0E0]"
+                }`}
+              >
+                Sign In
+              </span>
             </>
           )}
         </button>
