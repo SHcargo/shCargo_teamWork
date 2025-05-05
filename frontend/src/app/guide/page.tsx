@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import InfoCard from "../components/card2";
+import { UserManualCard } from "../components/UserManualCard";
 
 const Help = () => {
   const router = useRouter();
@@ -63,9 +64,9 @@ const Help = () => {
         <div className="flex gap-4 mb-4">
           <button
             onClick={() => router.back()}
-            className="bg-[#5F2DF5] h-11 w-11 flex items-center justify-center rounded-lg"
+            className="bg-gray-300 h-11 w-11 flex items-center justify-center rounded-lg"
           >
-            <ChevronLeft color="#fff" />
+            <ChevronLeft color="#000" />
           </button>
           <div className="flex-1 flex flex-col items-center">
             <h1 className="text-xl font-bold">Салбарын байршил</h1>
@@ -76,11 +77,10 @@ const Help = () => {
           <div key={index} className="inline-flex flex-col gap-4">
             <h1 className="font-bold">{section.title}</h1>
             {section.items.map((item, idx) => (
-              <InfoCard
+              <UserManualCard
                 key={idx}
                 icon={item.icon}
                 title={item.title}
-                subtitle=""
                 onClick={() => router.push(item.path)}
               />
             ))}
