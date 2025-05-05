@@ -4,7 +4,6 @@ import { useState } from "react";
 import Header from "./components/header";
 import Sidebar from "./components/sideBar";
 import UsersAdmin from "./_users/UserAdmin";
-
 import SalesProducts from "./_sales/salesProducts";
 import PriceAddCards from "./_price/priceAddCards";
 import LocationAdd from "./_location/locationAdd";

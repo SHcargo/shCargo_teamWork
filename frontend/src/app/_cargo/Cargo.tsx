@@ -11,7 +11,7 @@ type Order = {
   userId: string;
   status: string;
   createdAt: string;
-  trackingNumber:string;
+  trackingNumber: string;
   statusHistory: {
     status: string;
     changedAt: string;
@@ -79,7 +79,7 @@ const Cargo = () => {
     activeCategory === "Бүгд"
       ? orders
       : orders.filter((order) => order.status === activeCategory);
-console.log(filteredOrders)
+  console.log(filteredOrders);
   const handleCategoryClick = (category: string) => {
     setActiveCategory(category);
   };
@@ -96,7 +96,7 @@ console.log(filteredOrders)
         </div>
       ) : (
         <>
-          <div className="mt-4 flex gap-2 w-full overflow-x-auto">
+          <div className=" flex gap-2 w-full overflow-x-auto">
             {categories.map((category) => (
               <button
                 key={category}
