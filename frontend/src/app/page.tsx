@@ -17,7 +17,7 @@ export default function Home() {
       <Header />
       <div className="w-screen h-full flex justify-center">
         {step === "home" && <HomePage setStep={setStep} />}
-        {step === "location" && <Location />}
+        {step === "location" && <Location setStep={setStep}/>}
         {step === "cargo" && <Cargo />}
         {step === "logIn" && <Auth />}
         {step === "profile" && <Profile />}
