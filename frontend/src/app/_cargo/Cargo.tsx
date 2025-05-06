@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 
 import { useUser } from "../providers/UserProvider";
-import Post from "../components/post";
+// import Post from "../components/post";
 import axios from "axios";
 import { UserOrderCard } from "../components/userOrderCard";
 
@@ -91,9 +91,9 @@ const Cargo = () => {
   }
   return (
     <div className="flex flex-col h-screen w-full max-w-2xl mx-auto p-4 bg-white overflow-hidden">
-      <div className="flex-shrink-0">
+      {/* <div className="flex-shrink-0">
         <Post refreshFn={getCargoOrderItems} loading={loading} />
-      </div>
+      </div> */}
 
       {loading ? (
         <div className="flex justify-center items-center h-32">
