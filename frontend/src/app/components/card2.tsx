@@ -10,7 +10,7 @@ type InfoCardProps = {
 
 const InfoCard = ({ icon: Icon, title, subtitle, onClick }: InfoCardProps) => (
   <div
-    className="w-50 h-35 cursor-pointer bg-white rounded-lg flex p-4 overflow-hidden border-gray-200 border-1.5 shadow-sm hover:shadow-xl transition-all duration-200 ease-in-out"
+    className="w-full 2xl:w-50 2xl:h-35 cursor-pointer bg-white rounded-lg flex p-4 overflow-hidden border-gray-200 border-1.5 shadow-sm hover:shadow-xl transition-all duration-200 ease-in-out"
     onClick={onClick}
   >
     <div className="w-full flex flex-col gap-4">
