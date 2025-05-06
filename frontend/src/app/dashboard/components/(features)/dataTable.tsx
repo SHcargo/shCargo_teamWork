@@ -1,4 +1,6 @@
+import { Button } from "@/components/ui/button";
 import React, { useState } from "react";
+import AllItems from "../../_users/_allItems/allItems";
 
 type OrderItem = {
   trackingNumber: string;
@@ -51,20 +53,22 @@ export default function DataTable({ users }: Props) {
   return (
     <div>
       {/* Date Filter Inputs */}
-      <div className="flex gap-2 mb-4">
-        <input
-          type="date"
-          className="border p-2 rounded"
-          value={startDate}
-          onChange={(e) => setStartDate(e.target.value)}
-        />
-        <span>—</span>
-        <input
-          type="date"
-          className="border p-2 rounded"
-          value={endDate}
-          onChange={(e) => setEndDate(e.target.value)}
-        />
+      <div className="flex justify-between">
+        <div className="flex gap-2 mb-4">
+          <input
+            type="date"
+            className="border p-2 rounded"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+          />
+          <span>—</span>
+          <input
+            type="date"
+            className="border p-2 rounded"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+          />
+        </div>
       </div>
 
       <table className="w-full text-sm">
