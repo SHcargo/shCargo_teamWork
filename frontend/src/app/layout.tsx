@@ -39,8 +39,7 @@ export default function RootLayout({
           <AuthProvider>
             <UserProvider>
               <NotificationProvider>
-                {children}
-                {/* <DeliveryAddressProvider>{children}</DeliveryAddressProvider> */}
+                <DeliveryAddressProvider>{children}</DeliveryAddressProvider>
               </NotificationProvider>
             </UserProvider>
           </AuthProvider>

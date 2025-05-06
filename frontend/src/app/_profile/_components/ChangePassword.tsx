@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import { useState } from "react";
 import * as Yup from "yup";
 import { AxiosError } from "axios";
+import { errorToJSON } from "next/dist/server/render";
 
 const ChangePassword = () => {
   const { userId } = useUser();
@@ -25,7 +26,7 @@ const ChangePassword = () => {
       ),
     confirmPassword: Yup.string()
       .oneOf([Yup.ref("newPassword")], "Нууц үг таарахгүй байна")
-      .required("Нууц үгээ баталгаажуулна уу"),
+      .required("Нууц үгээ давтан оруулна уу"),
   });
 
   const togglePasswordVisibility = () => {
@@ -43,11 +44,11 @@ const ChangePassword = () => {
         }}
         validationSchema={PasswordSchema}
         onSubmit={async (values, { resetForm }) => {
-          if (!userId) {
-            toast.error("User ID not found. Please log in again.");
-            return;
-          }
           try {
+            if (values.newPassword === values.currentPassword) {
+              toast.error("Одоогийн нууц үг болон шинэ нууц үг адилхан байна");
+              return;
+            }
             if (values.newPassword !== values.confirmPassword) {
               toast.error("Нууц үг таарахгүй байна");
               return;
