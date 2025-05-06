@@ -1,11 +1,21 @@
 import NotfIcon from "../ui/NotfIcon";
-import SearchIcon from "../ui/SearchIcon";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import NotifContent from "./NotifContent";
 import Logo from "@/components/ui/logoSh";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { LogOut } from "lucide-react";
+import { DialogClose } from "@radix-ui/react-dialog";
 
 const Header = () => {
   return (
@@ -15,10 +25,6 @@ const Header = () => {
           <Logo className="w-30" />
         </div>
         <div className="flex items-center gap-3">
-          <button className="rounded-lg p-2 bg-[#303030]">
-            <SearchIcon />
-          </button>
-
           <DropdownMenu>
             <DropdownMenuTrigger asChild className="cursor-pointer">
               <button className="rounded-lg p-2 cursor-pointer bg-[#303030]">
@@ -27,6 +33,29 @@ const Header = () => {
             </DropdownMenuTrigger>
             <NotifContent />
           </DropdownMenu>
+          <Dialog>
+            <DialogTrigger>
+              <div className="bg-[#303030] p-2 rounded-lg cursor-pointer">
+                <LogOut stroke="white" width={22} height={22} />
+              </div>
+            </DialogTrigger>
+            <DialogContent className="flex flex-col items-center">
+              <DialogHeader>
+                <DialogTitle>
+                  Та системээс гарахдаа итгэлтэй байна уу
+                </DialogTitle>
+                <DialogDescription></DialogDescription>
+              </DialogHeader>
+              <div className="flex gap-6">
+                <Button className="px-6 cursor-pointer">Тийм</Button>
+                <DialogClose>
+                  <div className="px-6 cursor-pointer bg-black py-1 rounded-lg">
+                    Үгүй
+                  </div>
+                </DialogClose>
+              </div>
+            </DialogContent>
+          </Dialog>
         </div>
       </div>
     </div>
