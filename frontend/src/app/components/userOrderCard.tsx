@@ -94,12 +94,12 @@ export const UserOrderCard = ({
 
       <div className="flex gap-4">
         <button
-          className="mt-3 text-[80%] h-10 px-2 py-2 bg-gray-200 text-black rounded-lg w-full cursor-pointer hover:bg-gray-500"
+          className="mt-3 text-[80%] 2xl:text-[15px] h-10 px-2 py-2 bg-gray-200 text-black rounded-lg w-full cursor-pointer hover:bg-gray-500"
           onClick={() => router.push("/contact")}
         >
           Салбараас авах
         </button>
-        <button className="mt-3 text-[80%] h-10 px-2 py-2 bg-gray-200 text-black rounded-lg w-full cursor-pointer hover:bg-gray-500">
+        <button className="mt-3 text-[80%] 2xl:text-[15px] h-10 px-2 py-2 bg-gray-200 text-black rounded-lg w-full cursor-pointer hover:bg-gray-500">
           🚚 Хүргүүлэх
         </button>
       </div>
