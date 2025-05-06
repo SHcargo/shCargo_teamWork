@@ -1,4 +1,3 @@
-import Delivery from "./_components/Delivery";
 import DeliveryAddress from "./_components/DeliveryAddress";
 import ChangePhoneNumber from "./_components/ChangePhoneNumber";
 import PersonalInformation from "./_components/PersonalInformation";
@@ -6,9 +5,8 @@ import ChangePassword from "./_components/ChangePassword";
 
 const Profile = () => {
   return (
-    <div className="max-w-2xl w-full h-auto p-4 flex flex-col bg-[#e9ecef]">
+    <div className="max-w-2xl w-full h-auto p-4 flex flex-col pt-[100px] bg-[#e9ecef]">
       <div className="overflow-scroll w-full h-auto flex flex-col gap-4">
-        <Delivery />
         <PersonalInformation />
         <ChangePhoneNumber />
         <ChangePassword />

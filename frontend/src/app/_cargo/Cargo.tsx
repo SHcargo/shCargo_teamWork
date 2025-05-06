@@ -86,13 +86,13 @@ const Cargo = () => {
   const handleCategoryClick = (category: string) => {
     setActiveCategory(category);
   };
-if(loading){
-  return <div>is loading...</div>
-}
+  if (loading) {
+    return <div>is loading...</div>;
+  }
   return (
-    <div className="flex flex-col h-screen w-full max-w-2xl mx-auto p-4 bg-white overflow-hidden">
-      <div className="flex-shrink-0 mb-4">
-      <Post refreshFn={getCargoOrderItems} loading={loading} />
+    <div className="flex flex-col h-screen w-full pt-[100px] max-w-2xl mx-auto p-4 bg-white overflow-hidden">
+      <div className="flex-shrink-0">
+        <Post refreshFn={getCargoOrderItems} loading={loading} />
       </div>
 
       {loading ? (
