@@ -1,13 +1,7 @@
 "use client";
 
 import { Suspense } from "react";
-import SearchBar from "./searchBar";
-type HeaderProps = {
-  searchValue: string;
-  setSearchValue: (value: string) => void;
-};
-
-export default function Header({ searchValue, setSearchValue }: HeaderProps) {
+export default function Header() {
   return (
     <header className="h-16 border-b border-[#E5E5E5] bg-white fixed top-0 right-0 z-10 w-full md:left-[250px]">
       <div className="h-full flex items-center justify-between px-4 sm:px-6">
@@ -15,12 +9,7 @@ export default function Header({ searchValue, setSearchValue }: HeaderProps) {
           fallback={
             <div className="w-full max-w-xl h-10 bg-gray-100 animate-pulse rounded-lg"></div>
           }
-        >
-          <SearchBar
-            searchValue={searchValue}
-            setSearchValue={setSearchValue}
-          />
-        </Suspense>
+        ></Suspense>
       </div>
     </header>
   );

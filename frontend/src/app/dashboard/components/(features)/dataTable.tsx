@@ -13,7 +13,7 @@ type UserType = {
   phoneNumber: string;
   createdAt: string;
   truckCodeItem: {
-    item: OrderItem;
+    item: OrderItem | null; // Ensure item can be null
     status: string;
   }[];
   date?: string;
@@ -102,8 +102,6 @@ export default function DataTable({ users }: Props) {
                 </td>
                 <td className="p-2">{user.address || "-"}</td>
               </tr>
-
-              {/* Expanded Row for Orders */}
               {expandedRow === index && user.truckCodeItem.length > 0 && (
                 <tr className="bg-gray-50">
                   <td colSpan={6} className="p-4">
@@ -121,21 +119,21 @@ export default function DataTable({ users }: Props) {
                       <tbody>
                         {user.truckCodeItem
                           .filter((order) =>
-                            filterByDate(order.item.statusHistory || [])
+                            filterByDate(order.item?.statusHistory || [])
                           )
                           .map((order, idx) => (
                             <tr key={idx}>
                               <td className="p-2">{idx + 1}</td>
                               <td className="p-2">
-                                {order.item.trackingNumber}
+                                {order.item?.trackingNumber || "-"}
                               </td>
                               <td className="p-2">
-                                {order.item.statusHistory?.map((el, index) => (
+                                {order.item?.statusHistory?.map((el, index) => (
                                   <div key={index}>{el.status}</div>
                                 ))}
                               </td>
                               <td className="p-2">
-                                {order.item.statusHistory?.map((el, idx) => (
+                                {order.item?.statusHistory?.map((el, idx) => (
                                   <div key={idx}>
                                     {new Date(el.changedAt).toLocaleString(
                                       "en-US",
