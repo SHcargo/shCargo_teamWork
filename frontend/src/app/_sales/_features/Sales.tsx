@@ -4,7 +4,7 @@ import { useSalesProducts } from "@/app/providers/SalesProvider";
 const Sales = () => {
   const { products } = useSalesProducts();
   return (
-    <div className="w-screen h-screen flex flex-col bg-white items-center justify-center">
+    <div className="w-screen h-screen flex flex-col bg-white  items-center justify-center">
       <div className="max-w-2xl w-full h-full bg-[#e9ecef]  px-6 py-4">
         <div>
           <p className="font-bold text-2xl">Бэлэн бараа</p>
