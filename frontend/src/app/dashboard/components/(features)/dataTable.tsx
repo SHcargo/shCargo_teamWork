@@ -13,7 +13,7 @@ type UserType = {
   phoneNumber: string;
   createdAt: string;
   truckCodeItem: {
-    item: OrderItem | null; // Ensure item can be null
+    item: OrderItem | null;
     status: string;
   }[];
   date?: string;
@@ -29,6 +29,8 @@ export default function DataTable({ users }: Props) {
   const [expandedRow, setExpandedRow] = useState<number | null>(null);
   const [startDate, setStartDate] = useState<string>("");
   const [endDate, setEndDate] = useState<string>("");
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const itemsPerPage = 10;
 
   const toggleExpand = (index: number) => {
     setExpandedRow(expandedRow === index ? null : index);
@@ -48,6 +50,29 @@ export default function DataTable({ users }: Props) {
 
       return afterStart && beforeEnd;
     });
+  };
+
+  // Pagination logic: Show all users, including those without items
+  const totalPages = Math.ceil(users.length / itemsPerPage);
+
+  // Slice users based on current page
+  const paginatedUsers = users.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  // Go to next page
+  const goToNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  // Go to previous page
+  const goToPreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
   };
 
   return (
@@ -82,13 +107,15 @@ export default function DataTable({ users }: Props) {
           </tr>
         </thead>
         <tbody>
-          {users.map((user, index) => (
+          {paginatedUsers.map((user, index) => (
             <React.Fragment key={index}>
               <tr
                 className="border-b cursor-pointer hover:bg-gray-50"
                 onClick={() => toggleExpand(index)}
               >
-                <td className="p-2">{index + 1}</td>
+                <td className="p-2">
+                  {(currentPage - 1) * itemsPerPage + index + 1}
+                </td>
                 <td className="p-2">{user.phoneNumber || "-"}</td>
                 <td className="p-2">
                   {user.truckCodeItem?.length
@@ -171,6 +198,27 @@ export default function DataTable({ users }: Props) {
           ))}
         </tbody>
       </table>
+
+      {/* Pagination Controls */}
+      <div className="mt-4 flex justify-between items-center">
+        <button
+          onClick={goToPreviousPage}
+          className="px-4 py-2 bg-gray-500 text-white rounded-md disabled:opacity-50"
+          disabled={currentPage === 1}
+        >
+          Previous
+        </button>
+        <span className="text-gray-600">
+          Page {currentPage} of {totalPages}
+        </span>
+        <button
+          onClick={goToNextPage}
+          className="px-4 py-2 bg-gray-500 text-white rounded-md disabled:opacity-50"
+          disabled={currentPage === totalPages}
+        >
+          Next
+        </button>
+      </div>
     </div>
   );
 }
