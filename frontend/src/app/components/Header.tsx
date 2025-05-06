@@ -9,7 +9,7 @@ import NotifContent from "./NotifContent";
 
 const Header = () => {
   return (
-    <div className="w-screen flex justify-center h-[70px]  fixed top-0 z-50">
+    <div className="w-screen flex justify-center h-[70px] fixed top-0 z-50">
       <div className="max-w-2xl w-full px-6 bg-[#101010] shadow-md flex justify-between items-center">
         <div className="flex gap-3">
           <Logo />
