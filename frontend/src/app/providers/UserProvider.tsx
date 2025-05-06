@@ -21,22 +21,19 @@ type UserContextType = {
   createdAt?: Date;
 };
 
-// Decode token safely
 const getDecodedToken = async (token: string | null) => {
   if (!token) return null;
 
   try {
     return jwtDecode<DecodedToken>(token);
   } catch (error) {
-    console.error("❌ Invalid token:", error);
+    console.error("Invalid token:", error);
     return null;
   }
 };
 
-// Create context
 const UserContext = createContext<UserContextType>({} as UserContextType);
 
-// Provider component
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [client, setClient] = useState<DecodedToken | null>(null);
   const [loading, setLoading] = useState(true);
@@ -73,7 +70,6 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-// Custom hook
 export const useUser = () => {
   const context = useContext(UserContext);
   if (!context) {

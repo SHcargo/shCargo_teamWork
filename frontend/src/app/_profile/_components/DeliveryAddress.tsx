@@ -18,7 +18,7 @@ const DeliveryAddress = () => {
   console.log("delivery address", addresses);
 
   return (
-    <div className="w-full max-h-[500px] p-4 gap-4 h-full flex flex-col overflow-scroll rounded-lg bg-white">
+    <div className="w-full  p-4 gap-4 h-full flex flex-col overflow-scroll mb-[70px] rounded-lg bg-white">
       <div className="flex gap-2 items-center">
         <LocationEdit width={16} height={16} />
         <h1 className="font-medium">Миний хаяг</h1>
