@@ -42,6 +42,7 @@ const Cargo = () => {
   });
   const getCargoOrderItems = async () => {
     setLoading(true);
+    if(!value.userId){ return}
     try {
       const response = await axios.get(
         `${process.env.NEXT_PUBLIC_BASE_URL}/truckItems/${value.userId}`
@@ -72,7 +73,9 @@ const Cargo = () => {
   };
 
   useEffect(() => {
-    getCargoOrderItems();
+   
+      getCargoOrderItems();
+    
   }, [value.userId]);
 
   const filteredOrders =
