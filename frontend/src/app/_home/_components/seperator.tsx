@@ -5,7 +5,7 @@ import { IoIosArrowForward } from "react-icons/io";
 
 const AccountDialog = () => {
   return (
-    <div className="w-full relative -top-5 bg-white rounded-xl p-2 shadow">
+    <div className="w-full relative top-2 bg-white rounded-xl p-2 border-1.5 shadow-xl transition-all duration-200 ease-in-out">
       <p className="font-semibold mb-2">Илгээмж бүртгэх</p>
       <div className="flex items-center gap-2 h-12 bg-gray-100 px-4 py-3 rounded-lg shadow-inner">
         <FaBarcode className="text-xl text-black" />
