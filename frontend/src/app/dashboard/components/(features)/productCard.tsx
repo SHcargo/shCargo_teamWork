@@ -13,6 +13,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input"; // Assuming you have a styled Input component
+import AllItems from "../../_users/_allItems/allItems";
 
 type OrderItem = {
   trackingNumber: string;
@@ -95,7 +96,7 @@ export default function MainDataTable({ searchValue, setSearchValue }: Props) {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="users">Users</SelectItem>
-              <SelectItem value="truck">Truck Number</SelectItem>
+              <SelectItem value="truck">truck number</SelectItem>
             </SelectContent>
           </Select>
           <button
@@ -109,6 +110,11 @@ export default function MainDataTable({ searchValue, setSearchValue }: Props) {
           </button>
         </div>
       </div>
+      {filterType === "truck" && (
+        <div className="w-full mt-4">
+          <AllItems users={filteredUsers} searchValue={searchValue} />
+        </div>
+      )}
       {loading ? <SkeletonTable /> : <DataTable users={filteredUsers} />}
     </Card>
   );
