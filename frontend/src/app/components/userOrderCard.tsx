@@ -38,6 +38,7 @@ export const UserOrderCard = ({
     ["Бүртгэсэн", "Хаагдсан"].includes(description);
 
   const DeleteTruckingByTrackingNumber = async (trackingNumber: string) => {
+    console.log("a" , trackingNumber)
     try {
       await axios.delete(
         `${process.env.NEXT_PUBLIC_BASE_URL}/truckItems/${trackingNumber}`
