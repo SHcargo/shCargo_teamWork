@@ -2,30 +2,32 @@
 import { useEffect, useState } from "react";
 import { Html5QrcodeScanner } from "html5-qrcode";
 import axios from "axios";
+import { QrStatusSelector } from "@/components/ui/qrStatusSelector";
 
 const ScanCode = () => {
   const [loading, setLoading] = useState(false);
+  const [activeStatus, setActiveStatus] = useState("Замдаа");
 
   const fetchTruckItem = async (trackingNumber: string, phone: string) => {
     console.log("Fetching data for tracking number:", trackingNumber);
     setLoading(true);
 
     try {
-      // Dynamically use the scanned trackingNumber and pass the phone number in the request
       const response = await axios.put(
         `${process.env.NEXT_PUBLIC_BASE_URL}/truckItems/scan/${trackingNumber}`,
-        { phoneNumber: phone } // Sending the phone number as part of the request body
+        {
+          phoneNumber: phone,
+          status: activeStatus,
+        }
       );
 
       console.log("🚚 Truck item response:", response.data);
 
-      // Assuming the response is JSON, but check if it's actually a string or other format
       const truckData =
         typeof response.data === "string"
           ? JSON.parse(response.data)
           : response.data;
 
-      // Example formatted output, adjust based on your actual response structure
       alert(
         `Truck Number: ${truckData.truckNumber}\nStatus: ${truckData.status}\nLocation: ${truckData.location}`
       );
@@ -35,41 +37,41 @@ const ScanCode = () => {
       setLoading(false);
     }
   };
+
   const postItemsTruck = async (trackingNumber: string, phone: string) => {
-    console.log("Fetching data for tracking number:", trackingNumber);
+    console.log("Posting truck item data for:", trackingNumber);
     setLoading(true);
 
     try {
-      // Dynamically use the scanned trackingNumber and pass the phone number in the request
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_BASE_URL}/truckItems/scan/${trackingNumber}`,
-        { phoneNumber: phone } // Sending the phone number as part of the request body
+        {
+          phoneNumber: phone,
+        }
       );
 
-      console.log("🚚 Truck item response:", response.data);
+      console.log("🚚 Post response:", response.data);
 
-      // Check if the response data is a string and parse it accordingly
       const truckData =
         typeof response.data === "string"
           ? JSON.parse(response.data)
           : response.data;
 
-      // Assuming the response contains the truck number, status, and location (adjust as needed)
       alert(
         `Truck Number: ${truckData.trackingNumber}\nStatus: ${truckData.status}\nLocation: ${truckData.location}`
       );
     } catch (error) {
-      console.error("❌ Error fetching truck item:", error);
+      console.error("❌ Error posting truck item:", error);
     } finally {
-      setLoading(false); // Ensure loading state is always reset after the request completes
+      setLoading(false);
     }
   };
 
   const extractTrackingData = (decodedText: string) => {
     try {
-      const data = JSON.parse(decodedText); // Assuming the QR code value is a JSON string
+      const data = JSON.parse(decodedText);
       if (data && data.truck) {
-        fetchTruckItem(data.truck, data.phone); // Use the 'truck' number from the QR code
+        fetchTruckItem(data.truck, data.phone);
         postItemsTruck(data.truck, data.phone);
       } else {
         alert("Invalid QR code format");
@@ -94,8 +96,6 @@ const ScanCode = () => {
       (decodedText: string) => {
         console.log("✅ Scanned QR code:", decodedText);
         scanner.clear(); // Stop scanner
-
-        console.log("🚚 Extracted Tracking Number:", decodedText);
         alert(`QR Code Scanned: ${decodedText}`);
         extractTrackingData(decodedText);
       },
@@ -107,7 +107,6 @@ const ScanCode = () => {
     return () => {
       scanner.clear().catch(console.error);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -115,9 +114,13 @@ const ScanCode = () => {
       <h2 className="text-2xl font-bold text-center mb-4 text-blue-600">
         Scan QR Code with Your Phone
       </h2>
+      <QrStatusSelector
+        activeStatus={activeStatus}
+        setActiveStatus={setActiveStatus}
+      />
       <div
         id="qr-reader"
-        className="w-full max-w-md mx-auto mb-6 "
+        className="w-full max-w-md mx-auto mb-6"
         style={{ height: "400px" }}
       ></div>
       {loading && (
