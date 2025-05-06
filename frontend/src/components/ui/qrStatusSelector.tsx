@@ -1,41 +1,43 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
+
+type QrStatusSelectorProps = {
+  activeStatus: string;
+  setActiveStatus: (status: string) => void;
+};
 
 const categories: string[] = ["Замдаа", "УБ-д ирсэн", "Хаагдсан"];
 
-export const QrStatusSelector = () => {
-  const [activeCategory, setActiveCategory] = useState<string>("Замдаа");
-
-  // Load from localStorage on first render
+export const QrStatusSelector = ({
+  activeStatus,
+  setActiveStatus,
+}: QrStatusSelectorProps) => {
+  // Load from localStorage on mount
   useEffect(() => {
-    const storedCategory = localStorage.getItem("activeCategory");
-    if (storedCategory && categories.includes(storedCategory)) {
-      setActiveCategory(storedCategory);
+    const storedStatus = localStorage.getItem("activeStatus");
+    if (storedStatus && categories.includes(storedStatus)) {
+      setActiveStatus(storedStatus);
     }
-  }, []);
+  }, [setActiveStatus]);
 
-  // Save to localStorage whenever activeCategory changes
+  // Save to localStorage whenever activeStatus changes
   useEffect(() => {
-    localStorage.setItem("activeCategory", activeCategory);
-  }, [activeCategory]);
-
-  const handleCategoryClick = (category: string) => {
-    setActiveCategory(category);
-  };
+    localStorage.setItem("activeStatus", activeStatus);
+  }, [activeStatus]);
 
   return (
     <div className="flex gap-2">
-      {categories.map((category) => (
+      {categories.map((status) => (
         <button
-          key={category}
-          onClick={() => handleCategoryClick(category)}
+          key={status}
+          onClick={() => setActiveStatus(status)}
           className={`min-h-12 px-8 rounded-lg text-xs transition-all cursor-pointer ${
-            activeCategory === category
+            activeStatus === status
               ? "bg-[#5F2DF5] text-white"
               : "bg-gray-100 text-[#5F2DF5]"
           }`}
         >
-          {category}
+          {status}
         </button>
       ))}
     </div>
