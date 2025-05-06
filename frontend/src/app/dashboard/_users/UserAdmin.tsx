@@ -1,14 +1,16 @@
-import { useState } from "react";
 import MainDataTable from "../components/(features)/productCard";
 type Props = {
   searchValue: string;
+  setSearchValue: (val: string) => void;
 };
-const UsersAdmin = ({ searchValue }: Props) => {
+
+const UsersAdmin = ({ searchValue, setSearchValue }: Props) => {
   return (
     <div>
-      <div></div>
-      <MainDataTable searchValue={searchValue} />
-      {/* 12323 */}
+      <MainDataTable
+        searchValue={searchValue}
+        setSearchValue={setSearchValue}
+      />
     </div>
   );
 };
