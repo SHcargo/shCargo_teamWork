@@ -8,7 +8,6 @@ import { toast } from "react-toastify";
 import { useState } from "react";
 import * as Yup from "yup";
 import { AxiosError } from "axios";
-import { errorToJSON } from "next/dist/server/render";
 
 const ChangePassword = () => {
   const { userId } = useUser();
