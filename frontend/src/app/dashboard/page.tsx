@@ -12,7 +12,9 @@ const DashboardAdmin = () => {
   const [searchValue, setSearchValue] = useState("");
   return (
     <div className="flex">
-      <Sidebar step={step} setStep={setStep} />
+      <div className="sticky">
+        <Sidebar step={step} setStep={setStep} />
+      </div>
       <div className="flex-1 ml-0">
         <Header />
         <main className="mt-16 p-4 sm:p-6">

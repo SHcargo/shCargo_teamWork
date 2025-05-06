@@ -3,7 +3,6 @@
 import Header from "./components/Header";
 import NavBar from "./components/NavBar";
 import { useState } from "react";
-import HomePage from "./_home/Home";
 import Location from "./_location/Location";
 import Cargo from "./_cargo/Cargo";
 import Auth from "./_sign/auth";
@@ -16,7 +15,7 @@ export default function Home() {
   return (
     <div className="w-screen h-screen flex flex-col ">
       <Header />
-      <div className="w-screen h-full flex justify-center">
+      <div className="w-screen h-auto flex justify-center">
         {step === "home" && <Cargo />}
         {step === "location" && <Location setStep={setStep} />}
         {step === "cargo" && <Sales />}
