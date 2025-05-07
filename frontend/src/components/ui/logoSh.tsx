@@ -10,7 +10,12 @@ const Logo = (
     {...props}
   >
     <rect width="100%" height="100%" fill="none" />
-    <path fill="#f4b000" d="M90 100h70l-30 15h30l-30 15h30l-50 15z" />
+    {/* <path fill="#f4b000" d="M90 100h70l-30 15h30l-30 15h30l-50 15z" /> */}
+    <path 
+  fill="#f4b000" 
+  d="M90 100h70l-30 15h30l-30 15h30l-50 15z" 
+  transform="rotate(180 125 122.5)" 
+/>
     <text
       x={180}
       y={130}
