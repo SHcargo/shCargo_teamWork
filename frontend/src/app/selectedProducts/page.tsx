@@ -41,9 +41,13 @@ const BuySelectedProduct = ({ selectedId }: { selectedId: string }) => {
   }
 
   return (
-    <div className="w-screen h-screen flex flex-col bg-white items-center justify-center">
+    <div className="w-screen h-screen flex flex-col bg-white items-center justify-start">
+  
+    <Header />
+ 
+    <div className="w-screen h-screen flex flex-col bg-white items-center justify-center relative top-[70px]">
       <div onClick={() => router.push(`/`)}>
-        <Header />
+        
       </div>
       <div className="max-w-2xl w-full h-full bg-[#e9ecef]  px-6 py-4">
         <div className="flex gap-3">
@@ -71,6 +75,7 @@ const BuySelectedProduct = ({ selectedId }: { selectedId: string }) => {
 
         <Button className="w-full">Худалдан авах</Button>
       </div>
+    </div>
     </div>
   );
 };
