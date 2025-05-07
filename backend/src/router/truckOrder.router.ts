@@ -12,6 +12,6 @@ TruckOrdersRouter.post("/", TruckItemsController);
 TruckOrdersRouter.get("/:userId", GetTruckItemsController);
 TruckOrdersRouter.get("/:userId/:id", GetUserSelectOneOrderItems);
 TruckOrdersRouter.put("/scan/:trackingNumber", updateOrderStatus);
-TruckOrdersRouter.put("image/:trackingNumber", UpdateImageController);
+TruckOrdersRouter.put("/image/:trackingNumber", UpdateImageController);
 TruckOrdersRouter.post("/scan/:trackingNumber", create);
 TruckOrdersRouter.delete("/:trackingNumber", DeleteTruckByTrackingNumber);

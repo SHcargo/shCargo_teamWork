@@ -46,7 +46,7 @@ const Location = ({ setStep }: { setStep: (value: string) => void }) => {
           icon={LocationEdit}
           title="Хаяг Холбох"
           subtitle="Хятад дахь 5 салбар"
-          onClick={() => setStep("location")}
+          onClick={() => setStep("profile")}
         />
         <InfoCard
           icon={Calculator}
