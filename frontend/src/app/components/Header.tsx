@@ -5,7 +5,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import NotifContent from "./NotifContent";
 import Logo from "@/components/ui/logoSh";
-import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -16,8 +15,10 @@ import {
 } from "@/components/ui/dialog";
 import { LogOut } from "lucide-react";
 import { DialogClose } from "@radix-ui/react-dialog";
+import { useRouter } from "next/navigation";
 
 const Header = () => {
+  const router = useRouter();
   return (
     <div className="w-screen flex justify-center h-[70px] fixed top-0 z-50">
       <div className="max-w-2xl w-full px-6 bg-[#101010] shadow-md flex justify-between items-center">
@@ -47,9 +48,17 @@ const Header = () => {
                 <DialogDescription></DialogDescription>
               </DialogHeader>
               <div className="flex gap-6">
-                <Button className="px-6 cursor-pointer">Тийм</Button>
+                <div
+                  className="px-6 cursor-pointer  text-white bg-black py-1 rounded-lg"
+                  onClick={() => {
+                    localStorage.clear();
+                    router.push("/logIn");
+                  }}
+                >
+                  Тийм
+                </div>
                 <DialogClose>
-                  <div className="px-6 cursor-pointer bg-black py-1 rounded-lg">
+                  <div className="px-6 cursor-pointer text-white bg-black py-1 rounded-lg">
                     Үгүй
                   </div>
                 </DialogClose>

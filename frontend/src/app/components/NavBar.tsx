@@ -14,13 +14,12 @@ const NavBar = ({
 }) => {
   const router = useRouter();
   const [token, setToken] = useState<string | null>(null);
+  const phoneNumber = useUser();
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
     setToken(storedToken);
-  }, []);
-
-  const phoneNumber = useUser();
+  }, [phoneNumber]);
 
   return (
     <div className="w-screen flex justify-center fixed bottom-0 h-[70px] z-50">
@@ -71,10 +70,10 @@ const NavBar = ({
           className="text-xs flex flex-col items-center cursor-pointer"
           onClick={() => {
             if (token) setStep("profile");
-            else router.push("/logIn");
+            else router.push("/LogIn");
           }}
         >
-          {phoneNumber.phoneNumber ? (
+          {phoneNumber?.phoneNumber ? (
             <>
               <User
                 stroke={step === "profile" ? "#5F2DF5" : "#E0E0E0"}
@@ -90,17 +89,8 @@ const NavBar = ({
             </>
           ) : (
             <>
-              <User
-                stroke={step === "profile" ? "#7B61FF" : "#E0E0E0"}
-                size={20}
-              />
-              <span
-                className={`mt-1 ${
-                  step === "profile" ? "text-[#7B61FF]" : "text-[#E0E0E0]"
-                }`}
-              >
-                Sign In
-              </span>
+              <User stroke="#E0E0E0" size={20} />
+              <span className="mt-1 text-[#E0E0E0]">Profile</span>
             </>
           )}
         </button>
