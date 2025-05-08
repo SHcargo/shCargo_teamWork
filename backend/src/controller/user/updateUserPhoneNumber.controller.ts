@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { Users } from "../../model/users.model";
 import jwt from "jsonwebtoken";
+import { notification } from "../../model/notification.model";
 
 const updateUserPhoneNumber = async (req: Request, res: Response) => {
   const { phoneNumber } = req.body;
@@ -44,6 +45,10 @@ const updateUserPhoneNumber = async (req: Request, res: Response) => {
       process.env.JWT_SECRET || "your-secret-key",
       { expiresIn: "7d" }
     );
+    await notification.create({
+      title: "Таны утасны дугаар амжилттай шинэчлэгдлээ",
+      userId: userId,
+    });
 
     res.status(200).json({
       success: true,
@@ -51,6 +56,7 @@ const updateUserPhoneNumber = async (req: Request, res: Response) => {
       updatedUser,
       token,
     });
+    return;
   } catch (error) {
     res.status(500).json({
       success: false,

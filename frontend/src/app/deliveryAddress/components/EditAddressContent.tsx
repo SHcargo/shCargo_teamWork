@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import SelectField from "./SelectField";
+import SelectField from "../../_profile/_components/SelectField";
 import TextareaField from "./TextAreaField";
 import { useEffect } from "react";
 import {

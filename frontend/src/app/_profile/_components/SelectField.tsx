@@ -41,12 +41,16 @@ const SelectField = ({
         }}
         disabled={disabled}
       >
-        <SelectTrigger className="w-full">
+        <SelectTrigger className="w-full cursor-pointer">
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>
         <SelectContent>
           {options.map((option) => (
-            <SelectItem key={option} value={option}>
+            <SelectItem
+              key={option}
+              value={option}
+              className="cursor-pointer hover:bg-gray-200"
+            >
               {option}
             </SelectItem>
           ))}

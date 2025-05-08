@@ -8,11 +8,12 @@ import { toast } from "react-toastify";
 import { useState } from "react";
 import * as Yup from "yup";
 import { AxiosError } from "axios";
+import { useNotification } from "@/app/providers/NotificationProvider";
 
 const ChangePassword = () => {
   const { userId } = useUser();
   const [showPassword, setShowPassword] = useState(false);
-  console.log(userId);
+  const { getNotification } = useNotification();
 
   const PasswordSchema = Yup.object().shape({
     currentPassword: Yup.string().required("Одоогийн нууц үг шаардлагатай"),
@@ -68,6 +69,8 @@ const ChangePassword = () => {
             console.log("update password", values);
 
             toast.success("Нууц үг амжилттай шинэчлэгдлээ");
+            await getNotification();
+
             resetForm();
           } catch (error) {
             console.error("Error updating password:", error);
@@ -102,9 +105,9 @@ const ChangePassword = () => {
                   className="absolute right-3 top-1/2 transform -translate-y-1/2"
                 >
                   {showPassword ? (
-                    <EyeOff width={18} height={18} />
+                    <EyeOff width={18} height={18} cursor={"pointer"} />
                   ) : (
-                    <Eye width={18} height={18} />
+                    <Eye width={18} height={18} cursor={"pointer"} />
                   )}
                 </button>
               </div>
@@ -136,9 +139,9 @@ const ChangePassword = () => {
                   className="absolute right-3 top-1/2 transform -translate-y-1/2"
                 >
                   {showPassword ? (
-                    <EyeOff width={18} height={18} />
+                    <EyeOff width={18} height={18} cursor={"pointer"} />
                   ) : (
-                    <Eye width={18} height={18} />
+                    <Eye width={18} height={18} cursor={"pointer"} />
                   )}
                 </button>
               </div>
@@ -168,9 +171,9 @@ const ChangePassword = () => {
                   className="absolute right-3 top-1/2 transform -translate-y-1/2"
                 >
                   {showPassword ? (
-                    <EyeOff width={18} height={18} />
+                    <EyeOff width={18} height={18} cursor={"pointer"} />
                   ) : (
-                    <Eye width={18} height={18} />
+                    <Eye width={18} height={18} cursor={"pointer"} />
                   )}
                 </button>
               </div>

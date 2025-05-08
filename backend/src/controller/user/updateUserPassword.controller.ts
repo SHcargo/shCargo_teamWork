@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { Users } from "../../model/users.model";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { notification } from "../../model/notification.model";
 
 const updateUserPassword = async (req: Request, res: Response) => {
   const { currentPassword, newPassword } = req.body;
@@ -50,11 +51,17 @@ const updateUserPassword = async (req: Request, res: Response) => {
       { expiresIn: "7d" }
     );
 
+    await notification.create({
+      title: "Таны нууц үг амжилттай шинэчлэгдлээ",
+      userId: user._id,
+    });
+
     res.status(200).json({
       success: true,
       message: "Password updated successfully",
       token,
     });
+    return;
   } catch (error) {
     console.error("Error updating password:", error);
     res.status(500).json({

@@ -5,28 +5,89 @@ import {
   DialogHeader,
   DialogTitle,
   DialogDescription,
+  DialogClose,
 } from "@/components/ui/dialog";
 import TextareaField from "@/app/deliveryAddress/components/TextAreaField";
 import { useUser } from "@/app/providers/UserProvider";
 import { useDeliveryAddress } from "@/app/providers/DeliveryAddressProvider";
 import axios from "axios";
-import { Check } from "lucide-react";
-import { DialogClose } from "@radix-ui/react-dialog";
 import dynamic from "next/dynamic";
-
 import { toast } from "react-toastify";
+import SelectField from "./SelectField";
+import { districts } from "@/app/deliveryAddress/utils/address";
+import * as Yup from "yup";
+import { useRef } from "react";
+
 const LeafletMap = dynamic(() => import("./LeafletMap"), {
   ssr: false,
 });
+
+interface LocationType {
+  lat: number;
+  lng: number;
+}
+
 const AddAddressContent = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [location, setLocation] = useState<{ lat: number; lng: number } | null>(
-    null
-  );
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [error, setError] = useState<string | null>(null);
+  const [location, setLocation] = useState<LocationType | null>(null);
+  const [locationError, setLocationError] = useState("");
+  const [isLocating, setIsLocating] = useState(false);
+  const [accuracy, setAccuracy] = useState(0);
   const { userId } = useUser();
   const { fetchAddresses } = useDeliveryAddress();
+  const [selectedDistrict, setSelectedDistrict] = useState("");
+  const dialogCloseRef = useRef<HTMLButtonElement>(null);
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const getLocation = (setFieldValue: (field: string, value: any) => void) => {
+    setIsLocating(true);
+    setLocationError("");
+
+    if (!navigator.geolocation) {
+      setLocationError("Таны төхөөрөмж байршил тогтоох боломжгүй байна");
+      setIsLocating(false);
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude, accuracy } = position.coords;
+        setLocation({ lat: latitude, lng: longitude });
+        setFieldValue("lat", latitude);
+        setFieldValue("lng", longitude);
+        setFieldValue("accuracy", accuracy);
+        setAccuracy(accuracy);
+        setIsLocating(false);
+      },
+      (err) => {
+        setLocationError(getLocationErrorMessage(err));
+        setIsLocating(false);
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 0,
+      }
+    );
+  };
+
+  const getLocationErrorMessage = (error: GeolocationPositionError) => {
+    switch (error.code) {
+      case error.PERMISSION_DENIED:
+        return "Байршил тогтоохыг зөвшөөрөөгүй байна";
+      case error.POSITION_UNAVAILABLE:
+        return "Байршлын мэдээлэл олдсонгүй";
+      case error.TIMEOUT:
+        return "Байршил тогтоох хугацаа хэтэрлээ";
+      default:
+        return "Байршил тогтооход алдаа гарлаа";
+    }
+  };
+
+  const validationSchema = Yup.object({
+    detail: Yup.string().required("Дэлгэрэнгүй мэдээлэл шаардлагатай"),
+    district: Yup.string().required("Дүүрэг сонгоно уу"),
+    khoroo: Yup.string().required("Хороо сонгоно уу"),
+  });
 
   return (
     <DialogContent>
@@ -44,73 +105,109 @@ const AddAddressContent = () => {
             lat: 0,
             lng: 0,
             detail: "",
-            userId: userId,
+            district: "",
+            khoroo: "",
+            accuracy: accuracy,
           }}
-          onSubmit={async (values) => {
+          validationSchema={validationSchema}
+          onSubmit={async (values, { setSubmitting }) => {
             try {
-              const response = await axios.post(
+              await axios.post(
                 `${process.env.NEXT_PUBLIC_BASE_URL}/deliveryAddress/${userId}`,
                 {
                   lat: values.lat,
                   lng: values.lng,
                   detail: values.detail,
+                  district: values.district,
+                  khoroo: values.khoroo,
+                  accuracy: values.accuracy,
                 }
               );
               fetchAddresses();
               toast.success("Амжилттай шинэ хаяг нэмлээ!");
-
-              console.log(
-                "Delivery address created successfully",
-                response.data
-              );
+              dialogCloseRef.current?.click();
             } catch (error) {
-              console.log("Error in creating delivery address", error);
+              toast.error("Хаяг бүртгэхэд алдаа гарлаа");
+              console.error("Error creating address", error);
             }
+            setSubmitting(false);
           }}
         >
-          {({ setFieldValue, values }) => {
+          {({ setFieldValue, values, isSubmitting }) => {
             // eslint-disable-next-line react-hooks/rules-of-hooks
             useEffect(() => {
-              if (!navigator.geolocation) {
-                setError("Geolocation is not supported");
-                return;
-              }
-
-              navigator.geolocation.getCurrentPosition(
-                (position) => {
-                  const { latitude, longitude } = position.coords;
-                  setLocation({ lat: latitude, lng: longitude });
-                  setFieldValue("lat", latitude);
-                  setFieldValue("lng", longitude);
-                },
-                (err) => setError(err.message),
-                {
-                  enableHighAccuracy: true,
-                  timeout: 5000,
-                  maximumAge: 0,
-                }
-              );
+              getLocation(setFieldValue);
             }, [setFieldValue]);
 
+            const hasAccurateLocation = location && accuracy < 100;
+            const showManualInput = !hasAccurateLocation || locationError;
+
             return (
-              <Form className="flex flex-col gap-2 mt-4">
-                <p>
-                  Таний байршил {values.lat} {values.lng}
-                </p>
-                <LeafletMap latitude={values.lat} longitude={values.lng} />
+              <Form className="flex flex-col gap-6 mt-6">
+                <div className="flex flex-col gap-3">
+                  <div className="flex flex-col gap-2">
+                    {accuracy < 100 ? (
+                      <div className="border rounded-md overflow-hidden">
+                        <LeafletMap
+                          latitude={values.lat}
+                          longitude={values.lng}
+                        />
+                      </div>
+                    ) : (
+                      <div className="text-sm text-amber-600">
+                        Байршлын нарийвчлал бага байгаа учир доорх мэдээллийг
+                        бөглөнө үү.
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {showManualInput && (
+                  <div className="border-t pt-4 mt-4 flex flex-col gap-4">
+                    <SelectField
+                      name="district"
+                      label="Дүүрэг"
+                      placeholder="Дүүрэг сонгоно уу"
+                      options={Object.keys(districts)}
+                      onChange={(val) => {
+                        setSelectedDistrict(val);
+                        setFieldValue("khoroo", "");
+                      }}
+                      value={values.district}
+                    />
+
+                    <SelectField
+                      name="khoroo"
+                      label="Хороо"
+                      placeholder="Хороо сонгоно уу"
+                      options={
+                        selectedDistrict && selectedDistrict in districts
+                          ? districts[
+                              selectedDistrict as keyof typeof districts
+                            ]
+                          : []
+                      }
+                      disabled={!selectedDistrict}
+                      value={values.khoroo}
+                    />
+                  </div>
+                )}
 
                 <TextareaField
                   name="detail"
-                  label="Дэлгэрэнгүй мэдээлэл (Хотхон, Баяр, Орц, Орцны код, Давхар, Тоот)"
-                  placeholder="Дэлгэрэнгүй мэдээллээ оруулна уу"
+                  label="Дэлгэрэнгүй мэдээлэл"
+                  placeholder="Хотхон, байр, орц, код, тоот..."
                 />
-                <DialogClose asChild>
+                <DialogClose asChild disabled={isSubmitting}>
                   <button
+                    ref={dialogCloseRef}
                     type="submit"
-                    className="bg-[#5F2DF5] flex px-1 py-2.5 items-center justify-center gap-2 rounded-lg"
+                    disabled={isSubmitting}
+                    className="bg-black flex items-center justify-center gap-2 py-2.5 rounded-lg cursor-pointer hover:bg-[#303030] transition disabled:opacity-50"
                   >
-                    <Check width={16} height={16} stroke="white" />
-                    <p className="text-white font-semibold">Хадгалах</p>
+                    <span className="text-white font-semibold text-sm">
+                      Хадгалах
+                    </span>
                   </button>
                 </DialogClose>
               </Form>

@@ -129,19 +129,7 @@ const Login = () => {
             >
               Нэвтрэх
             </button>
-            <div className="flex flex-col gap-8">
-              {/* <div className="border-b-2 py-2">
-                <p className="text-gray-500">
-                  Утасны дугаараа
-                  <span
-                    onClick={() => router.push("/reset-phone")}
-                    className="text-blue-500 underline cursor-pointer"
-                  >
-                    энд дарна уу
-                  </span>
-                </p>
-              </div> */}
-            </div>
+            <div className="flex flex-col gap-8"></div>
             <div className=" flex  gap-1">
               <p className="text-gray-500">Нууц үгээ мартсан бол</p>
               <span

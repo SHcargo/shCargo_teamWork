@@ -4,13 +4,13 @@ import { Users } from "../../model/users.model";
 import { notification } from "../../model/notification.model";
 
 const createDeliveryAddress = async (req: Request, res: Response) => {
-  const { lng, lat, detail } = req.body;
+  const { lng, lat, detail, district, khoroo, accuracy } = req.body;
   const userId = req.params.userId;
 
-  if (!lng || !lat || !detail) {
+  if (!lng || !lat || !detail || !district || !khoroo) {
     res.status(400).json({
       success: false,
-      message: "lat, lng or detail is missing",
+      message: "request body's missing",
     });
     return;
   }
@@ -21,6 +21,9 @@ const createDeliveryAddress = async (req: Request, res: Response) => {
       lat,
       lng,
       detail,
+      district,
+      khoroo,
+      accuracy,
     });
 
     await Users.findByIdAndUpdate(userId, {
