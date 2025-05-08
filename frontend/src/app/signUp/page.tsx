@@ -3,10 +3,22 @@
 import { useRouter } from "next/navigation";
 import Logo from "../ui/Logo";
 import { PhoneCallIcon, LockKeyhole, User, Mail } from "lucide-react";
-import { Formik, Form, Field } from "formik";
+import { Formik, Form, Field, useFormikContext } from "formik";
 import axios from "axios";
 import { toast } from "react-toastify";
 import * as Yup from "yup";
+import { Button } from "@/components/ui/button";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
+import { useEffect, useState } from "react";
 
 const registerValidationSchema = Yup.object().shape({
   name: Yup.string()
@@ -36,8 +48,40 @@ const registerValidationSchema = Yup.object().shape({
     .oneOf([Yup.ref("password")], "Нууц үг таарахгүй байна"),
 });
 
+// Button to trigger Formik submission inside Drawer
+const SubmitDrawerButton = () => {
+  const { submitForm } = useFormikContext();
+
+  return (
+    <Button type="button" onClick={submitForm}>
+      Зөвшөөрсөн
+    </Button>
+  );
+};
+
 const Register = () => {
   const router = useRouter();
+  const [terms, setTerms] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchingTerms = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/terms`
+      );
+      setTerms(response.data);
+      console.log(response.data.message);
+    } catch (error) {
+      console.error("Error fetching terms", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchingTerms();
+  }, []);
 
   return (
     <div className="w-screen h-screen flex justify-center bg-[rgb(221,221,221)]">
@@ -51,7 +95,6 @@ const Register = () => {
             confirmPassword: "",
           }}
           validationSchema={registerValidationSchema}
-          enableReinitialize
           onSubmit={async (values) => {
             try {
               const response = await axios.post(
@@ -68,9 +111,8 @@ const Register = () => {
                 autoClose: 5000,
               });
               router.push("/logIn");
-              console.log("user created successfuly", response);
             } catch (error) {
-              console.log("error in registration:", error);
+              console.error("Registration error:", error);
               toast.error("😕 Хэрэглэгч бүртгэхэд алдаа гарлаа.");
             }
           }}
@@ -93,8 +135,8 @@ const Register = () => {
 
               {/* Name */}
               <div className="w-full h-10 bg-white border-2 border-gray-300 rounded-lg flex">
-                <div className="w-12 flex justify-center items-center bg-white">
-                  <User className="1/4" />
+                <div className="w-12 flex justify-center items-center">
+                  <User />
                 </div>
                 <Field
                   name="name"
@@ -105,8 +147,8 @@ const Register = () => {
 
               {/* Email */}
               <div className="w-full h-10 bg-white border-2 border-gray-300 rounded-lg flex">
-                <div className="w-12 flex justify-center items-center bg-white">
-                  <Mail className="1/4" />
+                <div className="w-12 flex justify-center items-center">
+                  <Mail />
                 </div>
                 <Field
                   name="email"
@@ -118,8 +160,8 @@ const Register = () => {
 
               {/* Phone */}
               <div className="w-full h-10 bg-white border-2 border-gray-300 rounded-lg flex">
-                <div className="w-12 flex justify-center items-center bg-white">
-                  <PhoneCallIcon className="1/4" />
+                <div className="w-12 flex justify-center items-center">
+                  <PhoneCallIcon />
                 </div>
                 <Field
                   name="phoneNumber"
@@ -130,8 +172,8 @@ const Register = () => {
 
               {/* Password */}
               <div className="w-full h-10 bg-white border-2 border-gray-300 rounded-lg flex">
-                <div className="w-12 flex justify-center items-center bg-white">
-                  <LockKeyhole className="1/4" />
+                <div className="w-12 flex justify-center items-center">
+                  <LockKeyhole />
                 </div>
                 <Field
                   name="password"
@@ -143,8 +185,8 @@ const Register = () => {
 
               {/* Confirm Password */}
               <div className="w-full h-10 bg-white border-2 border-gray-300 rounded-lg flex">
-                <div className="w-12 flex justify-center items-center bg-white">
-                  <LockKeyhole className="1/4" />
+                <div className="w-12 flex justify-center items-center">
+                  <LockKeyhole />
                 </div>
                 <Field
                   name="confirmPassword"
@@ -154,12 +196,30 @@ const Register = () => {
                 />
               </div>
 
-              <button
-                type="submit"
-                className="text-2xl font-semibold py-3 px-6 text-white bg-[#5F2DF5] rounded-lg"
-              >
-                Бүртгүүлэх
-              </button>
+              {/* Drawer Confirmation */}
+              <Drawer>
+                <DrawerTrigger asChild>
+                  <div className="cursor-pointer px-6 py-3 hover:bg-gray-500 font-semibold justify-center rounded-lg bg-gray-900 flex text-xl text-white">
+                    бүртгүүлэх
+                  </div>
+                </DrawerTrigger>
+                <DrawerContent>
+                  <DrawerHeader>
+                    <DrawerTitle>
+                      Та бүртгүүлэхдээ итгэлтэй байна уу?
+                    </DrawerTitle>
+                    <DrawerDescription>{terms[0]}</DrawerDescription>
+                  </DrawerHeader>
+                  <DrawerFooter>
+                    <SubmitDrawerButton />
+                    <DrawerClose asChild>
+                      <Button type="button" variant="outline">
+                        Буцах
+                      </Button>
+                    </DrawerClose>
+                  </DrawerFooter>
+                </DrawerContent>
+              </Drawer>
             </Form>
           )}
         </Formik>
