@@ -2,11 +2,18 @@
 
 import { useRouter } from "next/navigation";
 import Logo from "../ui/Logo";
-import { PhoneCallIcon, LockKeyhole, UserPlus2 } from "lucide-react";
+import {
+  PhoneCallIcon,
+  LockKeyhole,
+  UserPlus2,
+  Eye,
+  EyeOff,
+} from "lucide-react";
 import { Field, Form, Formik } from "formik";
 import axios from "axios";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
+import { useState } from "react";
 
 const loginValidationSchema = Yup.object().shape({
   phoneNumber: Yup.string()
@@ -16,6 +23,10 @@ const loginValidationSchema = Yup.object().shape({
 
 const Login = () => {
   const router = useRouter();
+  const [showPassword, setShowPassword] = useState(false);
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
   return (
     <div className="w-screen h-screen flex justify-center bg-[rgb(221,221,221)]">
@@ -49,7 +60,7 @@ const Login = () => {
           }
         }}
       >
-        {() => (
+        {({ errors, touched }) => (
           <Form className="max-w-2xl w-full h-full bg-[#e9ecef] py-3 px-6 flex flex-col gap-6">
             <div className="flex items-center gap-3">
               <Logo />
@@ -65,45 +76,89 @@ const Login = () => {
               </p>
             </div>
 
-            <div className="flex flex-col gap-6">
-              <div className="w-full h-10 bg-white border-2 border-gray-300 rounded-lg flex">
-                <div className="w-12 flex justify-center items-center bg-white">
-                  <PhoneCallIcon className="1/4" />
+            <div className="flex flex-col">
+              <div className="w-full h-10 bg-white border-2 border-gray-300 rounded-lg flex items-center overflow-hidden">
+                <div className="w-12 flex justify-center items-center">
+                  <PhoneCallIcon className="w-5 h-5 text-gray-500" />
                 </div>
+
                 <Field
                   name="phoneNumber"
                   type="text"
                   placeholder="Утасны дугаараа оруулна уу"
-                  className="w-full h-full text-black px-3 py-0.5"
+                  className="flex-1 h-full text-black px-3 py-1 outline-none"
                 />
               </div>
-
-              <div className="w-full h-10 bg-white border-2 border-gray-300 rounded-lg flex">
-                <div className="w-12 flex justify-center items-center bg-white">
-                  <LockKeyhole className="1/4" />
+              {errors.phoneNumber && touched.phoneNumber && (
+                <div className="text-red-500 text-sm mt-1 flex left-1">
+                  {errors.phoneNumber}
                 </div>
-                <Field
-                  name="password"
-                  type="password"
-                  placeholder="Нууц үгээ оруулна уу"
-                  className="w-full h-full text-black px-3 py-0.5"
-                />
+              )}
+
+              <div className="w-full mt-6 h-10 bg-white border-2 border-gray-300 rounded-lg flex items-center overflow-hidden">
+                <div className="w-12 flex justify-center items-center bg-white">
+                  <LockKeyhole className="w-5 h-5 text-gray-500" />
+                </div>
+
+                <div className="flex-1 relative h-full">
+                  <Field
+                    name="password"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Нууц үгээ оруулна уу"
+                    className="w-full h-full text-black px-3 py-1 outline-none"
+                  />
+
+                  <button
+                    type="button"
+                    onClick={togglePasswordVisibility}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
+                  >
+                    {showPassword ? (
+                      <EyeOff width={18} height={18} cursor={"pointer"} />
+                    ) : (
+                      <Eye width={18} height={18} cursor={"pointer"} />
+                    )}
+                  </button>
+                </div>
               </div>
             </div>
 
             <button
               type="submit"
-              className="text-2xl font-semibold py-3 px-6 text-white bg-[#5F2DF5] rounded-lg"
+              className="text-2xl font-semibold cursor-pointer py-3 px-6 text-white  bg-[#303030] rounded-lg"
             >
               Нэвтрэх
             </button>
+            <div className="flex flex-col gap-8">
+              {/* <div className="border-b-2 py-2">
+                <p className="text-gray-500">
+                  Утасны дугаараа
+                  <span
+                    onClick={() => router.push("/reset-phone")}
+                    className="text-blue-500 underline cursor-pointer"
+                  >
+                    энд дарна уу
+                  </span>
+                </p>
+              </div> */}
+            </div>
+            <div className=" flex  gap-1">
+              <p className="text-gray-500">Нууц үгээ мартсан бол</p>
+              <span
+                onClick={() => router.push("/reset-password")}
+                className="text-blue-500 underline cursor-pointer"
+              >
+                энд дарна уу ?
+              </span>
+            </div>
 
-            <div className="mt-12 flex flex-col gap-12">
-              <p className="text-gray-500">Шинээр бүртгэл үүсгэх</p>
-              <div className="w-full border-t-2 border-gray-300">Шинээр</div>
+            <div className="mt-12 flex flex-col gap-8">
+              <div className="border-b-2 py-2">
+                <p className="text-gray-500">Шинээр бүртгэл үүсгэх</p>
+              </div>
               <button
                 type="button"
-                className="text-2xl w-full flex justify-center gap-3 items-center font-semibold py-3 px-6 text-white bg-[#5F2DF5] rounded-lg"
+                className="text-2xl w-full cursor-pointer flex justify-center gap-3 items-center  bg-[#303030] font-semibold py-3 px-6 text-white rounded-lg"
                 onClick={() => router.push("/signUp")}
               >
                 <UserPlus2 />
