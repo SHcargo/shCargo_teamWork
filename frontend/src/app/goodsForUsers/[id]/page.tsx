@@ -68,12 +68,12 @@ const GoodsForUsersDetail = () => {
   }, [id, value.userId]);
 
   return (
-    <div className="w-screen h-screen flex flex-col bg-[#dddddd] items-center">
+    <div className="w-screen h-screen flex flex-col bg-gray-200 items-center">
       <div className="w-full max-w-2xl h-screen bg-white px-4 sm:px-6 py-4 rounded-md shadow-md flex flex-col gap-6 overflow-auto">
         {/* Header */}
         <div className="flex items-center gap-4">
           <Button
-            className="bg-gray-300 p-2 shadow"
+            className="bg-gray-300 w-15 p-2 shadow rounded-sm cursor-pointer"
             onClick={() => router.back()}
           >
             <ChevronLeft stroke="black" className="text-black" />
@@ -86,33 +86,51 @@ const GoodsForUsersDetail = () => {
         {/* Loading */}
         {loading ? (
           <div className="flex justify-center items-center h-40">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-blue-500"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-gray-700"></div>
           </div>
         ) : error ? (
           <p className="text-red-500 text-center">{error}</p>
         ) : order ? (
           <div className="flex flex-col gap-4">
             {/* Main Order Info */}
-            <div className="flex flex-col sm:flex-row gap-6 items-start">
+            <div className="flex flex-col sm:flex-row gap-6 items-start border rounded-sm border-gray-300 p-4 bg-white shadow-md">
               {/* Image Dialog */}
               <AlertDialog>
                 <AlertDialogTrigger className="w-full sm:w-32 flex justify-center sm:justify-start mt-2">
-                  <img
-                    src={order.image || "/default-image.jpg"}
-                    alt={`Order image${order.trackingNumber ? ` ${order.trackingNumber}` : ""}`}
-                    className="w-full sm:w-32 sm:h-32 object-cover rounded-md cursor-pointer"
-                  />
+                  {order.image ? (
+                    <img
+                      src={order.image}
+                      alt={`Order image${
+                        order.trackingNumber ? ` ${order.trackingNumber}` : ""
+                      }`}
+                      className="w-full sm:w-32 sm:h-32 object-cover rounded-md cursor-pointer"
+                    />
+                  ) : (
+                    <div className="w-full sm:w-32 sm:h-32 flex items-center justify-center bg-gray-200 rounded-md">
+                      <p className="text-gray-600">Зураг байхгүй</p>
+                    </div>
+                  )}
                 </AlertDialogTrigger>
 
                 <AlertDialogContent>
                   <AlertDialogHeader>
                     <AlertDialogTitle>Зураг</AlertDialogTitle>
                     <AlertDialogDescription className="flex justify-center">
-                      <img
-                        src={order.image || "/default-image.jpg"}
-                        alt={`Order image${order.trackingNumber ? ` ${order.trackingNumber}` : ""}`}
-                        className="max-w-full max-h-[60vh] object-contain rounded-md"
-                      />
+                      {order.image ? (
+                        <img
+                          src={order.image}
+                          alt={`Order image${
+                            order.trackingNumber
+                              ? ` ${order.trackingNumber}`
+                              : ""
+                          }`}
+                          className="max-w-full max-h-[60vh] object-contain rounded-md"
+                        />
+                      ) : (
+                        <p className="text-center text-gray-600">
+                          Зураг байхгүй
+                        </p>
+                      )}
                     </AlertDialogDescription>
                   </AlertDialogHeader>
 
@@ -123,11 +141,11 @@ const GoodsForUsersDetail = () => {
               </AlertDialog>
 
               {/* Order Info */}
-              <div className="flex flex-col gap-2 text-gray-700">
+              <div className="flex flex-col gap-2 text-black">
                 <p>
                   <span className="font-semibold">Статус:</span> {order.status}
                 </p>
-                <p>
+                <p className="text-black">
                   <span className="font-semibold">Огноо:</span>{" "}
                   {new Date(order.createdAt).toLocaleString()}
                 </p>
@@ -135,19 +153,27 @@ const GoodsForUsersDetail = () => {
             </div>
 
             {/* Status History */}
-            <div className="mt-4">
-              <h2 className="text-base sm:text-lg">
-                Truck Number: <span className="font-medium">{order.trackingNumber}</span>
+            <div className="mt-4 border rounded-sm border-gray-300 p-4 bg-white shadow-md">
+              <h2 className="text-base sm:text-lg font-semibold text-gray-800">
+                Truck Number:{" "}
+                <span className="font-medium text-black">
+                  {order.trackingNumber}
+                </span>
               </h2>
-              <h2 className="text-lg font-medium text-blue-600 mb-2">
+              <h2 className="text-lg font-medium text-black mt-2 mb-4">
                 Статусын түүх
               </h2>
               {order.statusHistory?.length > 0 ? (
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-3">
                   {order.statusHistory.map((entry) => (
-                    <div key={entry._id} className="text-sm text-gray-600">
-                      <span className="font-medium">{entry.status}</span> —{" "}
-                      <span className="text-red-400">
+                    <div
+                      key={entry._id}
+                      className="text-sm text-gray-700 flex justify-between items-center"
+                    >
+                      <span className="font-medium  text-black">
+                        {entry.status}
+                      </span>
+                      <span className="text-black text-sm">
                         {new Date(entry.changedAt).toLocaleString()}
                       </span>
                     </div>
@@ -161,8 +187,17 @@ const GoodsForUsersDetail = () => {
         ) : (
           <p className="text-gray-500 text-center">Захиалга олдсонгүй.</p>
         )}
+        <div className="grid grid-cols-2 gap-3">
+          <button className="w-full h-10 flex items-center justify-center text-sm font-medium text-black cursor-pointer border rounded-sm border-gray-300 p-4 bg-gray-100/10 shadow-md hover:bg-gray-300 transition-colors">
+            🏢 Салбараас авах
+          </button>
+
+          <button className="w-full h-10 flex items-center justify-center text-sm font-medium text-black cursor-pointer border rounded-sm border-gray-300 p-4 bg-gray-100/10 shadow-md hover:bg-gray-300 transition-colors">
+            🚚 Хүргүүлэх
+          </button>
+        </div>
       </div>
-      </div>
+    </div>
   );
 };
 
