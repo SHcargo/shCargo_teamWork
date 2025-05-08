@@ -10,7 +10,7 @@ const Profile = () => {
         <PersonalInformation />
         <ChangePhoneNumber />
         <ChangePassword />
-        <DeliveryAddress />   
+        <DeliveryAddress />
       </div>
       <div className="h-[70px]"></div>
     </div>

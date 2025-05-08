@@ -17,12 +17,15 @@ import { LogOut } from "lucide-react";
 import { DialogClose } from "@radix-ui/react-dialog";
 import { useRouter } from "next/navigation";
 
-const Header = () => {
+const Header = ({ setStep }: { setStep: (value: string) => void }) => {
   const router = useRouter();
   return (
     <div className="w-screen flex justify-center h-[70px] fixed top-0 z-50">
       <div className="max-w-2xl w-full px-6 bg-[#101010] shadow-md flex justify-between items-center">
-        <div className="flex gap-3">
+        <div
+          className="flex gap-3 cursor-pointer"
+          onClick={() => setStep("home")}
+        >
           <Logo className="w-30 h-fit" />
         </div>
         <div className="flex items-center gap-3">

@@ -1,6 +1,7 @@
 import { Response, Request } from "express";
 import { Users } from "../../model/users.model";
 import bcrypt from "bcrypt";
+import { notification } from "../../model/notification.model";
 
 const ResetPassword = async (req: Request, res: Response) => {
   const { newPassword } = req.body;
@@ -24,10 +25,16 @@ const ResetPassword = async (req: Request, res: Response) => {
       password: hashedPassword,
     });
 
+    await notification.create({
+      title: "Таны нууц үг амжилттай сэргэлээ",
+      userId: user._id,
+    });
+
     res.status(200).json({
       success: true,
       message: "Password updated successfully",
     });
+    return;
   } catch (error) {
     console.error("Error updating password:", error);
     res.status(500).json({
