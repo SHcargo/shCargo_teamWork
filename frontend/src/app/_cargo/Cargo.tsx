@@ -1,24 +1,32 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+
 import { useState, useEffect } from "react";
 import { useUser } from "../providers/UserProvider";
 import axios from "axios";
 import { UserOrderCard } from "../components/userOrderCard";
+import Post from "../components/post";
+
+type StatusCategory = "Бүгд" | "Бүртгэсэн" | "Замдаа" | "УБ-д ирсэн" | "Хаагдсан";
+
+type StatusHistory = {
+  status: string;
+  changedAt: string;
+  _id: string;
+};
 
 type Order = {
   _id: string;
   userId: string;
-  status: string;
+  status: StatusCategory;
   createdAt: string;
   trackingNumber: string;
-  statusHistory: {
-    status: string;
-    changedAt: string;
-    _id: string;
-  }[];
+  statusHistory: StatusHistory[];
   __v: number;
 };
 
-const categories: string[] = [
+type DeliveryCounts = Record<StatusCategory, number>;
+
+const categories: StatusCategory[] = [
   "Бүгд",
   "Бүртгэсэн",
   "Замдаа",
@@ -29,9 +37,9 @@ const categories: string[] = [
 const Cargo = () => {
   const value = useUser();
   const [orders, setOrders] = useState<Order[]>([]);
-  const [activeCategory, setActiveCategory] = useState<string>("Бүгд");
+  const [activeCategory, setActiveCategory] = useState<StatusCategory>("Бүгд");
   const [loading, setLoading] = useState<boolean>(false);
-  const [deliveryCounts, setDeliveryCounts] = useState<Record<string, number>>({
+  const [deliveryCounts, setDeliveryCounts] = useState<DeliveryCounts>({
     Бүгд: 0,
     Бүртгэсэн: 0,
     Замдаа: 0,
@@ -39,27 +47,32 @@ const Cargo = () => {
     Хаагдсан: 0,
   });
 
-  const getCargoOrderItems = async () => {
+
+  const getCargoOrderItems = async (): Promise<void> => {
     setLoading(true);
     if (!value.userId) return;
 
     try {
-      const response = await axios.get(
+      const response = await axios.get<{ orders: Order[] }>(
         `${process.env.NEXT_PUBLIC_BASE_URL}/truckItems/${value.userId}`
       );
-      const data: Order[] = response.data.orders;
+      const data = response.data.orders;
       setOrders(data);
 
-      const counts: Record<string, number> = categories.reduce(
-        (acc, category) => {
-          acc[category] =
-            category === "Бүгд"
-              ? data.length
-              : data.filter((order) => order.status === category).length;
-          return acc;
-        },
-        {} as Record<string, number>
-      );
+      const counts = categories.reduce<DeliveryCounts>((acc, category) => {
+        acc[category] =
+          category === "Бүгд"
+            ? data.length
+            : data.filter((order) => order.status === category).length;
+        return acc;
+      }, {
+        Бүгд: 0,
+        Бүртгэсэн: 0,
+        Замдаа: 0,
+        "УБ-д ирсэн": 0,
+        Хаагдсан: 0,
+      });
+
       setDeliveryCounts(counts);
     } catch (error) {
       console.error("Error fetching cargo orders:", error);
@@ -77,7 +90,7 @@ const Cargo = () => {
       ? orders
       : orders.filter((order) => order.status === activeCategory);
 
-  const handleCategoryClick = (category: string) => {
+  const handleCategoryClick = (category: StatusCategory) => {
     setActiveCategory(category);
   };
 
@@ -104,7 +117,7 @@ const Cargo = () => {
                 : "bg-gray-200 text-black/90"
             }`}
           >
-            {category} ({deliveryCounts[category] ?? 0})
+            {category} ({deliveryCounts[category]})
           </button>
         ))}
       </div>
@@ -131,15 +144,13 @@ const Cargo = () => {
         )}
         <div className="h-10" />
       </div>
+
+    <Post refreshFn={getCargoOrderItems}/>
+     
     </div>
   );
 };
 
 export default Cargo;
 
-/* {order.goodsItems.map((item) => (
-  <div key={item._id} className="flex flex-row justify-between">
-    <span>{item.item}</span>
-    <span>{item.quantity}</span>
-  </div>
-))} */
+
