@@ -13,7 +13,6 @@ import axios from "axios";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
 import { useState } from "react";
-import Logo from "@/components/ui/logoSh";
 
 const loginValidationSchema = Yup.object().shape({
   phoneNumber: Yup.string()

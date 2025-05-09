@@ -11,7 +11,7 @@ import axios from "axios";
 import { useUser } from "@/app/providers/UserProvider";
 
 type DeliveryAddress = {
-  accuracy: any;
+  accuracy: string;
   lng: number;
   lat: number;
   _id: string;
