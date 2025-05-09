@@ -18,7 +18,7 @@ const ChangePhoneNumber = () => {
   const { getNotification } = useNotification();
 
   return (
-    <div className="w-full h-auto p-4 flex flex-col gap-4 bg-white rounded-lg">
+    <div className="w-full h-auto p-4  cursor-default flex flex-col gap-4 bg-white rounded-lg">
       <h1 className="font-medium">Утасны дугаар шинэчлэх</h1>
       <Formik
         enableReinitialize

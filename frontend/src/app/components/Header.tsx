@@ -54,7 +54,8 @@ const Header = ({ setStep }: { setStep: (value: string) => void }) => {
                 <div
                   className="px-6 cursor-pointer  text-white bg-black py-1 rounded-lg"
                   onClick={() => {
-                    localStorage.clear();
+                    localStorage.removeItem("token");
+                    localStorage.removeItem("loginTime");
                     router.push("/logIn");
                   }}
                 >

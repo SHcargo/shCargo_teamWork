@@ -34,7 +34,7 @@ const ChangePassword = () => {
   };
 
   return (
-    <div className="w-full h-auto p-4 flex flex-col gap-4 bg-white rounded-lg">
+    <div className="w-full h-auto cursor-default p-4 flex flex-col gap-4 bg-white rounded-lg">
       <h1 className="font-medium">Нууц үг солих</h1>
       <Formik
         initialValues={{

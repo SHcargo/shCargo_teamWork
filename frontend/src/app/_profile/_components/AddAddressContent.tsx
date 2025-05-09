@@ -30,7 +30,6 @@ interface LocationType {
 const AddAddressContent = () => {
   const [location, setLocation] = useState<LocationType | null>(null);
   const [locationError, setLocationError] = useState("");
-  const [isLocating, setIsLocating] = useState(false);
   const [accuracy, setAccuracy] = useState(0);
   const { userId } = useUser();
   const { fetchAddresses } = useDeliveryAddress();
@@ -39,12 +38,10 @@ const AddAddressContent = () => {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const getLocation = (setFieldValue: (field: string, value: any) => void) => {
-    setIsLocating(true);
     setLocationError("");
 
     if (!navigator.geolocation) {
       setLocationError("Таны төхөөрөмж байршил тогтоох боломжгүй байна");
-      setIsLocating(false);
       return;
     }
 
@@ -56,11 +53,9 @@ const AddAddressContent = () => {
         setFieldValue("lng", longitude);
         setFieldValue("accuracy", accuracy);
         setAccuracy(accuracy);
-        setIsLocating(false);
       },
       (err) => {
         setLocationError(getLocationErrorMessage(err));
-        setIsLocating(false);
       },
       {
         enableHighAccuracy: true,
