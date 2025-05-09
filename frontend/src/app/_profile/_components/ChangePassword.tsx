@@ -62,7 +62,7 @@ const ChangePassword = () => {
               }
             );
 
-            if (response.data.token) {
+            if (response.data.token && typeof window !== "undefined") {
               localStorage.setItem("token", response.data.token);
             }
 

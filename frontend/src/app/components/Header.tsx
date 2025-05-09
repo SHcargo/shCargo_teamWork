@@ -57,16 +57,19 @@ const Header = () => {
                 <DialogDescription></DialogDescription>
               </DialogHeader>
               <div className="flex gap-6">
-                <div
-                  className="px-6 cursor-pointer  text-white bg-black py-1 rounded-lg"
-                  onClick={() => {
-                    localStorage.removeItem("token");
-                    localStorage.removeItem("loginTime");
-                    router.push("/logIn");
-                  }}
-                >
-                  Тийм
-                </div>
+              <div
+  className="px-6 cursor-pointer text-white bg-black py-1 rounded-lg"
+  onClick={() => {
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("token");
+      localStorage.removeItem("loginTime");
+      router.push("/logIn");
+    }
+  }}
+>
+  Тийм
+</div>
+
                 <DialogClose>
                   <div className="px-6 cursor-pointer text-white bg-black py-1 rounded-lg">
                     Үгүй

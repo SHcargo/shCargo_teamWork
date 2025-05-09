@@ -14,15 +14,19 @@ export const QrStatusSelector = ({
 }: QrStatusSelectorProps) => {
   // Load from localStorage on mount
   useEffect(() => {
-    const storedStatus = localStorage.getItem("activeStatus");
-    if (storedStatus && categories.includes(storedStatus)) {
-      setActiveStatus(storedStatus);
+    if (typeof window !== "undefined") {
+      const storedStatus = localStorage.getItem("activeStatus");
+      if (storedStatus && categories.includes(storedStatus)) {
+        setActiveStatus(storedStatus);
+      }
     }
   }, [setActiveStatus]);
 
   // Save to localStorage whenever activeStatus changes
   useEffect(() => {
+    if (typeof window !== "undefined") {
     localStorage.setItem("activeStatus", activeStatus);
+    }
   }, [activeStatus]);
 
   return (

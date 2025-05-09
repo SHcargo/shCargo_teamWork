@@ -12,8 +12,7 @@ import { Field, Form, Formik } from "formik";
 import axios from "axios";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
-import { useState } from "react";
-import Logo from "@/components/ui/logoSh";
+import { useState , useEffect} from "react";
 
 const loginValidationSchema = Yup.object().shape({
   phoneNumber: Yup.string()
@@ -24,11 +23,19 @@ const loginValidationSchema = Yup.object().shape({
 const Login = () => {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
+  const [phoneNumber, setPhoneNumber] = useState<string | null>(null);
+
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
-  const phoneNumber = localStorage.getItem("phoneNumber");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedPhoneNumber = localStorage.getItem("phoneNumber");
+      setPhoneNumber(storedPhoneNumber);
+    }
+  }, []);
 
   return (
     <div className="w-screen h-screen flex justify-center bg-[rgb(221,221,221)]">
@@ -49,12 +56,18 @@ const Login = () => {
               }
             );
 
-            localStorage.setItem("token", response.data.token);
-            localStorage.setItem("phoneNumber", values.phoneNumber);
+            if (typeof window !== "undefined") {
+              localStorage.setItem("token", response.data.token);
+              localStorage.setItem("phoneNumber", values.phoneNumber);
+            }
+            
             toast.success("Амжилттай нэвтэрлээ!");
             router.push("/");
             console.log("log in success", response);
-            localStorage.setItem("loginTime", new Date().toISOString());
+            if (typeof window !== "undefined") {
+              localStorage.setItem("loginTime", new Date().toISOString());
+            }
+            
           } catch (error) {
             console.log("error in login:", error);
             toast.error("Нэвтрэх нэр эсвэл нууц үг буруу байна!");

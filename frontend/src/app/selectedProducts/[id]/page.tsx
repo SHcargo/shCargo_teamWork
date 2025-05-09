@@ -1,13 +1,16 @@
-import BuySelectedProduct from "../page";
+// src/app/selectedProducts/[id]/page.tsx
+"use client";
 
-interface Props {
-  params: { id: string };
-}
+import { useParams } from "next/navigation";
+import BuySelectedProduct from "../BuySelectedProduct";
+ // adjust if your structure is different
 
-const ProductPage = ({ params }: Props) => {
+const ProductPage = () => {
+  const { id } = useParams<{ id: string }>();
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <BuySelectedProduct selectedId={params.id} />
+      {id ? <BuySelectedProduct selectedId={id} /> : <p>Product ID is missing.</p>}
     </div>
   );
 };
