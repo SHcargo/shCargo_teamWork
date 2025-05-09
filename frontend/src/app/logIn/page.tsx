@@ -28,11 +28,13 @@ const Login = () => {
     setShowPassword(!showPassword);
   };
 
+  const phoneNumber = localStorage.getItem("phoneNumber");
+
   return (
     <div className="w-screen h-screen flex justify-center bg-[rgb(221,221,221)]">
       <Formik
         initialValues={{
-          phoneNumber: "",
+          phoneNumber: phoneNumber ? phoneNumber : "",
           password: "",
         }}
         enableReinitialize
@@ -49,7 +51,6 @@ const Login = () => {
 
             localStorage.setItem("token", response.data.token);
             localStorage.setItem("phoneNumber", values.phoneNumber);
-
             toast.success("Амжилттай нэвтэрлээ!");
             router.push("/");
             console.log("log in success", response);
@@ -125,7 +126,7 @@ const Login = () => {
 
             <button
               type="submit"
-              className="text-2xl font-semibold cursor-pointer py-3 px-6 text-white  bg-[#303030] rounded-lg"
+              className=" font-semibold cursor-pointer py-2.5  text-white bg-black  hover:bg-[#303030] rounded-lg"
             >
               Нэвтрэх
             </button>
@@ -146,7 +147,7 @@ const Login = () => {
               </div>
               <button
                 type="button"
-                className="text-2xl w-full cursor-pointer flex justify-center gap-3 items-center  bg-[#303030] font-semibold py-3 px-6 text-white rounded-lg"
+                className="py-2.5  w-full cursor-pointer flex justify-center gap-3 items-center  hover:bg-[#303030] bg-black  font-semibold  text-white rounded-lg"
                 onClick={() => router.push("/signUp")}
               >
                 <UserPlus2 />

@@ -50,13 +50,16 @@ const Cargo = () => {
       const data: Order[] = response.data.orders;
       setOrders(data);
 
-      const counts: Record<string, number> = categories.reduce((acc, category) => {
-        acc[category] =
-          category === "Бүгд"
-            ? data.length
-            : data.filter((order) => order.status === category).length;
-        return acc;
-      }, {} as Record<string, number>);
+      const counts: Record<string, number> = categories.reduce(
+        (acc, category) => {
+          acc[category] =
+            category === "Бүгд"
+              ? data.length
+              : data.filter((order) => order.status === category).length;
+          return acc;
+        },
+        {} as Record<string, number>
+      );
       setDeliveryCounts(counts);
     } catch (error) {
       console.error("Error fetching cargo orders:", error);
@@ -108,11 +111,6 @@ const Cargo = () => {
 
       {/* БАРААНЫ ЖАГСААЛТ */}
       <div className="text-sm font-semibold text-gray-700 mb-2">Захиалгууд</div>
-      <div className="grid grid-cols-3 text-xs text-gray-500 font-semibold px-2 mb-1">
-        <div>Tracking #</div>
-        <div>Status</div>
-        <div>Огноо</div>
-      </div>
 
       <div className="flex-1 overflow-y-auto bg-gray-50 rounded-xl p-2 shadow-inner">
         {filteredOrders.length === 0 ? (

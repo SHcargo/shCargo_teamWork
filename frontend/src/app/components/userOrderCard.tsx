@@ -12,6 +12,8 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import GetFromCargoDialog from "./GetFromCargoDialog";
+import UserDeliveryDialog from "./UserDeliveryDialog";
 
 type UserOrderCardProps = {
   description: string;
@@ -46,6 +48,8 @@ export const UserOrderCard = ({
       console.error("Устгах үед алдаа гарлаа:", err);
     }
   };
+
+  console.log(trackingNumber);
 
   return (
     <div className="bg-white p-4 rounded-xl border border-gray-300 shadow-md mb-4">
@@ -103,13 +107,8 @@ export const UserOrderCard = ({
       </div>
 
       <div className="grid grid-cols-2 gap-3">
-        <button className="w-full h-10 text-sm cursor-pointer font-medium rounded-lg bg-gray-100 text-gray-800 hover:bg-gray-300 transition-colors">
-          🏢 Салбараас авах
-        </button>
-
-        <button className="w-full h-10 text-sm cursor-pointer font-medium rounded-lg bg-gray-100 text-gray-800 hover:bg-gray-300 transition-colors">
-          🚚 Хүргүүлэх
-        </button>
+        <GetFromCargoDialog />
+        <UserDeliveryDialog />
       </div>
     </div>
   );

@@ -14,7 +14,7 @@ const PersonalInformation = () => {
     }
   }, [phoneNumber]);
   return (
-    <div className="w-full h-auto p-4 flex flex-col gap-4 bg-white rounded-lg">
+    <div className="w-full h-auto cursor-default p-4 flex flex-col gap-4 bg-white rounded-lg">
       <h1 className="font-medium">Таний хувийн мэдээлэл</h1>
       <div className="flex flex-col gap-2">
         <div className="flex gap-2 items-center">

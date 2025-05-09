@@ -30,6 +30,7 @@ const itemsOrderSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  deliveryCondition: { type: String, default: "Салбараас авна" },
   statusHistory: [
     {
       status: {
