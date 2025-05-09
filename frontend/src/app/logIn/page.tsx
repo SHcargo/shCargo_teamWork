@@ -1,7 +1,6 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import Logo from "../ui/Logo";
 import {
   PhoneCallIcon,
   LockKeyhole,
@@ -14,6 +13,7 @@ import axios from "axios";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
 import { useState } from "react";
+import Logo from "@/components/ui/logoSh";
 
 const loginValidationSchema = Yup.object().shape({
   phoneNumber: Yup.string()
@@ -62,76 +62,68 @@ const Login = () => {
         }}
       >
         {({ errors, touched }) => (
-          <Form className="max-w-2xl w-full h-full bg-[#e9ecef] py-3 px-6 flex flex-col gap-6">
-            <div className="flex items-center gap-3">
-              <Logo />
-              <h1 className="text-[#5F2DF5] text-2xl font-semibold">
-                SH Cargo
-              </h1>
+          <Form className="max-w-2xl w-full pt-[200px] h-full bg-[#e9ecef] py-3 px-6 flex flex-col gap-6 text-base text-black font-medium cursor-default">
+            <div className="flex flex-col gap-1">
+              <h1 className="text-xl font-semibold">Тавтай морил</h1>
+              <p>Та утасны дугаар эсвэл мэйл хаягаараа нэвтрэнэ үү!</p>
             </div>
 
-            <div className="flex flex-col gap-2">
-              <h1 className="text-black font-semibold">Тавтай морил</h1>
-              <p className="text-black font-medium">
-                Та утасны дугаар эсвэл мэйл хаягаараа нэвтрэнэ үү!
-              </p>
-            </div>
-
-            <div className="flex flex-col">
+            <div className="flex flex-col gap-6">
+              {/* Phone Field */}
               <div className="w-full h-10 bg-white border-2 border-gray-300 rounded-lg flex items-center overflow-hidden">
                 <div className="w-12 flex justify-center items-center">
                   <PhoneCallIcon className="w-5 h-5 text-gray-500" />
                 </div>
-
                 <Field
                   name="phoneNumber"
                   type="text"
                   placeholder="Утасны дугаараа оруулна уу"
-                  className="flex-1 h-full text-black px-3 py-1 outline-none"
+                  className="flex-1 h-full px-3 py-1 outline-none text-black cursor-text"
                 />
               </div>
               {errors.phoneNumber && touched.phoneNumber && (
-                <div className="text-red-500 text-sm mt-1 flex left-1">
+                <div className="text-red-500 text-sm mt-1 ml-1">
                   {errors.phoneNumber}
                 </div>
               )}
 
-              <div className="w-full mt-6 h-10 bg-white border-2 border-gray-300 rounded-lg flex items-center overflow-hidden">
-                <div className="w-12 flex justify-center items-center bg-white">
+              {/* Password Field */}
+              <div className="w-full h-10 bg-white border-2 border-gray-300 rounded-lg flex items-center overflow-hidden">
+                <div className="w-12 flex justify-center items-center">
                   <LockKeyhole className="w-5 h-5 text-gray-500" />
                 </div>
-
                 <div className="flex-1 relative h-full">
                   <Field
                     name="password"
                     type={showPassword ? "text" : "password"}
                     placeholder="Нууц үгээ оруулна уу"
-                    className="w-full h-full text-black px-3 py-1 outline-none"
+                    className="w-full h-full px-3 py-1 outline-none text-black cursor-text"
                   />
-
                   <button
                     type="button"
                     onClick={togglePasswordVisibility}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 cursor-pointer"
                   >
                     {showPassword ? (
-                      <EyeOff width={18} height={18} cursor={"pointer"} />
+                      <EyeOff width={18} height={18} />
                     ) : (
-                      <Eye width={18} height={18} cursor={"pointer"} />
+                      <Eye width={18} height={18} />
                     )}
                   </button>
                 </div>
               </div>
             </div>
 
+            {/* Submit Button */}
             <button
               type="submit"
-              className=" font-semibold cursor-pointer py-2.5  text-white bg-black  hover:bg-[#303030] rounded-lg"
+              className="font-semibold cursor-pointer py-2.5 text-white bg-black hover:bg-[#303030] rounded-lg"
             >
               Нэвтрэх
             </button>
-            <div className="flex flex-col gap-8"></div>
-            <div className=" flex  gap-1">
+
+            {/* Forgot Password */}
+            <div className="flex gap-1 text-sm mt-2">
               <p className="text-gray-500">Нууц үгээ мартсан бол</p>
               <span
                 onClick={() => router.push("/reset-password")}
@@ -141,16 +133,17 @@ const Login = () => {
               </span>
             </div>
 
-            <div className="mt-12 flex flex-col gap-8">
-              <div className="border-b-2 py-2">
-                <p className="text-gray-500">Шинээр бүртгэл үүсгэх</p>
+            {/* Register Section */}
+            <div className="mt-12 flex flex-col gap-4">
+              <div className="border-b-2 pb-2">
+                <p className="text-gray-500 text-sm">Шинээр бүртгэл үүсгэх</p>
               </div>
               <button
                 type="button"
-                className="py-2.5  w-full cursor-pointer flex justify-center gap-3 items-center  hover:bg-[#303030] bg-black  font-semibold  text-white rounded-lg"
+                className="py-2.5 w-full cursor-pointer flex justify-center gap-3 items-center hover:bg-[#303030] bg-black font-semibold text-white rounded-lg"
                 onClick={() => router.push("/signUp")}
               >
-                <UserPlus2 />
+                <UserPlus2 width={16} height={16} />
                 <p>Бүртгүүлэх</p>
               </button>
             </div>

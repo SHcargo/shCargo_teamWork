@@ -18,7 +18,7 @@ const NotifContent = () => {
       <DropdownMenuSeparator />
       {[...notifications].reverse().map((notif, index) => (
         <DropdownMenuItem key={index}>
-          <div className="flex flex-col">
+          <div className="flex flex-col cursor-pointer">
             <p>{notif.title}</p>
             <span className="text-xs text-muted-foreground">
               {formatTime(notif.createdAt)}

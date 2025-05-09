@@ -2,19 +2,19 @@
 
 import Header from "./components/Header";
 import NavBar from "./components/NavBar";
-import { useState } from "react";
 import Location from "./_location/Location";
 import Cargo from "./_cargo/Cargo";
 import Auth from "./_sign/auth";
 import Profile from "./_profile/Profile";
 import Sales from "./_sales/_features/Sales";
+import useStepStore from "./components/step";
 
 export default function Home() {
-  const [step, setStep] = useState("home");
+  const { step, setStep } = useStepStore();
 
   return (
     <div className="w-screen h-screen flex flex-col ">
-      <Header setStep={setStep} />
+      <Header />
       <div className="w-screen h-auto flex justify-center relative top-[70px]">
         {step === "home" && <Cargo />}
         {step === "location" && <Location setStep={setStep} />}
