@@ -34,9 +34,10 @@ const ChangePhoneNumber = () => {
                 phoneNumber: values.phoneNumber,
               }
             );
-            if (response.data.token) {
+            if (typeof window !== "undefined" && response.data.token) {
               localStorage.setItem("token", response.data.token);
             }
+            
 
             await getUser();
             await getNotification();

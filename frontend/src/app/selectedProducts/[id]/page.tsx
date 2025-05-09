@@ -2,7 +2,7 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import BuySelectedProduct from "../page";
+import BuySelectedProduct from "../BuySelectedProduct";
  // adjust if your structure is different
 
 const ProductPage = () => {

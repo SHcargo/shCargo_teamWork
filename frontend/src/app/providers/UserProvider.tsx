@@ -40,8 +40,17 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
 
   const getUser = async () => {
     const storedToken = localStorage.getItem("token");
+    if (!storedToken) {
+      setLoading(false); // If no token, we set loading to false and return
+      return;
+    }
+
     const user = await getDecodedToken(storedToken);
-    setClient(user);
+    if (user) {
+      setClient(user);
+    } else {
+      console.error("Failed to decode token.");
+    }
     setLoading(false);
   };
 
