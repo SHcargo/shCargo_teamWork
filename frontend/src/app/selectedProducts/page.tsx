@@ -1,12 +1,14 @@
 /* eslint-disable @next/next/no-img-element */
+// src/components/BuySelectedProduct.tsx
 "use client";
 
 import axios from "axios";
 import { useEffect, useState } from "react";
-import Header from "../components/Header";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
+
+import Header from "../dashboard/components/header";
 import useStepStore from "../components/step";
 
 type Product = {
@@ -43,8 +45,7 @@ const BuySelectedProduct = ({ selectedId }: { selectedId: string }) => {
     <div className="w-screen h-screen flex flex-col bg-white">
       <Header />
 
-      {/* Full-height content area under header */}
-      <main className="flex-1 pt-[70px] flex items-center justify-center  px-4 bg-[#f8f9fa]">
+      <main className="flex-1 pt-[70px] flex items-center justify-center px-4 bg-[#f8f9fa]">
         <div className="relative max-w-2xl w-full h-[100%] cursor-pointer bg-white shadow-lg rounded-lg px-6 pt-[100px] overflow-y-auto">
           {/* Back Button */}
           <button
@@ -52,7 +53,7 @@ const BuySelectedProduct = ({ selectedId }: { selectedId: string }) => {
               setStep("cargo");
               router.push("/");
             }}
-            className="absolute top-4 cursor-pointer left-4 flex items-center gap-2 text-sm text-gray-700 hover:text-black transition"
+            className="absolute top-4 left-4 flex items-center gap-2 text-sm text-gray-700 hover:text-black transition"
           >
             <ArrowLeft size={18} />
             Буцах
@@ -78,7 +79,7 @@ const BuySelectedProduct = ({ selectedId }: { selectedId: string }) => {
           </div>
 
           {/* Buy Button */}
-          <Button className="w-full mt-6 ">Худалдан авах</Button>
+          <Button className="w-full mt-6">Худалдан авах</Button>
         </div>
       </main>
     </div>
