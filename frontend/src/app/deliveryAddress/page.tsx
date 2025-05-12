@@ -14,7 +14,6 @@ import AddPinPointContent from "./components/AddPinPointContent";
 const DeliveryAddress = () => {
   const { addresses } = useDeliveryAddress();
   const [selectedAddress, setSelectedAddress] = useState("");
-  console.log("delivery address", addresses);
   return (
     <div className="bg-[rgb(221,221,221) w-screen flex flex-col justify-center items-center h-screen">
       <SubHeader />

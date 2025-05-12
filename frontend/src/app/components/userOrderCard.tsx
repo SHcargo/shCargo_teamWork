@@ -33,7 +33,6 @@ export const UserOrderCard = ({
   ref,
 }: UserOrderCardProps) => {
   const router = useRouter();
-
   const showTrash =
     ["Бүртгэсэн", "Хаагдсан"].includes(activeCategory) ||
     ["Бүртгэсэн", "Хаагдсан"].includes(description);
@@ -49,7 +48,6 @@ export const UserOrderCard = ({
     }
   };
 
-  console.log(trackingNumber);
 
   return (
     <div className="bg-white p-4 rounded-xl border border-gray-300 shadow-md mb-4">
@@ -107,8 +105,8 @@ export const UserOrderCard = ({
       </div>
 
       <div className="grid grid-cols-2 gap-3">
-        <GetFromCargoDialog />
-        <UserDeliveryDialog />
+        <GetFromCargoDialog trackingNumber={trackingNumber} />
+        <UserDeliveryDialog trackingNumber={trackingNumber} />
       </div>
     </div>
   );

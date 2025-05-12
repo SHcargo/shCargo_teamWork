@@ -50,7 +50,6 @@ export default function MainDataTable({ searchValue, setSearchValue }: Props) {
       const response = await axios.get(
         `${process.env.NEXT_PUBLIC_BASE_URL}/adminView`
       );
-      console.log(response);
       setUsers(response.data.users);
     } catch (error) {
       console.error("Error fetching users:", error);
