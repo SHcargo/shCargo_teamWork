@@ -1,6 +1,5 @@
 "use client";
 import {
-  Calculator,
   Lightbulb,
   LocationEdit,
   MapPinHouse,
@@ -17,7 +16,6 @@ const Location = ({ setStep }: { setStep: (value: string) => void }) => {
   const router = useRouter();
   return (
     <div className="max-w-2xl w-full h-screen overflow-scroll bg-[#e9ecef]">
-
       <div className="p-4">
         <Button
           className="w-full h-12 bg-white text-black justify-between rounded-lg flex font-bold"
@@ -47,18 +45,6 @@ const Location = ({ setStep }: { setStep: (value: string) => void }) => {
           title="Хаяг Холбох"
           subtitle="Хятад дахь 5 салбар"
           onClick={() => setStep("profile")}
-        />
-        <InfoCard
-          icon={Calculator}
-          title="Тээврийн Зардал"
-          subtitle="Тооцоолуур"
-          onClick={() => router.push("/calculate")}
-        />
-        <InfoCard
-          icon={Truck}
-          title="Миний захиалга"
-          subtitle=""
-          onClick={() => setStep("cargo")}
         />
         <InfoCard
           icon={MapPinHouse}
