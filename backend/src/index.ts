@@ -11,6 +11,8 @@ import { UserRouter } from "./router/user.router";
 import { SalesProductRouter } from "./router/salesProduct.router";
 import { TermsRouter } from "./router/terms.router";
 import { NotificationRouter } from "./router/notification.router";
+import { choosePickupOrDeliveryRoutes } from "./router/choosePickupOrDelivery.router";
+
 
 require("dotenv").config();
 
@@ -42,6 +44,7 @@ app.use("/deliveryAddress", DeliveryAddressRouter);
 app.use("/user", UserRouter);
 app.use("/sales", SalesProductRouter);
 app.use("/notification", NotificationRouter);
+app.use("/choosePickupOrDelivery", choosePickupOrDeliveryRoutes);
 
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);

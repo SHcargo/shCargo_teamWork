@@ -26,7 +26,6 @@ const Deliveries = () => {
   const handleCategoryClick = (category: string) => {
     setActiveCategory(category);
     // Optional: trigger filter logic here
-    console.log("Selected category:", category);
   };
 
   return (
