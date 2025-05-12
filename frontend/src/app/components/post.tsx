@@ -33,8 +33,8 @@ const Post = React.forwardRef(
         <AlertDialog>
           <AlertDialogTrigger>
             <div
-              className="flex items-center gap-2 px-4 py-2 rounded-xl border border-gray-400 
-             bg-gray-100 text-black shadow-md hover:shadow-lg hover:bg-gray-300 
+              className="flex items-center gap-2 px-4 py-2 rounded-xl border border-green-300 
+             bg-green-200/80 text-black shadow-md hover:shadow-lg hover:bg-gray-300 
              active:scale-[0.98] transition-all duration-200 ease-in-out
              dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:hover:bg-gray-600"
             >
