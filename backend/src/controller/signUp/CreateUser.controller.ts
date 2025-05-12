@@ -25,6 +25,7 @@ export const CreateUserController = async (req: Request, res: Response) => {
     });
 
     await notification.create({
+      userId: createUser._id,
       title: `Хэрэглэгч амжилттай бүртгэгдлээ`,
     });
     res.status(201).json({

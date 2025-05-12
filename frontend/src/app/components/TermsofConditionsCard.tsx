@@ -23,7 +23,7 @@ export const TermsofConditionsCard = ({ title, subtitle }: InfoCardProps) => {
           <p className="text-[#212529] font-medium">{title}</p>
         </div>
         <button>
-          <ChevronDown color="#5F2DF5" />
+          <ChevronDown color="#0000z" />
         </button>
       </div>
 

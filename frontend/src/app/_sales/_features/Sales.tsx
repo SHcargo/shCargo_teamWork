@@ -37,7 +37,6 @@ const Sales = () => {
           </div>
           <div className="h-[90px]"></div>
         </div>
-        
       </div>
     </div>
   );
