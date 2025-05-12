@@ -69,7 +69,7 @@ const UserDeliveryDialog = ({ trackingNumber }: UserDeliveryDialogProps) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <button className="w-full h-10 text-sm font-medium rounded-lg bg-gray-100 text-gray-800 hover:bg-gray-300 transition-colors">
+        <button className="w-full h-10 text-sm font-medium border border-gray-300/60 rounded-lg bg-gray-100 text-gray-800 hover:bg-gray-300 transition-colors">
           🚚 Хүргүүлэх
         </button>
       </DialogTrigger>
