@@ -24,6 +24,7 @@ type UserOrderCardProps = {
   ref: () => void;
 };
 
+
 export const UserOrderCard = ({
   description,
   id,
@@ -37,6 +38,7 @@ export const UserOrderCard = ({
     ["Бүртгэсэн", "Хаагдсан"].includes(activeCategory) ||
     ["Бүртгэсэн", "Хаагдсан"].includes(description);
 
+
   const handleDelete = async () => {
     try {
       await axios.delete(
@@ -48,14 +50,14 @@ export const UserOrderCard = ({
     }
   };
 
-
   return (
     <div className="bg-white p-4 rounded-xl border border-gray-300 shadow-md mb-4">
       <div className="flex justify-between items-start mb-2">
         <div>
           <h2 className="text-base font-bold text-gray-800 mb-1">
-            📦 Захиалгын мэдээлэл
+            📦 Захиалгын мэдээлэл 
           </h2>
+          
           <p className="text-sm text-gray-600"># {trackingNumber}</p>
         </div>
         {showTrash && (
@@ -103,11 +105,12 @@ export const UserOrderCard = ({
           → Дэлгэрэнгүй харах
         </p>
       </div>
-
-      <div className="grid grid-cols-2 gap-3">
+     <div className="grid grid-cols-2 gap-3">
+        
         <GetFromCargoDialog trackingNumber={trackingNumber} />
         <UserDeliveryDialog trackingNumber={trackingNumber} />
       </div>
+     
     </div>
   );
 };
