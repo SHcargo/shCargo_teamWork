@@ -21,6 +21,7 @@
     "leaflet": "^1.7.1",
     "mongodb": "^6.15.0",
     "mongoose": "^8.13.3",
+    "nodemailer": "^7.0.3",
     "nodemon": "^3.1.9",
     "react-leaflet": "^3.2.5"
   },
@@ -32,6 +33,7 @@
     "@types/jsonwebtoken": "^9.0.9",
     "@types/mongoose": "^5.11.96",
     "@types/node": "^22.14.1",
+    "@types/nodemailer": "^6.4.17",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3"
   }
