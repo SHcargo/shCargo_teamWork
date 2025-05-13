@@ -12,7 +12,7 @@ import { SalesProductRouter } from "./router/salesProduct.router";
 import { TermsRouter } from "./router/terms.router";
 import { NotificationRouter } from "./router/notification.router";
 import { choosePickupOrDeliveryRoutes } from "./router/choosePickupOrDelivery.router";
-
+import otpRouter from "./router/OTP.router";
 
 require("dotenv").config();
 
@@ -45,6 +45,7 @@ app.use("/user", UserRouter);
 app.use("/sales", SalesProductRouter);
 app.use("/notification", NotificationRouter);
 app.use("/choosePickupOrDelivery", choosePickupOrDeliveryRoutes);
+app.use("/otp", otpRouter);
 
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);

@@ -75,6 +75,10 @@ const Register = () => {
   const [terms, setTerms] = useState<Term[]>([]);
   const [loading, setLoading] = useState(true);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [otpSent, setOtpSent] = useState(false);
+  const [otp, setOtp] = useState("");
+  const [otpLoading, setOtpLoading] = useState(false);
+  const [otpEmail, setOtpEmail] = useState("");
 
   const fetchingTerms = async () => {
     try {
@@ -108,17 +112,21 @@ const Register = () => {
           validationSchema={registerValidationSchema}
           onSubmit={async (values) => {
             try {
-              await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/signUp`, {
-                email: values.email,
-                password: values.confirmPassword,
-                phoneNumber: values.phoneNumber,
-                name: values.name,
-              });
-              toast.success("✅ Хэрэглэгч амжилттай бүртгэгдлээ!");
-              router.push("/logIn");
+              setOtpLoading(true);
+              await axios.post(
+                `${process.env.NEXT_PUBLIC_BASE_URL}/otp/send-signup-otp`,
+                {
+                  email: values.email,
+                }
+              );
+              setOtpEmail(values.email);
+              setOtpSent(true);
+              toast.info("📧 Таны имэйл рүү баталгаажуулах код илгээгдлээ!");
             } catch (error) {
-              console.error("Registration error:", error);
-              toast.error("😕 Хэрэглэгч бүртгэхэд алдаа гарлаа.");
+              toast.error("OTP илгээхэд алдаа гарлаа.");
+              console.log(error);
+            } finally {
+              setOtpLoading(false);
             }
           }}
         >
@@ -132,7 +140,7 @@ const Register = () => {
                   </h1>
                 </div>
 
-                {/* Name Field */}
+                {/* Name */}
                 <div>
                   <div className="w-full h-10 bg-white border-2 border-gray-300 rounded-lg flex">
                     <div className="w-12 flex justify-center items-center">
@@ -151,7 +159,7 @@ const Register = () => {
                   />
                 </div>
 
-                {/* Email Field */}
+                {/* Email */}
                 <div>
                   <div className="w-full h-10 bg-white border-2 border-gray-300 rounded-lg flex">
                     <div className="w-12 flex justify-center items-center">
@@ -171,7 +179,7 @@ const Register = () => {
                   />
                 </div>
 
-                {/* Phone Number */}
+                {/* Phone */}
                 <div>
                   <div className="w-full h-10 bg-white border-2 border-gray-300 rounded-lg flex">
                     <div className="w-12 flex justify-center items-center">
@@ -181,6 +189,7 @@ const Register = () => {
                       name="phoneNumber"
                       placeholder="Утасны дугаар"
                       className="w-full h-full text-black px-3 py-0.5"
+                      type="tel"
                     />
                   </div>
                   <ErrorMessage
@@ -230,7 +239,7 @@ const Register = () => {
                   />
                 </div>
 
-                {/* Custom Drawer Trigger */}
+                {/* Open Drawer Button */}
                 <div
                   className="cursor-pointer px-6 py-3 hover:bg-gray-500 font-semibold justify-center rounded-lg bg-gray-900 flex text-xl text-white"
                   onClick={async () => {
@@ -242,7 +251,6 @@ const Register = () => {
                       password: true,
                       confirmPassword: true,
                     });
-
                     if (Object.keys(errors).length === 0) {
                       setDrawerOpen(true);
                     }
@@ -279,6 +287,71 @@ const Register = () => {
                   </DrawerFooter>
                 </DrawerContent>
               </Drawer>
+
+              {/* OTP Modal */}
+              {otpSent && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30">
+                  <div className="bg-white p-8 rounded shadow-md w-full max-w-sm">
+                    <h2 className="text-lg font-semibold mb-4">
+                      Имэйл баталгаажуулах код
+                    </h2>
+                    <input
+                      type="text"
+                      value={otp}
+                      onChange={(e) => setOtp(e.target.value)}
+                      placeholder="6 оронтой код"
+                      className="border p-2 rounded w-full mb-4"
+                      maxLength={6}
+                    />
+                    <div className="flex gap-2">
+                      <Button
+                        onClick={async () => {
+                          try {
+                            setOtpLoading(true);
+                            await axios.post(
+                              `${process.env.NEXT_PUBLIC_BASE_URL}/otp/verify-signup-otp`,
+                              {
+                                email: otpEmail,
+                                otp,
+                              }
+                            );
+
+                            await axios.post(
+                              `${process.env.NEXT_PUBLIC_BASE_URL}/signUp`,
+                              {
+                                email: otpEmail,
+                                password: formik.values.confirmPassword,
+                                phoneNumber: formik.values.phoneNumber,
+                                name: formik.values.name,
+                                otp: otp,
+                              }
+                            );
+
+                            toast.success(
+                              "✅ Хэрэглэгч амжилттай бүртгэгдлээ!"
+                            );
+                            setOtpSent(false);
+                            router.push("/logIn");
+                          } catch (error) {
+                            toast.error("OTP баталгаажуулахад алдаа гарлаа.");
+                          } finally {
+                            setOtpLoading(false);
+                          }
+                        }}
+                        disabled={otpLoading || otp.length !== 6}
+                      >
+                        Баталгаажуулах
+                      </Button>
+                      <Button
+                        variant="outline"
+                        onClick={() => setOtpSent(false)}
+                      >
+                        Буцах
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              )}
             </>
           )}
         </Formik>
