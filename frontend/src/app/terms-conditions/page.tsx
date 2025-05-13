@@ -31,6 +31,7 @@ const Home = () => {
         `${process.env.NEXT_PUBLIC_BASE_URL}/terms`
       );
       setTerms(response.data.message);
+      console.log(response.data.message);
     } catch (error) {
       console.log("Error fetching terms", error);
     } finally {

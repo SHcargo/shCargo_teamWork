@@ -1,14 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import {
-  BarChart3,
-  Building2,
-  HelpingHand,
-  Star,
-  Menu,
-  X,
-} from "lucide-react";
+import { BarChart3, Building2, HelpingHand, Star, Menu, X } from "lucide-react";
+import Logo from "@/components/ui/logoSh";
 
 const categories = [
   { name: "Хэрэглэгчид", step: "users", icon: Star },
@@ -42,10 +36,7 @@ export default function Sidebar({
           isOpen ? "translate-x-0" : "-translate-x-full"
         } md:translate-x-0 md:static md:block`}
       >
-        <div className="mb-8">
-          <h1 className="text-xl font-bold text-black">SH cargo Admin</h1>
-        </div>
-
+        <Logo className="w-30 mb-8 h-30 bg-black rounded-2xl" />
         <nav>
           <ul className="space-y-2">
             {categories.map((category) => {

@@ -5,6 +5,7 @@ import { notification } from "../../model/notification.model";
 
 export const CreateUserController = async (req: Request, res: Response) => {
   const { email, password, phoneNumber, name } = req.body;
+  const role = req.body.role?.toUpperCase() === "ADMIN" ? "ADMIN" : "USER";
 
   if (!email || !password || !phoneNumber) {
     res.status(400).json({
@@ -21,6 +22,7 @@ export const CreateUserController = async (req: Request, res: Response) => {
       email,
       phoneNumber,
       password: hashedPassword,
+      role,
       name,
     });
 
@@ -28,6 +30,7 @@ export const CreateUserController = async (req: Request, res: Response) => {
       userId: createUser._id,
       title: `Хэрэглэгч амжилттай бүртгэгдлээ`,
     });
+
     res.status(201).json({
       success: true,
       user: createUser,
