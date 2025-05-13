@@ -1,11 +1,11 @@
 "use client";
 
-import {  LocationEdit, NotebookPen, Trash2Icon } from "lucide-react";
+import React, { useState } from "react";
+import dynamic from "next/dynamic";
+import { LocationEdit, NotebookPen, Trash2Icon } from "lucide-react";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { useDeliveryAddress } from "@/app/providers/DeliveryAddressProvider";
 import AddAddressContent from "./AddAddressContent";
-import { useState } from "react";
-import dynamic from "next/dynamic";
 import { DeleteConfirm } from "./DeleteConfirm";
 
 const LeafletMap = dynamic(() => import("./LeafletMap"), { ssr: false });
@@ -82,7 +82,7 @@ const DeliveryAddress = () => {
 
       <Dialog>
         <DialogTrigger asChild>
-          <button className="mt-2 bg-[#101010] text-white px-4 py-2 rounded-lg cursor-pointer  hover:bg-gray-950">
+          <button className="mt-2 bg-[#101010] text-white px-4 py-2 rounded-lg cursor-pointer hover:bg-gray-950">
             <span>Шинэ хаяг нэмэх</span>
           </button>
         </DialogTrigger>

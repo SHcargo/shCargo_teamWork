@@ -17,9 +17,8 @@ export const PostLoginUserController = async (req: Request, res: Response) => {
   }
 
   try {
-    // Check if OTP is verified
-    const otpRecord = await OTP.findOne({ email });
-
+    // 1. Find OTP record for login purpose
+    const otpRecord = await OTP.findOne({ email, purpose: "login" });
     if (!otpRecord) {
       res.status(400).json({
         success: false,
@@ -28,20 +27,21 @@ export const PostLoginUserController = async (req: Request, res: Response) => {
       return;
     }
 
-    // Verify OTP
+    // 2. Verify OTP
     const isValidOTP = await bcrypt.compare(otp, otpRecord.otp);
-
-    if (!isValidOTP || !otpRecord.isVerified) {
+    if (!isValidOTP) {
       res.status(400).json({
         success: false,
-        message: "Invalid or unverified OTP",
+        message: "Invalid OTP",
       });
       return;
     }
 
-    // Proceed with checking user credentials
-    const userFound = await Users.findOne({ email });
+    // 3. Delete OTP after successful verification
+    await OTP.deleteOne({ _id: otpRecord._id });
 
+    // 4. Check user credentials
+    const userFound = await Users.findOne({ email });
     if (!userFound) {
       res.status(404).json({
         success: false,
@@ -50,12 +50,11 @@ export const PostLoginUserController = async (req: Request, res: Response) => {
       return;
     }
 
-    // Verify password
+    // 5. Verify password
     const isMatch = await bcrypt.compare(
       password,
       userFound.password as string
     );
-
     if (!isMatch) {
       res.status(401).json({
         success: false,
@@ -64,8 +63,8 @@ export const PostLoginUserController = async (req: Request, res: Response) => {
       return;
     }
 
-    // Create JWT Token
-    const decodePassword = "123"; // Replace with a proper secret key
+    // 6. Create JWT Token
+    const jwtSecret = process.env.JWT_SECRET || "your-secret-key";
     const token = jwt.sign(
       {
         userId: userFound._id,
@@ -73,21 +72,19 @@ export const PostLoginUserController = async (req: Request, res: Response) => {
         phoneNumber: userFound.phoneNumber,
         name: userFound.name,
         createdAt: userFound.createdAt,
+        userEmail: userFound.email,
       },
-      decodePassword,
+      jwtSecret,
       { expiresIn: "2 days" }
     );
 
-    // Create notification
+    // 7. Create notification
     await notification.create({
       title: "Хэрэглэгч амжилттай нэвтэрлээ",
       userId: userFound._id,
     });
 
-    // Delete OTP record after successful login
-    await OTP.deleteOne({ email });
-
-    // Respond with success
+    // 8. Respond with success
     res.status(200).json({
       success: true,
       message: "Logged in successfully",
@@ -100,5 +97,6 @@ export const PostLoginUserController = async (req: Request, res: Response) => {
       success: false,
       message: "Internal server error",
     });
+    return;
   }
 };

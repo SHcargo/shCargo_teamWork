@@ -6,13 +6,16 @@ import { Field, Form, Formik } from "formik";
 import axios from "axios";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Logo from "@/components/ui/logoSh";
+import { Button } from "@/components/ui/button";
+import { useUser } from "../providers/UserProvider";
 
 const loginValidationSchema = Yup.object().shape({
   email: Yup.string()
     .required("Имэйл хаяг оруулна уу")
     .email("Буруу имэйл хаяг байна"),
+  password: Yup.string().required("Нууц үг оруулна уу"),
 });
 
 const Login = () => {
@@ -20,19 +23,29 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [otpSent, setOtpSent] = useState(false);
   const [otp, setOtp] = useState("");
-  const [otpLoading, setOtpLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [otpEmail, setOtpEmail] = useState("");
+  const [otpPassword, setOtpPassword] = useState("");
+  const [resendCooldown, setResendCooldown] = useState(0);
+  const { getUser } = useUser();
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const storedPhoneNumber = localStorage.getItem("phoneNumber");
-      setPhoneNumber(storedPhoneNumber);
-    }
-  }, []);
+  // Function for OTP resend cooldown
+  const startResendCooldown = () => {
+    setResendCooldown(60);
+    const interval = setInterval(() => {
+      setResendCooldown((prev) => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  };
 
   return (
     <div className="w-screen h-screen flex justify-center bg-[rgb(221,221,221)]">
@@ -45,46 +58,42 @@ const Login = () => {
         validationSchema={loginValidationSchema}
         onSubmit={async (values) => {
           try {
-            // const response = await axios.post(
-            //   `${process.env.NEXT_PUBLIC_BASE_URL}/login`,
-            //   {
-            //     phoneNumber: values.phoneNumber,
-            //     password: values.password,
-            //   }
-            // );
-
-            setOtpLoading(true);
-            await axios.post(
-              `${process.env.NEXT_PUBLIC_BASE_URL}/otp/send-login-otp`,
-              {
+            setLoading(true);
+            // Step 1: Request OTP to be sent to the user's email
+            await axios
+              .post(`${process.env.NEXT_PUBLIC_BASE_URL}/otp/send`, {
                 email: values.email,
-              }
-            );
+                purpose: "login",
+              })
+              .catch((error) => {
+                if (error.response) {
+                  if (error.response.status === 404) {
+                    toast.error("Имэйл хаяг бүртгэлгүй байна!");
+                  } else {
+                    toast.error("Имэйл руу код илгээхэд алдаа гарлаа!");
+                  }
+                } else {
+                  toast.error("Сервертэй холбогдох боломжгүй байна!");
+                }
+                throw error;
+              });
 
-
-            if (typeof window !== "undefined") {
-              localStorage.setItem("token", response.data.token);
-              localStorage.setItem("phoneNumber", values.phoneNumber);
-            }
-
-            toast.success("Амжилттай нэвтэрлээ!");
-            router.push("/");
-            console.log("log in success", response);
-            if (typeof window !== "undefined") {
-              localStorage.setItem("loginTime", new Date().toISOString());
-            }
-
+            // Store email and password for OTP verification step
             setOtpEmail(values.email);
+            setOtpPassword(values.password);
             setOtpSent(true);
+            startResendCooldown();
             toast.info("📧 Таны имэйл рүү баталгаажуулах код илгээгдлээ!");
           } catch (error) {
-            console.log("error in login:", error);
-            toast.error("Нэвтрэх нэр эсвэл нууц үг буруу байна!");
+            console.log("Error sending OTP:", error);
+            // Error handling done in catch block above
+          } finally {
+            setLoading(false);
           }
         }}
       >
-        {({ errors, touched }) => (
-          <Form className="max-w-2xl w-full  h-full bg-[#e9ecef] py-3 px-6 flex flex-col gap-6 text-base text-black font-medium cursor-default">
+        {({ errors, touched, isSubmitting }) => (
+          <Form className="max-w-2xl w-full h-full bg-[#e9ecef] py-3 px-6 flex flex-col gap-6 text-base text-black font-medium cursor-default">
             <div className="flex flex-col gap-1">
               <div className="flex justify-center">
                 <Logo className="w-30 h-30 bg-black rounded-2xl" />
@@ -96,7 +105,7 @@ const Login = () => {
             </div>
 
             <div className="flex flex-col gap-6">
-              {/* Phone Field */}
+              {/* Email Field */}
               <div className="w-full h-10 bg-white border-2 border-gray-300 rounded-lg flex items-center overflow-hidden">
                 <div className="w-12 flex justify-center items-center">
                   <Mail className="w-5 h-5 text-gray-500" />
@@ -139,84 +148,161 @@ const Login = () => {
                   </button>
                 </div>
               </div>
+              {errors.password && touched.password && (
+                <div className="text-red-500 text-sm mt-1 ml-1">
+                  {errors.password}
+                </div>
+              )}
             </div>
 
             {/* Submit Button */}
             <button
               type="submit"
               className="font-semibold cursor-pointer py-2.5 text-white bg-black hover:bg-[#303030] rounded-lg"
+              disabled={isSubmitting}
             >
-              Нэвтрэх
+              {isSubmitting ? "Илгээж байна..." : "Нэвтрэх"}
             </button>
+
+            {/* OTP Verification Modal */}
             {otpSent && (
               <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30">
                 <div className="bg-white p-8 rounded shadow-md w-full max-w-sm">
                   <h2 className="text-lg font-semibold mb-4">
                     Имэйл баталгаажуулах код
                   </h2>
+                  <p className="text-sm text-gray-600 mb-4">
+                    {otpEmail} хаяг руу илгээсэн 6 оронтой кодыг оруулна уу
+                  </p>
                   <input
                     type="text"
                     value={otp}
-                    onChange={(e) => setOtp(e.target.value)}
+                    onChange={(e) => {
+                      // Only allow numbers and limit to 6 digits
+                      const value = e.target.value
+                        .replace(/[^\d]/g, "")
+                        .slice(0, 6);
+                      setOtp(value);
+                    }}
                     placeholder="6 оронтой код"
                     className="border p-2 rounded w-full mb-4"
                     maxLength={6}
                   />
-                  <div className="flex gap-2">
-                    <Button
-                      onClick={async (values) => {
-                        try {
-                          setOtpLoading(true);
-                          await axios.post(
-                            `${process.env.NEXT_PUBLIC_BASE_URL}/otp/verify-login-otp`,
-                            {
-                              email: otpEmail,
-                              otp,
+                  <div className="flex flex-col gap-4">
+                    <div className="flex gap-2 justify-between">
+                      <Button
+                        onClick={async () => {
+                          try {
+                            setLoading(true);
+
+                            // If OTP verification succeeds, then attempt login
+                            try {
+                              const loginResponse = await axios.post(
+                                `${process.env.NEXT_PUBLIC_BASE_URL}/login`,
+                                {
+                                  email: otpEmail,
+                                  password: otpPassword,
+                                  otp: otp,
+                                }
+                              );
+
+                              // Handle successful login
+                              if (
+                                loginResponse &&
+                                loginResponse.data &&
+                                loginResponse.data.token
+                              ) {
+                                // Store auth token and user info
+                                if (typeof window !== "undefined") {
+                                  localStorage.setItem(
+                                    "token",
+                                    loginResponse.data.token
+                                  );
+                                  localStorage.setItem("email", otpEmail);
+                                  localStorage.setItem(
+                                    "loginTime",
+                                    new Date().toISOString()
+                                  );
+                                }
+
+                                toast.success(
+                                  "✅ Хэрэглэгч амжилттай нэвтэрлээ!"
+                                );
+                                setOtpSent(false);
+                                router.push("/");
+                                await getUser();
+                              } else {
+                                toast.error("Токен мэдээлэл алга байна!");
+                              }
+                            } catch (loginError) {
+                              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                              const error = loginError as any;
+                              if (error.response) {
+                                if (error.response.status === 400) {
+                                  toast.error(
+                                    "Нэг удаагын нууц үг баталгаажуулах шаардлагатай!"
+                                  );
+                                } else if (error.response.status === 401) {
+                                  toast.error("Нууц үг буруу байна!");
+                                } else if (error.response.status === 404) {
+                                  toast.error("Хэрэглэгч олдсонгүй!");
+                                } else {
+                                  toast.error("Нэвтрэх үед алдаа гарлаа!");
+                                }
+                              } else {
+                                toast.error(
+                                  "Сервертэй холбогдох боломжгүй байна!"
+                                );
+                              }
                             }
-                          );
-
-                          await axios.post(
-                            `${process.env.NEXT_PUBLIC_BASE_URL}/login`,
-                            {
-                              email: otpEmail,
-                              password: values.password,
-                              otp: otp,
-                            }
-                          );
-                          if (typeof window !== "undefined") {
-                            localStorage.setItem("token", response.data.token);
-                            localStorage.setItem(
-                              "phoneNumber",
-                              values.phoneNumber
-                            );
+                          } catch (error) {
+                            console.error("Authentication error:", error);
+                            // Specific error handling already done in catch blocks above
+                          } finally {
+                            setLoading(false);
                           }
+                        }}
+                        disabled={loading || otp.length !== 6}
+                        className="flex-1"
+                      >
+                        {loading ? "Баталгаажуулж байна..." : "Баталгаажуулах"}
+                      </Button>
+                      <Button
+                        variant="outline"
+                        onClick={() => setOtpSent(false)}
+                        className="flex-1"
+                      >
+                        Буцах
+                      </Button>
+                    </div>
 
-                          toast.success("Амжилттай нэвтэрлээ!");
-                          router.push("/");
-                          console.log("log in success", response);
-                          if (typeof window !== "undefined") {
-                            localStorage.setItem(
-                              "loginTime",
-                              new Date().toISOString()
+                    <div className="text-sm text-center border-t pt-3 mt-2">
+                      <Button
+                        variant="link"
+                        disabled={resendCooldown > 0 || loading}
+                        onClick={async () => {
+                          try {
+                            setLoading(true);
+                            await axios.post(
+                              `${process.env.NEXT_PUBLIC_BASE_URL}/otp/send-login-otp`,
+                              { email: otpEmail }
                             );
+                            toast.info("📧 Шинэ код илгээгдлээ!");
+                            startResendCooldown();
+                          } catch (error) {
+                            toast.error("Код дахин илгээхэд алдаа гарлаа!");
+                            console.log(error);
+                          } finally {
+                            setLoading(false);
                           }
-
-                          toast.success("✅ Хэрэглэгч амжилттай нэвтэрлээ!");
-                          setOtpSent(false);
-                          router.push("/logIn");
-                        } catch (error) {
-                          toast.error("OTP баталгаажуулахад алдаа гарлаа.");
-                        } finally {
-                          setOtpLoading(false);
-                        }
-                      }}
-                      disabled={otpLoading || otp.length !== 6}
-                    >
-                      Баталгаажуулах
-                    </Button>
-                    <Button variant="outline" onClick={() => setOtpSent(false)}>
-                      Буцах
-                    </Button>
+                        }}
+                        className="text-blue-500"
+                      >
+                        {resendCooldown > 0
+                          ? `Дахин код авах (${resendCooldown} секунд)`
+                          : "Дахин код авах"}
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import {
+import React, {
   createContext,
   useContext,
   useState,
@@ -11,14 +11,13 @@ import axios from "axios";
 import { useUser } from "@/app/providers/UserProvider";
 
 type DeliveryAddress = {
-  accuracy: number;
-  lng: number;
-  lat: number;
   _id: string;
-  city: string;
+  lat: number;
+  lng: number;
+  detail: string;
   district: string;
   khoroo: string;
-  detail: string;
+  accuracy: number;
   userId: string;
 };
 
@@ -45,10 +44,7 @@ export const DeliveryAddressProvider = ({
       const response = await axios.get(
         `${process.env.NEXT_PUBLIC_BASE_URL}/deliveryAddress/${userId}`
       );
-
-      const { data } = response.data;
-
-      setAddresses(data);
+      setAddresses(response.data.data || []);
     } catch (error) {
       console.error("Failed to fetch delivery addresses", error);
     }
@@ -67,9 +63,10 @@ export const DeliveryAddressProvider = ({
 
 export const useDeliveryAddress = () => {
   const context = useContext(DeliveryAddressContext);
-  if (!context)
+  if (!context) {
     throw new Error(
       "useDeliveryAddress must be used within DeliveryAddressProvider"
     );
+  }
   return context;
 };

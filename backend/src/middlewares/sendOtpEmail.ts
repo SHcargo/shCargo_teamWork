@@ -3,11 +3,6 @@ import dotenv from "dotenv";
 dotenv.config();
 // Create a transporter using SMTP
 // Replace these with your actual email configuration
-console.log("EMAIL_USER:", process.env.EMAIL_USER);
-console.log(
-  "EMAIL_PASSWORD:",
-  process.env.EMAIL_PASSWORD ? "Exists" : "Missing"
-);
 
 const transporter = nodemailer.createTransport({
   service: "gmail", // or another service

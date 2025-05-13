@@ -28,27 +28,21 @@ export const VerifyLoginOTPController = async (req: Request, res: Response) => {
     // Compare the OTP
     const isValid = await bcrypt.compare(otp, otpRecord.otp);
     if (!isValid) {
-      res.status(400).json({
-        success: false,
-        message: "Invalid OTP",
-      });
+      res.status(400).json({ success: false, message: "Invalid OTP" });
       return;
     }
+    // Mark OTP as verified
+    await OTP.updateOne({ email }, { $set: { isVerified: true } });
 
-    // OTP is valid, generate token
-    const token = jwt.sign(
-      {
-        email: email,
-      },
-      "your_secret_key",
-      { expiresIn: "1d" }
-    );
+    // Generate token and respond
+    const token = jwt.sign({ email }, "your_secret_key", { expiresIn: "1d" });
 
     res.status(200).json({
       success: true,
       message: "OTP verified successfully",
       token,
     });
+
     return;
   } catch (error) {
     console.error("Error verifying OTP:", error);
