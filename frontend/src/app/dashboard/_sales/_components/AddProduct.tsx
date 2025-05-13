@@ -64,6 +64,7 @@ const AddSalesProducts = () => {
         title,
         price: Number(price),
         image: imageUrl,
+        description,
       });
       alert("Product created successfully!");
       setTitle("");

@@ -22,7 +22,7 @@ const GetFromCargoDialog = ({ trackingNumber }: UserDeliveryDialogProps) => {
 
   const choosePickupOrDelivery = async () => {
     if (!value?.userId || !value?.phoneNumber) {
-      toast.error("❌ Хэрэглэгчийн мэдээлэл дутуу байна.");
+      toast.error("❌ Хэрэглэгчийн мэдээлэл дутуу байна. Салбараас ачаа авах боломжгүй.");
       return;
     }
 
@@ -34,7 +34,7 @@ const GetFromCargoDialog = ({ trackingNumber }: UserDeliveryDialogProps) => {
       );
 
       if (response.data.success === false) {
-        toast.error("❌ Энэ хэрэглэгч аль хэдийн хаяг сонгосон байна.");
+        toast.error("❌ Та аль хэдийн 'Салбараас авах' сонголтыг хийсэн байна.");
         return;
       }
 
@@ -47,9 +47,9 @@ const GetFromCargoDialog = ({ trackingNumber }: UserDeliveryDialogProps) => {
         }
       );
 
-      toast.success("✅ Хаяг амжилттай илгээгдлээ!");
+      toast.success("✅ 'Салбараас авах' сонголт амжилттай илгээгдлээ!");
     } catch (error) {
-      toast.error("❌ Хаяг илгээхэд алдаа гарлаа!");
+      toast.error("❌ 'Салбараас авах' сонголтыг илгээхэд алдаа гарлаа.");
       console.error(error);
     } finally {
       setIsLoading(false);
@@ -60,7 +60,7 @@ const GetFromCargoDialog = ({ trackingNumber }: UserDeliveryDialogProps) => {
     <Dialog>
       <DialogTrigger asChild>
         <button className="w-full h-10 text-sm cursor-pointer border border-gray-300/60 font-medium rounded-lg bg-gray-100 text-gray-800 hover:bg-gray-300 transition-colors">
-          📍 Хаяг сонгох
+          🏢 Салбараас авах
         </button>
       </DialogTrigger>
 
@@ -68,7 +68,7 @@ const GetFromCargoDialog = ({ trackingNumber }: UserDeliveryDialogProps) => {
         <DialogHeader>
           <DialogTitle>Хаяг мэдээлэл</DialogTitle>
           <DialogDescription>
-            Доорх хаяг дээр очиж ачаагаа авна уу.
+            Доорх байршилд очиж ачаагаа авна уу.
           </DialogDescription>
         </DialogHeader>
 

@@ -1,13 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import {
-  PhoneCallIcon,
-  LockKeyhole,
-  UserPlus2,
-  Eye,
-  EyeOff,
-} from "lucide-react";
+import { Mail, LockKeyhole, UserPlus2, Eye, EyeOff } from "lucide-react";
 import { Field, Form, Formik } from "formik";
 import axios from "axios";
 import * as Yup from "yup";
@@ -16,15 +10,18 @@ import { useState, useEffect } from "react";
 import Logo from "@/components/ui/logoSh";
 
 const loginValidationSchema = Yup.object().shape({
-  phoneNumber: Yup.string()
-    .required("Утасны дугаар оруулна уу")
-    .matches(/^[0-9]{8}$/, "Утасны дугаар 8 оронтой тоо байх ёстой"),
+  email: Yup.string()
+    .required("Имэйл хаяг оруулна уу")
+    .email("Буруу имэйл хаяг байна"),
 });
 
 const Login = () => {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
-  const [phoneNumber, setPhoneNumber] = useState<string | null>(null);
+  const [otpSent, setOtpSent] = useState(false);
+  const [otp, setOtp] = useState("");
+  const [otpLoading, setOtpLoading] = useState(false);
+  const [otpEmail, setOtpEmail] = useState("");
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -41,20 +38,29 @@ const Login = () => {
     <div className="w-screen h-screen flex justify-center bg-[rgb(221,221,221)]">
       <Formik
         initialValues={{
-          phoneNumber: phoneNumber ? phoneNumber : "",
+          email: "",
           password: "",
         }}
         enableReinitialize
         validationSchema={loginValidationSchema}
         onSubmit={async (values) => {
           try {
-            const response = await axios.post(
-              `${process.env.NEXT_PUBLIC_BASE_URL}/login`,
+            // const response = await axios.post(
+            //   `${process.env.NEXT_PUBLIC_BASE_URL}/login`,
+            //   {
+            //     phoneNumber: values.phoneNumber,
+            //     password: values.password,
+            //   }
+            // );
+
+            setOtpLoading(true);
+            await axios.post(
+              `${process.env.NEXT_PUBLIC_BASE_URL}/otp/send-login-otp`,
               {
-                phoneNumber: values.phoneNumber,
-                password: values.password,
+                email: values.email,
               }
             );
+
 
             if (typeof window !== "undefined") {
               localStorage.setItem("token", response.data.token);
@@ -67,6 +73,10 @@ const Login = () => {
             if (typeof window !== "undefined") {
               localStorage.setItem("loginTime", new Date().toISOString());
             }
+
+            setOtpEmail(values.email);
+            setOtpSent(true);
+            toast.info("📧 Таны имэйл рүү баталгаажуулах код илгээгдлээ!");
           } catch (error) {
             console.log("error in login:", error);
             toast.error("Нэвтрэх нэр эсвэл нууц үг буруу байна!");
@@ -89,18 +99,18 @@ const Login = () => {
               {/* Phone Field */}
               <div className="w-full h-10 bg-white border-2 border-gray-300 rounded-lg flex items-center overflow-hidden">
                 <div className="w-12 flex justify-center items-center">
-                  <PhoneCallIcon className="w-5 h-5 text-gray-500" />
+                  <Mail className="w-5 h-5 text-gray-500" />
                 </div>
                 <Field
-                  name="phoneNumber"
-                  type="text"
-                  placeholder="Утасны дугаараа оруулна уу"
+                  name="email"
+                  type="email"
+                  placeholder="Мэйл хаягаа оруулна уу"
                   className="flex-1 h-full px-3 py-1 outline-none text-black cursor-text"
                 />
               </div>
-              {errors.phoneNumber && touched.phoneNumber && (
+              {errors.email && touched.email && (
                 <div className="text-red-500 text-sm mt-1 ml-1">
-                  {errors.phoneNumber}
+                  {errors.email}
                 </div>
               )}
 
@@ -138,6 +148,79 @@ const Login = () => {
             >
               Нэвтрэх
             </button>
+            {otpSent && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30">
+                <div className="bg-white p-8 rounded shadow-md w-full max-w-sm">
+                  <h2 className="text-lg font-semibold mb-4">
+                    Имэйл баталгаажуулах код
+                  </h2>
+                  <input
+                    type="text"
+                    value={otp}
+                    onChange={(e) => setOtp(e.target.value)}
+                    placeholder="6 оронтой код"
+                    className="border p-2 rounded w-full mb-4"
+                    maxLength={6}
+                  />
+                  <div className="flex gap-2">
+                    <Button
+                      onClick={async (values) => {
+                        try {
+                          setOtpLoading(true);
+                          await axios.post(
+                            `${process.env.NEXT_PUBLIC_BASE_URL}/otp/verify-login-otp`,
+                            {
+                              email: otpEmail,
+                              otp,
+                            }
+                          );
+
+                          await axios.post(
+                            `${process.env.NEXT_PUBLIC_BASE_URL}/login`,
+                            {
+                              email: otpEmail,
+                              password: values.password,
+                              otp: otp,
+                            }
+                          );
+                          if (typeof window !== "undefined") {
+                            localStorage.setItem("token", response.data.token);
+                            localStorage.setItem(
+                              "phoneNumber",
+                              values.phoneNumber
+                            );
+                          }
+
+                          toast.success("Амжилттай нэвтэрлээ!");
+                          router.push("/");
+                          console.log("log in success", response);
+                          if (typeof window !== "undefined") {
+                            localStorage.setItem(
+                              "loginTime",
+                              new Date().toISOString()
+                            );
+                          }
+
+                          toast.success("✅ Хэрэглэгч амжилттай нэвтэрлээ!");
+                          setOtpSent(false);
+                          router.push("/logIn");
+                        } catch (error) {
+                          toast.error("OTP баталгаажуулахад алдаа гарлаа.");
+                        } finally {
+                          setOtpLoading(false);
+                        }
+                      }}
+                      disabled={otpLoading || otp.length !== 6}
+                    >
+                      Баталгаажуулах
+                    </Button>
+                    <Button variant="outline" onClick={() => setOtpSent(false)}>
+                      Буцах
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* Forgot Password */}
             <div className="flex gap-1 text-sm mt-2">

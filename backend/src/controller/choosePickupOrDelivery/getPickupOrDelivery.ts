@@ -4,10 +4,10 @@ import { choosePickupOrDelivery } from "../../model/choosePickupOrDelivery";
 // Check if user has already chosen a pickup or delivery address
 export const checkChoosePickupOrDelivery = async (req: Request, res: Response) => {
   try {
-    const userId = req.params.userId;
+    const trackingNumber = req.params.userId;
 
     // Check if a document exists for the user
-    const existing = await choosePickupOrDelivery.findOne({ userId });
+    const existing = await choosePickupOrDelivery.findOne({ trackingNumber });
 
     if (existing) {
        res.status(200).json({
