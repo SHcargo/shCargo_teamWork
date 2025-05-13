@@ -9,6 +9,7 @@ import { UserProvider } from "./providers/UserProvider";
 import { DeliveryAddressProvider } from "./providers/DeliveryAddressProvider";
 import { SalesProvider } from "./providers/SalesProvider";
 import { NotificationProvider } from "./providers/NotificationProvider";
+import AdminProvider from "./providers/AdminProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,11 +38,13 @@ export default function RootLayout({
       >
         <SalesProvider>
           <AuthProvider>
-            <UserProvider>
-              <NotificationProvider>
-                <DeliveryAddressProvider>{children}</DeliveryAddressProvider>
-              </NotificationProvider>
-            </UserProvider>
+            <AdminProvider>
+              <UserProvider>
+                <NotificationProvider>
+                  <DeliveryAddressProvider>{children}</DeliveryAddressProvider>
+                </NotificationProvider>
+              </UserProvider>
+            </AdminProvider>
           </AuthProvider>
         </SalesProvider>
 

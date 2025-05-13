@@ -6,8 +6,8 @@ import { Field, Form, Formik } from "formik";
 import axios from "axios";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { useState, useEffect } from "react";
+import Logo from "@/components/ui/logoSh";
 
 const loginValidationSchema = Yup.object().shape({
   email: Yup.string()
@@ -26,6 +26,13 @@ const Login = () => {
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedPhoneNumber = localStorage.getItem("phoneNumber");
+      setPhoneNumber(storedPhoneNumber);
+    }
+  }, []);
 
   return (
     <div className="w-screen h-screen flex justify-center bg-[rgb(221,221,221)]">
@@ -53,6 +60,20 @@ const Login = () => {
                 email: values.email,
               }
             );
+
+
+            if (typeof window !== "undefined") {
+              localStorage.setItem("token", response.data.token);
+              localStorage.setItem("phoneNumber", values.phoneNumber);
+            }
+
+            toast.success("Амжилттай нэвтэрлээ!");
+            router.push("/");
+            console.log("log in success", response);
+            if (typeof window !== "undefined") {
+              localStorage.setItem("loginTime", new Date().toISOString());
+            }
+
             setOtpEmail(values.email);
             setOtpSent(true);
             toast.info("📧 Таны имэйл рүү баталгаажуулах код илгээгдлээ!");
@@ -63,9 +84,14 @@ const Login = () => {
         }}
       >
         {({ errors, touched }) => (
-          <Form className="max-w-2xl w-full pt-[200px] h-full bg-[#e9ecef] py-3 px-6 flex flex-col gap-6 text-base text-black font-medium cursor-default">
+          <Form className="max-w-2xl w-full  h-full bg-[#e9ecef] py-3 px-6 flex flex-col gap-6 text-base text-black font-medium cursor-default">
             <div className="flex flex-col gap-1">
-              <h1 className="text-xl font-semibold">Тавтай морил</h1>
+              <div className="flex justify-center">
+                <Logo className="w-30 h-30 bg-black rounded-2xl" />
+              </div>
+              <h1 className="text-xl flex justify-center font-semibold">
+                Тавтай морил
+              </h1>
               <p>Та утасны дугаар эсвэл мэйл хаягаараа нэвтрэнэ үү!</p>
             </div>
 

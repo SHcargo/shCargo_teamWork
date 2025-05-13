@@ -7,6 +7,7 @@ import { OTP } from "../../model/otpModel";
 export const CreateUserController = async (req: Request, res: Response) => {
   const { email, password, phoneNumber, name, otp } = req.body;
 
+
   if (!email || !password || !phoneNumber || !name || !otp) {
     res.status(400).json({
       success: false,
@@ -56,6 +57,7 @@ export const CreateUserController = async (req: Request, res: Response) => {
       email,
       phoneNumber,
       password: hashedPassword,
+      role,
       name,
       isVerified: true, // User is verified because OTP was verified
     });
@@ -64,6 +66,7 @@ export const CreateUserController = async (req: Request, res: Response) => {
       userId: createUser._id,
       title: `Хэрэглэгч амжилттай бүртгэгдлээ`,
     });
+
 
     // Delete the OTP record after successful registration
     await OTP.deleteOne({ email });
