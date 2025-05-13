@@ -2,9 +2,9 @@ import { Request, Response } from "express";
 import { SalesProduct } from "../../model/sales.model";
 
 export const CreateSalesController = async (req: Request, res: Response) => {
-  const { title, price, image } = req.body;
+  const { title, price, image, description } = req.body;
 
-  if (!title || !price || !image) {
+  if (!title || !price || !image || !description) {
     res.status(400).json({
       success: false,
       message: "Title, Price and Images are required",
@@ -16,6 +16,7 @@ export const CreateSalesController = async (req: Request, res: Response) => {
       title,
       price,
       image,
+      description,
     });
     res.status(201).json({
       success: true,
