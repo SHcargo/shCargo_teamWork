@@ -6,6 +6,7 @@ import UsersAdmin from "./_users/UserAdmin";
 import SalesProducts from "./_sales/salesProducts";
 import LocationAdd from "./_location/locationAdd";
 import HelpForUsersAdd from "./_help/helpForUsers";
+import { Delivery } from "./_Delivery/Delivery";
 
 const DashboardAdmin = () => {
   const [step, setStep] = useState("users");
@@ -27,6 +28,7 @@ const DashboardAdmin = () => {
           {step === "sales" && <SalesProducts />}
           {step === "location" && <LocationAdd />}
           {step === "help" && <HelpForUsersAdd />}
+          {step === "Delivery" && <Delivery/>}
         </main>
       </div>
     </div>

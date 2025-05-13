@@ -1,12 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-
 import { useState, useEffect } from "react";
 import { useUser } from "../providers/UserProvider";
 import axios from "axios";
 import { UserOrderCard } from "../components/userOrderCard";
 import Post from "../components/post";
 
-type StatusCategory = "Бүгд" | "Бүртгэсэн" | "Замдаа" | "УБ-д ирсэн" | "Хаагдсан";
+type StatusCategory =
+  | "Бүгд"
+  | "Бүртгэсэн"
+  | "Замдаа"
+  | "УБ-д ирсэн"
+  | "Хаагдсан";
 
 type StatusHistory = {
   status: string;
@@ -22,6 +26,7 @@ type Order = {
   trackingNumber: string;
   statusHistory: StatusHistory[];
   __v: number;
+  choose?: string | null;
 };
 
 type DeliveryCounts = Record<StatusCategory, number>;
@@ -47,31 +52,51 @@ const Cargo = () => {
     Хаагдсан: 0,
   });
 
-
   const getCargoOrderItems = async (): Promise<void> => {
     setLoading(true);
-    if (!value.userId) return;
+    if (!value.userId) {
+      setLoading(false);
+      return;
+    }
 
     try {
+      // Ачааны жагсаалт авах
       const response = await axios.get<{ orders: Order[] }>(
         `${process.env.NEXT_PUBLIC_BASE_URL}/truckItems/${value.userId}`
       );
-      const data = response.data.orders;
-      setOrders(data);
+      const ordersData = response.data.orders;
 
-      const counts = categories.reduce<DeliveryCounts>((acc, category) => {
-        acc[category] =
-          category === "Бүгд"
-            ? data.length
-            : data.filter((order) => order.status === category).length;
-        return acc;
-      }, {
-        Бүгд: 0,
-        Бүртгэсэн: 0,
-        Замдаа: 0,
-        "УБ-д ирсэн": 0,
-        Хаагдсан: 0,
-      });
+      // "choosePickupOrDelivery" статус шалгах
+      const chooseResponse = await axios.get(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/choosePickupOrDelivery/${value.userId}`
+      );
+      const chooseStatus = chooseResponse.data?.existing || null;
+
+      // Захиалгууд дээр choose статус нэмэх
+      const updatedOrders = ordersData.map((order) => ({
+        ...order,
+        choose: chooseStatus,
+      }));
+
+      setOrders(updatedOrders);
+
+      // Төрлөөр нь тоолох
+      const counts = categories.reduce<DeliveryCounts>(
+        (acc, category) => {
+          acc[category] =
+            category === "Бүгд"
+              ? updatedOrders.length
+              : updatedOrders.filter((order) => order.status === category).length;
+          return acc;
+        },
+        {
+          Бүгд: 0,
+          Бүртгэсэн: 0,
+          Замдаа: 0,
+          "УБ-д ирсэн": 0,
+          Хаагдсан: 0,
+        }
+      );
 
       setDeliveryCounts(counts);
     } catch (error) {
@@ -83,7 +108,7 @@ const Cargo = () => {
 
   useEffect(() => {
     getCargoOrderItems();
-  }, [value.userId]);
+  }, [value]);
 
   const filteredOrders =
     activeCategory === "Бүгд"
@@ -127,7 +152,7 @@ const Cargo = () => {
 
       <div className="flex-1 overflow-y-auto bg-gray-50 rounded-xl p-2 shadow-inner">
         {filteredOrders.length === 0 ? (
-          <p className="text-center text-gray-500">No orders found.</p>
+          <p className="text-center text-gray-500">Захиалга олдсонгүй.</p>
         ) : (
           filteredOrders.map((order) => (
             <div key={order._id}>
@@ -138,6 +163,7 @@ const Cargo = () => {
                 createdAt={order.createdAt}
                 activeCategory={activeCategory}
                 ref={getCargoOrderItems}
+     
               />
             </div>
           ))
@@ -145,12 +171,9 @@ const Cargo = () => {
         <div className="h-10" />
       </div>
 
-    <Post refreshFn={getCargoOrderItems}/>
-     
+      <Post refreshFn={getCargoOrderItems} />
     </div>
   );
 };
 
 export default Cargo;
-
-

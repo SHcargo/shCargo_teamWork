@@ -2,12 +2,12 @@ import mongoose from "mongoose";
 
 const choosePickupOrDeliverySchema = new mongoose.Schema({
   deliveryAddress: {
-    lat: { type: Number, required: true },  // Ensure lat is required
-    lng: { type: Number, required: true },  // Ensure lng is required
-    detail: { type: String, required: true },  // Ensure detail is required
-    district: { type: String, required: true },  // Ensure district is required
-    khoroo: { type: String, required: true },  // Ensure khoroo is required
-    accuracy: { type: Number, required: true },  // Ensure accuracy is required
+    lat: { type: Number,  },  // Ensure lat is required
+    lng: { type: Number,  },  // Ensure lng is required
+    detail: { type: String,  },  // Ensure detail is required
+    district: { type: String,  },  // Ensure district is required
+    khoroo: { type: String, },  // Ensure khoroo is required
+    accuracy: { type: Number, },  // Ensure accuracy is required
   },
   status: {
     type: String,
