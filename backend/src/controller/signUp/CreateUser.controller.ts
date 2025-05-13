@@ -7,19 +7,17 @@ import { OTP } from "../../model/otpModel";
 export const CreateUserController = async (req: Request, res: Response) => {
   const { email, password, phoneNumber, name, otp } = req.body;
 
-
   if (!email || !password || !phoneNumber || !name || !otp) {
     res.status(400).json({
       success: false,
-      message: "All fields are required",
+      message: "All fields including OTP are required",
     });
     return;
   }
 
   try {
-    // Check if OTP is verified
-    const otpRecord = await OTP.findOne({ email });
-
+    // Find OTP record for signup purpose
+    const otpRecord = await OTP.findOne({ email, purpose: "signup" });
     if (!otpRecord) {
       res.status(400).json({
         success: false,
@@ -30,19 +28,18 @@ export const CreateUserController = async (req: Request, res: Response) => {
 
     // Verify OTP
     const isValidOTP = await bcrypt.compare(otp, otpRecord.otp);
-
-    if (!isValidOTP || !otpRecord.isVerified) {
+    if (!isValidOTP) {
       res.status(400).json({
         success: false,
-        message: "Invalid or unverified OTP",
+        message: "Invalid OTP",
       });
       return;
     }
 
+    // Check if user already exists
     const existingUser = await Users.findOne({
       $or: [{ email }, { phoneNumber }],
     });
-
     if (existingUser) {
       res.status(400).json({
         success: false,
@@ -51,33 +48,31 @@ export const CreateUserController = async (req: Request, res: Response) => {
       return;
     }
 
+    // Hash password and create user
     const hashedPassword = await bcrypt.hash(password, 10);
-
-    const createUser = await Users.create({
+    const newUser = await Users.create({
       email,
       phoneNumber,
       password: hashedPassword,
-      role,
       name,
-      isVerified: true, // User is verified because OTP was verified
+      isVerified: true,
     });
 
     await notification.create({
-      userId: createUser._id,
-      title: `Хэрэглэгч амжилттай бүртгэгдлээ`,
+      userId: newUser._id,
+      title: "Хэрэглэгч амжилттай бүртгэгдлээ",
     });
 
-
-    // Delete the OTP record after successful registration
-    await OTP.deleteOne({ email });
+    // Delete OTP after successful registration
+    await OTP.deleteOne({ email, purpose: "signup" });
 
     res.status(201).json({
       success: true,
-      user: createUser,
+      user: newUser,
     });
     return;
   } catch (error) {
-    console.error(error);
+    console.error("Registration error:", error);
     res.status(500).json({
       success: false,
       message: "Internal server error",

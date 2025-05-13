@@ -2,12 +2,43 @@ import { Response, Request } from "express";
 import { Users } from "../../model/users.model";
 import bcrypt from "bcrypt";
 import { notification } from "../../model/notification.model";
+import { OTP } from "../../model/otpModel";
 
 const ResetPassword = async (req: Request, res: Response) => {
-  const { newPassword } = req.body;
   const userId = req.params.userId;
+  const { email, newPassword, otp } = req.body;
+
+  if (!email || !newPassword || !otp) {
+    res.status(400).json({
+      success: false,
+      message: "Email, password, and OTP are required",
+    });
+    return;
+  }
 
   try {
+    const otpRecord = await OTP.findOne({ email, purpose: "reset_password" });
+    if (!otpRecord) {
+      res.status(400).json({
+        success: false,
+        message: "OTP verification required. Please request a new OTP",
+      });
+      return;
+    }
+
+    // 2. Verify OTP
+    const isValidOTP = await bcrypt.compare(otp, otpRecord.otp);
+    if (!isValidOTP) {
+      res.status(400).json({
+        success: false,
+        message: "Invalid OTP",
+      });
+      return;
+    }
+
+    // 3. Delete OTP after successful verification
+    await OTP.deleteOne({ _id: otpRecord._id });
+
     const user = await Users.findById(userId);
 
     if (!user) {

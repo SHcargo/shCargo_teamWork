@@ -23,7 +23,7 @@ export const validateEmail = async (
         .status(400)
         .json({
           success: false,
-          message: "Found user with this email",
+          message: "Энэ и-мэйл хаягтай хэрэглэгч бүртгэлтэй байна",
         })
         .send();
     } else {
