@@ -1,18 +1,18 @@
 import { Request, Response } from "express";
 import { Users } from "../../model/users.model";
 
-const FindUserByPhoneNumber = async (req: Request, res: Response) => {
-  const { phoneNumber } = req.body;
+const FindUserByEmail = async (req: Request, res: Response) => {
+  const { email } = req.body;
 
   try {
-    const userExist = await Users.findOne({ phoneNumber: phoneNumber });
+    const userExist = await Users.findOne({ email: email });
     if (!userExist) {
       res.status(404).json({ message: "User not found.", success: false });
       return;
     }
 
     res.status(200).json({
-      message: "User with this phone number exist",
+      message: "User with this email exist",
       success: true,
       user: userExist,
     });
@@ -24,4 +24,4 @@ const FindUserByPhoneNumber = async (req: Request, res: Response) => {
   }
 };
 
-export default FindUserByPhoneNumber;
+export default FindUserByEmail;

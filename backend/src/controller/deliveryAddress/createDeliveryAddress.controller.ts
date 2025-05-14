@@ -7,10 +7,21 @@ const createDeliveryAddress = async (req: Request, res: Response) => {
   const { lng, lat, detail, district, khoroo, accuracy } = req.body;
   const userId = req.params.userId;
 
-  if (!lng || !lat || !detail || !district || !khoroo) {
+  if (
+    lat === undefined ||
+    lat === null ||
+    lng === undefined ||
+    lng === null ||
+    !detail ||
+    detail.trim() === "" ||
+    !district ||
+    district.trim() === "" ||
+    !khoroo ||
+    khoroo.trim() === ""
+  ) {
     res.status(400).json({
       success: false,
-      message: "request body's missing",
+      message: "Request body is missing required fields",
     });
     return;
   }

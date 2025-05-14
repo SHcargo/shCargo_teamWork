@@ -8,7 +8,8 @@ type DecodedToken = {
   role: string;
   userId: string;
   name: string;
-  createdAt: Date;
+  createdAt: string; // usually ISO string in JWT
+  userEmail: string;
 };
 
 type UserContextType = {
@@ -18,10 +19,11 @@ type UserContextType = {
   name?: string;
   getUser: () => Promise<void>;
   loading: boolean;
-  createdAt?: Date;
+  createdAt?: string;
+  userEmail?: string;
 };
 
-const getDecodedToken = async (token: string | null) => {
+const getDecodedToken = (token: string | null): DecodedToken | null => {
   if (!token) return null;
 
   try {
@@ -39,28 +41,37 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [loading, setLoading] = useState(true);
 
   const getUser = async () => {
+    setLoading(true);
     const storedToken = localStorage.getItem("token");
     if (!storedToken) {
-      setLoading(false); // If no token, we set loading to false and return
+      setClient(null);
+      setLoading(false);
       return;
     }
 
-    const user = await getDecodedToken(storedToken);
+    const user = getDecodedToken(storedToken);
     if (user) {
       setClient(user);
     } else {
+      setClient(null);
       console.error("Failed to decode token.");
     }
     setLoading(false);
   };
 
+  // Run once on mount
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      getUser();
-    }
-  }, []);
+    getUser();
 
-  console.log(client);
+    // Listen for token changes in other tabs/windows
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === "token") {
+        getUser();
+      }
+    };
+    window.addEventListener("storage", onStorage);
+    return () => window.removeEventListener("storage", onStorage);
+  }, []);
 
   return (
     <UserContext.Provider
@@ -70,6 +81,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
         role: client?.role,
         name: client?.name,
         createdAt: client?.createdAt,
+        userEmail: client?.userEmail,
         getUser,
         loading,
       }}
@@ -82,7 +94,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
 export const useUser = () => {
   const context = useContext(UserContext);
   if (!context) {
-    console.warn("UserContext not available");
+    throw new Error("useUser must be used within UserProvider");
   }
   return context;
 };

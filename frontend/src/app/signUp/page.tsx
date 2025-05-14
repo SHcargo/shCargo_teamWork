@@ -64,7 +64,7 @@ const registerValidationSchema = Yup.object().shape({
 const SubmitDrawerButton = () => {
   const { submitForm } = useFormikContext();
   return (
-    <Button type="button" onClick={submitForm}>
+    <Button type="button" className="cursor-pointer" onClick={submitForm}>
       Зөвшөөрсөн
     </Button>
   );
@@ -79,6 +79,20 @@ const Register = () => {
   const [otp, setOtp] = useState("");
   const [otpLoading, setOtpLoading] = useState(false);
   const [otpEmail, setOtpEmail] = useState("");
+  const [resendCooldown, setResendCooldown] = useState(0);
+
+  const startResendCooldown = () => {
+    setResendCooldown(60);
+    const interval = setInterval(() => {
+      setResendCooldown((prev) => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  };
 
   const fetchingTerms = async () => {
     try {
@@ -113,14 +127,13 @@ const Register = () => {
           onSubmit={async (values) => {
             try {
               setOtpLoading(true);
-              await axios.post(
-                `${process.env.NEXT_PUBLIC_BASE_URL}/otp/send-signup-otp`,
-                {
-                  email: values.email,
-                }
-              );
+              await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/otp/send`, {
+                email: values.email,
+                purpose: "signup",
+              });
               setOtpEmail(values.email);
               setOtpSent(true);
+              setDrawerOpen(false);
               toast.info("📧 Таны имэйл рүү баталгаажуулах код илгээгдлээ!");
             } catch (error) {
               toast.error("OTP илгээхэд алдаа гарлаа.");
@@ -133,9 +146,12 @@ const Register = () => {
           {(formik) => (
             <>
               <Form className="flex flex-col gap-5">
-                <div className="flex justify-center items-center gap-3">
-                  <Logo className="w-40 h-40 bg-black rounded-2xl" />
+                <div className="flex justify-center">
+                  <Logo className="w-24 h-24 bg-black rounded-2xl" />
                 </div>
+                <h1 className="font-semibold text-center">
+                  Шинэ хэрэглэгчийн бүртгэл
+                </h1>
 
                 {/* Name */}
                 <div>
@@ -253,7 +269,7 @@ const Register = () => {
                     }
                   }}
                 >
-                  бүртгүүлэх
+                  Бүртгүүлэх
                 </div>
               </Form>
 
@@ -262,7 +278,7 @@ const Register = () => {
                 <DrawerContent>
                   <DrawerHeader>
                     <DrawerTitle>
-                      Та бүртгүүлэхдээ итгэлтэй байна уу?
+                      Та манай үйлчилгээний нөхцөлийг зөвшөөрч байна уу ?
                     </DrawerTitle>
                     {!loading && terms.length > 0 ? (
                       <DrawerDescription>
@@ -277,7 +293,11 @@ const Register = () => {
                   <DrawerFooter>
                     <SubmitDrawerButton />
                     <DrawerClose asChild>
-                      <Button type="button" variant="outline">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        className="cursor-pointer"
+                      >
                         Буцах
                       </Button>
                     </DrawerClose>
@@ -292,27 +312,25 @@ const Register = () => {
                     <h2 className="text-lg font-semibold mb-4">
                       Имэйл баталгаажуулах код
                     </h2>
+                    <p className="text-sm text-gray-600 mb-4">
+                      {otpEmail} хаяг руу илгээсэн 6 оронтой кодыг оруулна уу
+                    </p>
                     <input
                       type="text"
                       value={otp}
-                      onChange={(e) => setOtp(e.target.value)}
+                      onChange={(e) =>
+                        setOtp(e.target.value.replace(/[^\d]/g, "").slice(0, 6))
+                      }
                       placeholder="6 оронтой код"
                       className="border p-2 rounded w-full mb-4"
                       maxLength={6}
                     />
+
                     <div className="flex gap-2">
                       <Button
                         onClick={async () => {
                           try {
                             setOtpLoading(true);
-                            await axios.post(
-                              `${process.env.NEXT_PUBLIC_BASE_URL}/otp/verify-signup-otp`,
-                              {
-                                email: otpEmail,
-                                otp,
-                              }
-                            );
-
                             await axios.post(
                               `${process.env.NEXT_PUBLIC_BASE_URL}/signUp`,
                               {
@@ -323,7 +341,6 @@ const Register = () => {
                                 otp: otp,
                               }
                             );
-
                             toast.success(
                               "✅ Хэрэглэгч амжилттай бүртгэгдлээ!"
                             );
@@ -336,14 +353,45 @@ const Register = () => {
                           }
                         }}
                         disabled={otpLoading || otp.length !== 6}
+                        className="cursor-pointer flex-1"
                       >
                         Баталгаажуулах
                       </Button>
+
                       <Button
                         variant="outline"
                         onClick={() => setOtpSent(false)}
+                        className="cursor-pointer flex-1"
                       >
                         Буцах
+                      </Button>
+                    </div>
+
+                    <div className="text-sm text-center mt-4 border-t pt-4">
+                      <Button
+                        variant="link"
+                        disabled={resendCooldown > 0 || otpLoading}
+                        onClick={async () => {
+                          try {
+                            setOtpLoading(true);
+                            await axios.post(
+                              `${process.env.NEXT_PUBLIC_BASE_URL}/otp/send`,
+                              { email: otpEmail, purpose: "signup" }
+                            );
+                            toast.info("📧 Шинэ код илгээгдлээ!");
+                            startResendCooldown();
+                          } catch (error) {
+                            toast.error("Код дахин илгээхэд алдаа гарлаа!");
+                            console.error(error);
+                          } finally {
+                            setOtpLoading(false);
+                          }
+                        }}
+                        className="text-blue-500"
+                      >
+                        {resendCooldown > 0
+                          ? `Дахин код авах (${resendCooldown} секунд)`
+                          : "Дахин код авах"}
                       </Button>
                     </div>
                   </div>

@@ -8,7 +8,6 @@ import axios from "axios";
 
 const HelpForUsersAdd = () => {
   // const [location, setLocation] = useState();
-  const [existingLocation, setExistingLocation] = useState(false);
   const [formData, setFormData] = useState({
     userPhoneNumber: "",
     factoryPhoneNumber: "",
