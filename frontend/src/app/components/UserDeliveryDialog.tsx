@@ -27,7 +27,7 @@ type DeliveryAddress = {
 };
 
 type UserDeliveryDialogProps = {
-  trackingNumber: string;
+  trackingNumber?: string;
 };
 
 const UserDeliveryDialog = ({ trackingNumber }: UserDeliveryDialogProps) => {
@@ -115,7 +115,7 @@ const UserDeliveryDialog = ({ trackingNumber }: UserDeliveryDialogProps) => {
                     <button
                       className="w-full h-10 text-sm font-medium border rounded-lg bg-gray-100 text-gray-800 hover:bg-gray-300 transition-colors"
                       onClick={() =>
-                        choosePickupOrDelivery(address, trackingNumber)
+                        choosePickupOrDelivery(address, trackingNumber as string)
                       }
                     >
                       🚚 Энэ хаягаар хүргүүлэх
