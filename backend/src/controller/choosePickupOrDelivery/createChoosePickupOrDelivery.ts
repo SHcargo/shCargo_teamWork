@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { choosePickupOrDelivery } from "../../model/choosePickupOrDelivery";
-
+import { ItemsOrder } from "../../model/truckOrders.model"; 
 // Create a new choosePickupOrDelivery only if one doesn't exist
 export const createChoosePickupOrDelivery = async (
   req: Request,
@@ -38,6 +38,15 @@ export const createChoosePickupOrDelivery = async (
     });
 
     const saved = await newChoosePickupOrDelivery.save();
+    const update = await ItemsOrder.findOne(
+      {trackingNumber : trackingNumber},
+      {delivery : status}
+    );
+    if (update) {
+      res.status(404).json({ message: "Address not found." });
+      return;
+    }
+    res.status(200).json(update);
 
     res.status(201).json({
       success: true,
