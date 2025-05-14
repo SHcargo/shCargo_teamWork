@@ -51,7 +51,6 @@ const Cargo = () => {
     "УБ-д ирсэн": 0,
     Хаагдсан: 0,
   });
-  const [addresses ,setAddresses] = useState()
 console.log(orders)
   const getCargoOrderItems = async (): Promise<void> => {
     setLoading(true);
