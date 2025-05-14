@@ -7,6 +7,7 @@ import { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
 
 const emailValidationSchema = Yup.object().shape({
   email: Yup.string()
@@ -27,8 +28,6 @@ const passwordValidationSchema = Yup.object().shape({
     .required("Нууц үгээ давтан оруулна уу"),
 });
 
-// ...other imports and code
-
 const ResetPassword = () => {
   const [step, setStep] = useState<"verify" | "reset">("verify");
   const [showPassword, setShowPassword] = useState(false);
@@ -40,8 +39,7 @@ const ResetPassword = () => {
   const [otpEmail, setOtpEmail] = useState("");
   const [resendCooldown, setResendCooldown] = useState(0);
 
-  const toggleVisibility = () => setShowPassword((prev) => !prev);
-
+  // Cooldown timer for resend button
   const startResendCooldown = () => {
     setResendCooldown(60);
     const interval = setInterval(() => {
@@ -54,6 +52,33 @@ const ResetPassword = () => {
       });
     }, 1000);
   };
+
+  // Resend OTP handler
+  const handleResendOTP = async () => {
+    if (resendCooldown > 0 || loading) return;
+    try {
+      setLoading(true);
+      await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/otp/send`, {
+        email: otpEmail,
+        purpose: "reset_password",
+      });
+      toast.info("📧 Шинэ код илгээгдлээ!");
+      startResendCooldown();
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const errorMessage = error.response?.data?.message;
+        toast.error(errorMessage || "Код дахин илгээхэд алдаа гарлаа!");
+      } else {
+        toast.error("Код дахин илгээхэд алдаа гарлаа!");
+      }
+      console.error("OTP resend error:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Toggle password visibility
+  const toggleVisibility = () => setShowPassword((prev) => !prev);
 
   return (
     <div className="w-screen h-screen flex justify-center items-center bg-[rgb(221,221,221)]">
@@ -90,6 +115,8 @@ const ResetPassword = () => {
               if (response.data.success) {
                 setStep("reset");
                 setUserId(response.data.user._id);
+              } else {
+                toast.error("Энэ майл хаягтай хэрэглэгч бүртгэлгүй байна");
               }
             } catch (error) {
               console.error("Алдаа гарлаа", error);
@@ -123,17 +150,23 @@ const ResetPassword = () => {
               if (response.data.success) {
                 toast.success("Нууц үг амжилттай шинэчлэгдлээ");
                 router.push("/logIn");
-              }
-            } catch (error) {
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              const err = error as any;
-              console.error("Нууц үг шинэчлэхэд алдаа гарлаа", error);
-              if (err.response.data.message || "Invalid OTP") {
-                toast.error("Нэг удаагийн нууц үг буруу байна");
-              } else
+              } else {
                 toast.error(
                   "Нууц үг шинэчлэхэд алдаа гарлаа. Дахин оролдоно уу."
                 );
+              }
+            } catch (error) {
+              console.error("Нууц үг шинэчлэхэд алдаа гарлаа", error);
+              if (axios.isAxiosError(error)) {
+                toast.error(
+                  error.response?.data?.message ||
+                    "Нэг удаагийн нууц үг буруу байна"
+                );
+              } else {
+                toast.error(
+                  "Нууц үг шинэчлэхэд алдаа гарлаа. Дахин оролдоно уу."
+                );
+              }
             } finally {
               setLoading(false);
             }
@@ -185,6 +218,18 @@ const ResetPassword = () => {
                       setOtp(value);
                     }}
                   />
+                </div>
+                <div className="text-sm text-center border-t pt-3 mt-2">
+                  <Button
+                    variant="link"
+                    disabled={resendCooldown > 0 || loading}
+                    onClick={handleResendOTP}
+                    className="text-blue-500 cursor-pointer"
+                  >
+                    {resendCooldown > 0
+                      ? `Дахин код авах (${resendCooldown} секунд)`
+                      : "Дахин код авах"}
+                  </Button>
                 </div>
                 {otp.length !== 6 && step === "reset" && (
                   <div className="text-red-500 text-sm">

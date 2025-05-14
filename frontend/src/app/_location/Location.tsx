@@ -1,11 +1,5 @@
 "use client";
-import {
-  Lightbulb,
-  LocationEdit,
-  MapPinHouse,
-  Paperclip,
-  Truck,
-} from "lucide-react";
+import { Lightbulb, LocationEdit, MapPinHouse, Paperclip } from "lucide-react";
 import InfoCard from "../components/card2";
 import { Button } from "@/components/ui/button";
 import { ChevronRight } from "lucide-react";

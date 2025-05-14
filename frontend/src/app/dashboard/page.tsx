@@ -50,7 +50,7 @@ const DashboardAdmin = () => {
           {step === "sales" && <SalesProducts />}
           {step === "location" && <LocationAdd />}
           {step === "help" && <HelpForUsersAdd />}
-          {step === "Delivery" && <Delivery/>}
+          {/* {step === "Delivery" && <Delivery/>} */}
         </main>
       </div>
     </div>
