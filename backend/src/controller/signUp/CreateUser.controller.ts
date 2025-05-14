@@ -63,10 +63,8 @@ export const CreateUserController = async (req: Request, res: Response) => {
       title: "Хэрэглэгч амжилттай бүртгэгдлээ",
     });
 
-
     // Delete OTP after successful registration
     await OTP.deleteOne({ email, purpose: "signup" });
-
 
     res.status(201).json({
       success: true,
