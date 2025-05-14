@@ -18,7 +18,7 @@ const Location = ({ setStep }: { setStep: (value: string) => void }) => {
     <div className="max-w-2xl w-full h-screen overflow-scroll bg-[#e9ecef]">
       <div className="p-4">
         <Button
-          className="w-full h-12 bg-white text-black justify-between rounded-lg flex font-bold"
+          className="w-full h-12 bg-white text-black justify-between hover:bg-black hover:text-white rounded-lg flex font-bold"
           onClick={() => router.push(`/address/${number}`)}
         >
           Эрээн агуулах
@@ -28,7 +28,7 @@ const Location = ({ setStep }: { setStep: (value: string) => void }) => {
       <div className="p-4 space-y-3">
         <p className="font-bold">Тусламж</p>
         <Button
-          className="w-full h-fit bg-white text-black rounded-lg flex items-center font-bold px-4 py-3 text-left"
+          className="w-full h-fit bg-white text-black hover:bg-black hover:text-white rounded-lg flex items-center font-bold px-4 py-3 text-left"
           onClick={() => router.push(`/help/${number}`)}
         >
           <div className="flex w-full items-center justify-between flex-wrap">
@@ -43,13 +43,13 @@ const Location = ({ setStep }: { setStep: (value: string) => void }) => {
         <InfoCard
           icon={LocationEdit}
           title="Хаяг Холбох"
-          subtitle="Хятад дахь 5 салбар"
+          subtitle="Хятад дахь салбар"
           onClick={() => setStep("profile")}
         />
         <InfoCard
           icon={MapPinHouse}
           title="SH Cargo Салбар"
-          subtitle="УБ дахь 2 салбар"
+          subtitle="УБ дахь салбар"
           onClick={() => router.push("/contact")}
         />
         <InfoCard

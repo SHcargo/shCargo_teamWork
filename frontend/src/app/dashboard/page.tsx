@@ -9,6 +9,7 @@ import SalesProducts from "./_sales/salesProducts";
 import LocationAdd from "./_location/locationAdd";
 import HelpForUsersAdd from "./_help/helpForUsers";
 import { useAdmin } from "../providers/AdminProvider";
+import { Delivery } from "./_Delivery/Delivery";
 
 const DashboardAdmin = () => {
   const [step, setStep] = useState("users");
@@ -17,21 +18,21 @@ const DashboardAdmin = () => {
   const router = useRouter();
 
   // Redirect non-admins to unauthorized page
-  useEffect(() => {
-    if (!loading && role !== "ADMIN") {
-      router.push("/unauthorized"); // Or you could redirect to another page, like '/'
-    }
-  }, [loading, role, router]);
+  // useEffect(() => {
+  //   if (!loading && role !== "ADMIN") {
+  //     router.push("/unauthorized"); // Or you could redirect to another page, like '/'
+  //   }
+  // }, [loading, role, router]);
 
   // Display loading message while the admin role is being fetched
-  if (loading) {
-    return <p className="p-6 text-center">Уншиж байна...</p>; // You can show a loading spinner here
-  }
+  // if (loading) {
+  //   return <p className="p-6 text-center">Уншиж байна...</p>; // You can show a loading spinner here
+  // }
 
-  // If role is not ADMIN, return null (handled by redirect)
-  if (role !== "ADMIN") {
-    return null; // This ensures nothing is rendered if unauthorized
-  }
+  // // If role is not ADMIN, return null (handled by redirect)
+  // if (role !== "ADMIN") {
+  //   return null; // This ensures nothing is rendered if unauthorized
+  // }
 
   return (
     <div className="flex">
@@ -50,7 +51,7 @@ const DashboardAdmin = () => {
           {step === "sales" && <SalesProducts />}
           {step === "location" && <LocationAdd />}
           {step === "help" && <HelpForUsersAdd />}
-          {step === "Delivery" && <Delivery/>}
+          {step === "Delivery" && <Delivery />}
         </main>
       </div>
     </div>

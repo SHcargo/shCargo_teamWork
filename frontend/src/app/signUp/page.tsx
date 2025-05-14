@@ -2,7 +2,6 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import Logo from "../ui/Logo";
 import { PhoneCallIcon, LockKeyhole, User, Mail } from "lucide-react";
 import { Formik, Form, Field, ErrorMessage, useFormikContext } from "formik";
 import axios from "axios";
@@ -21,6 +20,7 @@ import {
 import { useEffect, useState } from "react";
 import SkeletonTable from "../dashboard/components/(features)/skeleton";
 import TermsOfViewForUser from "./feautures/termsOfView";
+import Logo from "@/components/ui/logoSh";
 
 interface Term {
   _id: string;
@@ -133,11 +133,8 @@ const Register = () => {
           {(formik) => (
             <>
               <Form className="flex flex-col gap-5">
-                <div className="flex items-center gap-3">
-                  <Logo />
-                  <h1 className="text-[#5F2DF5] text-2xl font-semibold">
-                    SH Cargo
-                  </h1>
+                <div className="flex justify-center items-center gap-3">
+                  <Logo className="w-40 h-40 bg-black rounded-2xl" />
                 </div>
 
                 {/* Name */}

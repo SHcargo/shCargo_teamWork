@@ -13,6 +13,7 @@ import { TermsRouter } from "./router/terms.router";
 import { NotificationRouter } from "./router/notification.router";
 import { choosePickupOrDeliveryRoutes } from "./router/choosePickupOrDelivery.router";
 import otpRouter from "./router/OTP.router";
+import { HelpRouter } from "./router/help.router";
 
 require("dotenv").config();
 
@@ -35,6 +36,7 @@ const connectDb = () => {
 connectDb();
 
 app.use("/signUp", UserSignUpRouter);
+app.use("/help", HelpRouter);
 app.use("/terms", TermsRouter);
 app.use("/login", UserLoginRouter);
 app.use("/truckItems", TruckOrdersRouter);

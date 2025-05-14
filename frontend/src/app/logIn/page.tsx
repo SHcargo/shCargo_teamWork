@@ -1,13 +1,14 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Mail, LockKeyhole, UserPlus2, Eye, EyeOff } from "lucide-react";
 import { Field, Form, Formik } from "formik";
-import axios from "axios";
 import * as Yup from "yup";
+import axios from "axios";
 import { toast } from "react-toastify";
-import { useState, useEffect } from "react";
 import Logo from "@/components/ui/logoSh";
+import { Button } from "@/components/ui/button"; // Make sure you import your custom Button
 
 const loginValidationSchema = Yup.object().shape({
   email: Yup.string()
@@ -20,40 +21,23 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [otpSent, setOtpSent] = useState(false);
   const [otp, setOtp] = useState("");
-  const [otpLoading, setOtpLoading] = useState(false);
   const [otpEmail, setOtpEmail] = useState("");
+  const [otpLoading, setOtpLoading] = useState(false);
+  const [userPassword, setUserPassword] = useState("");
 
   const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
+    setShowPassword((prev) => !prev);
   };
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const storedPhoneNumber = localStorage.getItem("phoneNumber");
-      setPhoneNumber(storedPhoneNumber);
-    }
-  }, []);
 
   return (
     <div className="w-screen h-screen flex justify-center bg-[rgb(221,221,221)]">
       <Formik
-        initialValues={{
-          email: "",
-          password: "",
-        }}
-        enableReinitialize
+        initialValues={{ email: "", password: "" }}
         validationSchema={loginValidationSchema}
         onSubmit={async (values) => {
           try {
-            // const response = await axios.post(
-            //   `${process.env.NEXT_PUBLIC_BASE_URL}/login`,
-            //   {
-            //     phoneNumber: values.phoneNumber,
-            //     password: values.password,
-            //   }
-            // );
-
             setOtpLoading(true);
+
             await axios.post(
               `${process.env.NEXT_PUBLIC_BASE_URL}/otp/send-login-otp`,
               {
@@ -61,93 +45,111 @@ const Login = () => {
               }
             );
 
-
-            if (typeof window !== "undefined") {
-              localStorage.setItem("token", response.data.token);
-              localStorage.setItem("phoneNumber", values.phoneNumber);
-            }
-
-            toast.success("Амжилттай нэвтэрлээ!");
-            router.push("/");
-            console.log("log in success", response);
-            if (typeof window !== "undefined") {
-              localStorage.setItem("loginTime", new Date().toISOString());
-            }
-
             setOtpEmail(values.email);
+            setUserPassword(values.password);
             setOtpSent(true);
+
             toast.info("📧 Таны имэйл рүү баталгаажуулах код илгээгдлээ!");
           } catch (error) {
-            console.log("error in login:", error);
-            toast.error("Нэвтрэх нэр эсвэл нууц үг буруу байна!");
+            console.error("OTP илгээхэд алдаа:", error);
+            toast.error("Имэйл илгээхэд алдаа гарлаа.");
+          } finally {
+            setOtpLoading(false);
           }
         }}
       >
         {({ errors, touched }) => (
-          <Form className="max-w-2xl w-full  h-full bg-[#e9ecef] py-3 px-6 flex flex-col gap-6 text-base text-black font-medium cursor-default">
+          <Form className="max-w-2xl w-full h-full bg-[#e9ecef] py-3 px-6 flex flex-col gap-6 text-base text-black font-medium cursor-default">
+            {/* Header */}
             <div className="flex flex-col gap-1">
               <div className="flex justify-center">
                 <Logo className="w-30 h-30 bg-black rounded-2xl" />
               </div>
-              <h1 className="text-xl flex justify-center font-semibold">
+              <h1 className="text-xl text-center font-semibold">
                 Тавтай морил
               </h1>
-              <p>Та утасны дугаар эсвэл мэйл хаягаараа нэвтрэнэ үү!</p>
+              <p className="text-center">Та мэйл хаягаараа нэвтрэнэ үү!</p>
             </div>
 
-            <div className="flex flex-col gap-6">
-              {/* Phone Field */}
-              <div className="w-full h-10 bg-white border-2 border-gray-300 rounded-lg flex items-center overflow-hidden">
-                <div className="w-12 flex justify-center items-center">
-                  <Mail className="w-5 h-5 text-gray-500" />
-                </div>
+            {/* Email Input */}
+            <div className="w-full h-10 bg-white border-2 border-gray-300 rounded-lg flex items-center overflow-hidden">
+              <div className="w-12 flex justify-center items-center">
+                <Mail className="w-5 h-5 text-gray-500" />
+              </div>
+              <Field
+                name="email"
+                type="email"
+                placeholder="Мэйл хаягаа оруулна уу"
+                className="flex-1 h-full px-3 py-1 outline-none text-black"
+              />
+            </div>
+            {errors.email && touched.email && (
+              <div className="text-red-500 text-sm mt-1 ml-1">
+                {errors.email}
+              </div>
+            )}
+
+            {/* Password Input */}
+            <div className="w-full h-10 bg-white border-2 border-gray-300 rounded-lg flex items-center overflow-hidden">
+              <div className="w-12 flex justify-center items-center">
+                <LockKeyhole className="w-5 h-5 text-gray-500" />
+              </div>
+              <div className="flex-1 relative h-full">
                 <Field
-                  name="email"
-                  type="email"
-                  placeholder="Мэйл хаягаа оруулна уу"
-                  className="flex-1 h-full px-3 py-1 outline-none text-black cursor-text"
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Нууц үгээ оруулна уу"
+                  className="w-full h-full px-3 py-1 outline-none text-black"
                 />
-              </div>
-              {errors.email && touched.email && (
-                <div className="text-red-500 text-sm mt-1 ml-1">
-                  {errors.email}
-                </div>
-              )}
-
-              {/* Password Field */}
-              <div className="w-full h-10 bg-white border-2 border-gray-300 rounded-lg flex items-center overflow-hidden">
-                <div className="w-12 flex justify-center items-center">
-                  <LockKeyhole className="w-5 h-5 text-gray-500" />
-                </div>
-                <div className="flex-1 relative h-full">
-                  <Field
-                    name="password"
-                    type={showPassword ? "text" : "password"}
-                    placeholder="Нууц үгээ оруулна уу"
-                    className="w-full h-full px-3 py-1 outline-none text-black cursor-text"
-                  />
-                  <button
-                    type="button"
-                    onClick={togglePasswordVisibility}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 cursor-pointer"
-                  >
-                    {showPassword ? (
-                      <EyeOff width={18} height={18} />
-                    ) : (
-                      <Eye width={18} height={18} />
-                    )}
-                  </button>
-                </div>
+                <button
+                  type="button"
+                  onClick={togglePasswordVisibility}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
+                >
+                  {showPassword ? (
+                    <EyeOff width={18} height={18} />
+                  ) : (
+                    <Eye width={18} height={18} />
+                  )}
+                </button>
               </div>
             </div>
 
-            {/* Submit Button */}
+            {/* Submit */}
             <button
               type="submit"
-              className="font-semibold cursor-pointer py-2.5 text-white bg-black hover:bg-[#303030] rounded-lg"
+              className="font-semibold py-2.5 text-white bg-black hover:bg-[#303030] rounded-lg"
             >
               Нэвтрэх
             </button>
+
+            {/* Forgot Password */}
+            <div className="text-sm mt-2 text-center">
+              <p className="text-gray-500 inline">Нууц үгээ мартсан бол </p>
+              <span
+                onClick={() => router.push("/reset-password")}
+                className="text-blue-500 underline cursor-pointer"
+              >
+                энд дарна уу
+              </span>
+            </div>
+
+            {/* Register */}
+            <div className="mt-12 flex flex-col gap-4">
+              <div className="border-b-2 pb-2">
+                <p className="text-gray-500 text-sm">Шинээр бүртгэл үүсгэх</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => router.push("/signUp")}
+                className="py-2.5 w-full flex justify-center gap-3 items-center hover:bg-[#303030] bg-black font-semibold text-white rounded-lg"
+              >
+                <UserPlus2 width={16} height={16} />
+                <p>Бүртгүүлэх</p>
+              </button>
+            </div>
+
+            {/* OTP Modal */}
             {otpSent && (
               <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30">
                 <div className="bg-white p-8 rounded shadow-md w-full max-w-sm">
@@ -164,9 +166,11 @@ const Login = () => {
                   />
                   <div className="flex gap-2">
                     <Button
-                      onClick={async (values) => {
+                      onClick={async () => {
                         try {
                           setOtpLoading(true);
+
+                          // Verify OTP
                           await axios.post(
                             `${process.env.NEXT_PUBLIC_BASE_URL}/otp/verify-login-otp`,
                             {
@@ -175,36 +179,30 @@ const Login = () => {
                             }
                           );
 
-                          await axios.post(
+                          // Then log in
+                          const response = await axios.post(
                             `${process.env.NEXT_PUBLIC_BASE_URL}/login`,
                             {
                               email: otpEmail,
-                              password: values.password,
-                              otp: otp,
+                              password: userPassword,
+                              otp,
                             }
                           );
+
+                          // Save token
                           if (typeof window !== "undefined") {
                             localStorage.setItem("token", response.data.token);
-                            localStorage.setItem(
-                              "phoneNumber",
-                              values.phoneNumber
-                            );
-                          }
-
-                          toast.success("Амжилттай нэвтэрлээ!");
-                          router.push("/");
-                          console.log("log in success", response);
-                          if (typeof window !== "undefined") {
                             localStorage.setItem(
                               "loginTime",
                               new Date().toISOString()
                             );
                           }
 
-                          toast.success("✅ Хэрэглэгч амжилттай нэвтэрлээ!");
+                          toast.success("✅ Амжилттай нэвтэрлээ!");
                           setOtpSent(false);
-                          router.push("/logIn");
+                          router.push("/");
                         } catch (error) {
+                          console.error("OTP баталгаажуулах алдаа:", error);
                           toast.error("OTP баталгаажуулахад алдаа гарлаа.");
                         } finally {
                           setOtpLoading(false);
@@ -221,32 +219,6 @@ const Login = () => {
                 </div>
               </div>
             )}
-
-            {/* Forgot Password */}
-            <div className="flex gap-1 text-sm mt-2">
-              <p className="text-gray-500">Нууц үгээ мартсан бол</p>
-              <span
-                onClick={() => router.push("/reset-password")}
-                className="text-blue-500 underline cursor-pointer"
-              >
-                энд дарна уу ?
-              </span>
-            </div>
-
-            {/* Register Section */}
-            <div className="mt-12 flex flex-col gap-4">
-              <div className="border-b-2 pb-2">
-                <p className="text-gray-500 text-sm">Шинээр бүртгэл үүсгэх</p>
-              </div>
-              <button
-                type="button"
-                className="py-2.5 w-full cursor-pointer flex justify-center gap-3 items-center hover:bg-[#303030] bg-black font-semibold text-white rounded-lg"
-                onClick={() => router.push("/signUp")}
-              >
-                <UserPlus2 width={16} height={16} />
-                <p>Бүртгүүлэх</p>
-              </button>
-            </div>
           </Form>
         )}
       </Formik>
