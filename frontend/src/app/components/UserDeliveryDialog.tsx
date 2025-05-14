@@ -26,11 +26,12 @@ type DeliveryAddress = {
   userId: string;
 };
 
-type UserDeliveryDialogProps = {
-  trackingNumber?: string;
-};
 
-const UserDeliveryDialog = ({ trackingNumber }: UserDeliveryDialogProps) => {
+type Props = {
+  trackingNumber : string,
+  ref? : () => void
+}
+const UserDeliveryDialog = ({ trackingNumber ,ref }: Props ) => {
   const { userId, phoneNumber } = useUser();
   const { addresses } = useDeliveryAddress();
   const [openAddDialog, setOpenAddDialog] = useState(false);
@@ -68,6 +69,8 @@ const UserDeliveryDialog = ({ trackingNumber }: UserDeliveryDialogProps) => {
         }
       );
       toast.success("✅ Хаяг амжилттай илгээгдлээ!");
+      if(ref)
+      ref()
     } catch (error) {
       toast.error("❌ Хаяг илгээхэд алдаа гарлаа!");
       console.error("Error:", error);

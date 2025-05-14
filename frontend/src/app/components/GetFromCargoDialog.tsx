@@ -12,11 +12,12 @@ import axios from "axios";
 import { useState } from "react";
 import { useUser } from "../providers/UserProvider";
 
-type UserDeliveryDialogProps = {
-  trackingNumber?: string;
-};
+type Props = {
+  trackingNumber : string,
+  ref? : () => void
+}
 
-const GetFromCargoDialog = ({ trackingNumber }: UserDeliveryDialogProps) => {
+const GetFromCargoDialog = ({ trackingNumber ,ref}: Props) => {
   const value = useUser();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -48,6 +49,8 @@ const GetFromCargoDialog = ({ trackingNumber }: UserDeliveryDialogProps) => {
       );
 
       toast.success("✅ 'Салбараас авах' сонголт амжилттай илгээгдлээ!");
+      if(ref)
+      ref()
     } catch (error) {
       toast.error("❌ 'Салбараас авах' сонголтыг илгээхэд алдаа гарлаа.");
       console.error(error);

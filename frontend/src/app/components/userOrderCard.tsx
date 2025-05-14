@@ -1,6 +1,7 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Trash2 } from "lucide-react";
 import axios from "axios";
@@ -23,9 +24,18 @@ type Order = {
   trackingNumber: string;
   status: string;
   createdAt: string;
-  delivery?:string | null
+  delivery?: string | null;
 };
-
+type DeliveryAddress = {
+  _id: string;
+  lat: number;
+  lng: number;
+  detail: string;
+  district: string;
+  khoroo: string;
+  accuracy: number;
+  userId: string;
+};
 type UserOrderCardProps = {
   order: Order;
   activeCategory: string;
@@ -40,6 +50,7 @@ export const UserOrderCard = ({
   const { _id, trackingNumber, status, createdAt } = order;
   const router = useRouter();
   const [deleting, setDeleting] = useState(false);
+  const [addresses, setAddresses] = useState<DeliveryAddress[]>([]);
 
   const showTrash =
     ["Бүртгэсэн", "Хаагдсан"].includes(activeCategory) ||
@@ -59,12 +70,39 @@ export const UserOrderCard = ({
     }
   };
 
+  const getAddress = async () => {
+    try {
+      const checkResponse = await axios.get(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/choosePickupOrDelivery/${trackingNumber}`
+      );
+      const data = checkResponse.data?.address;
+
+      // Ensure data is an array or fallback to empty array
+      if (Array.isArray(data)) {
+        setAddresses(data);
+      } else if (data) {
+        // Handle single object response (some APIs return a single object instead of an array)
+        setAddresses([data]);
+      } else {
+        setAddresses([]);
+      }
+    } catch (error) {
+      console.error("Error fetching address:", error);
+      setAddresses([]); // fallback to prevent map error
+    }
+  };
+
+  useEffect(() => {
+    getAddress();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <div className="bg-white p-4 rounded-xl border border-gray-300 shadow-md mb-4">
       <div className="flex justify-between items-start mb-2">
         <div>
           <h2 className="text-base font-bold text-gray-800 mb-1">
-            📦 Захиалгын мэдээлэл {order.delivery ? order.delivery : ""}
+            📦 Захиалгын мэдээлэл
           </h2>
           <p className="text-sm text-gray-600"># {trackingNumber}</p>
         </div>
@@ -85,7 +123,9 @@ export const UserOrderCard = ({
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
-                <AlertDialogCancel disabled={deleting}>Цуцлах</AlertDialogCancel>
+                <AlertDialogCancel disabled={deleting}>
+                  Цуцлах
+                </AlertDialogCancel>
                 <AlertDialogAction onClick={handleDelete} disabled={deleting}>
                   {deleting ? "Устгаж байна..." : "Устгах"}
                 </AlertDialogAction>
@@ -113,10 +153,74 @@ export const UserOrderCard = ({
         <p className="text-blue-600 text-xs mt-1">→ Дэлгэрэнгүй харах</p>
       </div>
 
-      <div className="grid grid-cols-2 gap-3">
-        <GetFromCargoDialog trackingNumber={trackingNumber} />
-        <UserDeliveryDialog trackingNumber={trackingNumber} />
-      </div>
+      {order.delivery ? (
+        <div className="w-full">
+          <div className="mb-2">
+            {" "}
+            ({order.delivery} хаяг)
+          </div>
+          <div>
+            {order.delivery === "Хүргүүлэх" ? (
+              <div className="space-y-4">
+                {Array.isArray(addresses) && addresses.length > 0 ? (
+                  addresses.map((address) => (
+                    <div
+                      key={address._id}
+                      className="p-4 border border-gray-200 rounded-xl shadow-sm bg-gray-50 flex flex-col gap-4"
+                    >
+                      <div className="text-sm font-semibold text-gray-800">
+                        {address.detail || "Хаягийн дэлгэрэнгүй мэдээлэл байхгүй"}
+                      </div>
+
+                      <div className="text-sm text-gray-600 space-y-1 flex gap-5">
+                        <div className="flex">
+                          <span className="font-medium">Дүүрэг: </span>
+                          <span>{address.district}</span>
+                        </div>
+                        <div className="flex">
+                          <span className="font-medium">Хороо: </span>
+                          <span>{address.khoroo}</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-sm text-gray-500 italic">
+                    Хаягийн мэдээлэл олдсонгүй.
+                  </p>
+                )}
+              </div>
+            ) : (
+              <div className="w-fit px-2">
+                <a
+                  href="https://www.google.com/maps?q=47.9145,106.9225"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex gap-4 items-start"
+                >
+                  <img
+                    src="/img.JPG"
+                    alt="Google Maps"
+                    className="h-30 w-30 rounded-md object-cover"
+                  />
+                  <div className="text-black text-sm max-w-xs">
+                    СБД Цирк-н баруун талд, миний дэлгүүрийн чанх хойно, 10-р
+                    байр.
+                    <div className="text-blue-600 underline mt-2">
+                      map дээр харах →
+                    </div>
+                  </div>
+                </a>
+              </div>
+            )}
+          </div>
+        </div>
+      ) : (
+        <div className="grid grid-cols-2 gap-3">
+          <GetFromCargoDialog trackingNumber={trackingNumber} ref={onRefresh} />
+          <UserDeliveryDialog trackingNumber={trackingNumber} ref={onRefresh} />
+        </div>
+      )}
     </div>
   );
 };

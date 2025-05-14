@@ -26,8 +26,7 @@ type Order = {
   trackingNumber: string;
   statusHistory: StatusHistory[];
   __v: number;
-  choose?: string | null;
-  delivery?:string | null
+  delivery?: string | null;
 };
 
 type DeliveryCounts = Record<StatusCategory, number>;
@@ -52,7 +51,8 @@ const Cargo = () => {
     "УБ-д ирсэн": 0,
     Хаагдсан: 0,
   });
-
+  const [addresses ,setAddresses] = useState()
+console.log(orders)
   const getCargoOrderItems = async (): Promise<void> => {
     setLoading(true);
     if (!value.userId) {
@@ -67,28 +67,15 @@ const Cargo = () => {
       );
       const ordersData = response.data.orders;
 
-      // "choosePickupOrDelivery" статус шалгах
-      const chooseResponse = await axios.get(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/choosePickupOrDelivery/${value.userId}`
-      );
-      const chooseStatus = chooseResponse.data?.existing || null;
-
-      // Захиалгууд дээр choose статус нэмэх
-      const updatedOrders = ordersData.map((order) => ({
-        ...order,
-        choose: chooseStatus,
-      }));
-
-      setOrders(updatedOrders);
+      setOrders(ordersData);
 
       // Төрлөөр нь тоолох
       const counts = categories.reduce<DeliveryCounts>(
         (acc, category) => {
           acc[category] =
             category === "Бүгд"
-              ? updatedOrders.length
-              : updatedOrders.filter((order) => order.status === category)
-                  .length;
+              ? ordersData.length
+              : ordersData.filter((order) => order.status === category).length;
           return acc;
         },
         {
@@ -107,7 +94,7 @@ const Cargo = () => {
       setLoading(false);
     }
   };
-
+ 
   useEffect(() => {
     getCargoOrderItems();
   }, [value]);

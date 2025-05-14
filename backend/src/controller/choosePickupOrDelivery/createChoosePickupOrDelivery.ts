@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { choosePickupOrDelivery } from "../../model/choosePickupOrDelivery";
 import { ItemsOrder } from "../../model/truckOrders.model"; 
-// Create a new choosePickupOrDelivery only if one doesn't exist
+
 export const createChoosePickupOrDelivery = async (
   req: Request,
   res: Response
@@ -10,15 +10,7 @@ export const createChoosePickupOrDelivery = async (
     const { deliveryAddress, status, phoneNumber, trackingNumber } = req.body;
     const userId = req.params.userId;
 
-    // Validate if required fields are provided
-    if (!deliveryAddress || !status || !phoneNumber || !trackingNumber) {
-       res.status(400).json({
-        success: false,
-        message: "Дутуу талбарууд байна.",
-      });return
-    }
 
-    // Check if a record already exists for this user
     const existing = await choosePickupOrDelivery.findOne({ trackingNumber });
 
     if (existing) {
@@ -28,8 +20,7 @@ export const createChoosePickupOrDelivery = async (
       });return
     }
 
-    // Create a new choosePickupOrDelivery
-    const newChoosePickupOrDelivery = new choosePickupOrDelivery({
+    const newChoose = new choosePickupOrDelivery({
       deliveryAddress,
       status,
       userId,
@@ -37,27 +28,31 @@ export const createChoosePickupOrDelivery = async (
       trackingNumber,
     });
 
-    const saved = await newChoosePickupOrDelivery.save();
-    const update = await ItemsOrder.findOne(
-      {trackingNumber : trackingNumber},
-      {delivery : status}
-    );
-    if (update) {
-      res.status(404).json({ message: "Address not found." });
-      return;
-    }
-    res.status(200).json(update);
+    const saved = await newChoose.save();
 
-    res.status(201).json({
+    const updateResult = await ItemsOrder.updateOne(
+      { trackingNumber },
+      { $set: { delivery: status } }
+    );
+
+    if (updateResult.modifiedCount === 0) {
+       res.status(404).json({
+        success: false,
+        message: "Tracking дугаартай захиалга олдсонгүй.",
+      });
+      return
+    }
+
+     res.status(201).json({
       success: true,
-      message: "ChoosePickupOrDelivery created successfully",
+      message: "ChoosePickupOrDelivery амжилттай хадгалагдлаа.",
       data: saved,
-    });
+    });return
   } catch (error) {
-    console.error(error); // Log the error for debugging
-    res.status(500).json({
+    console.error(error);
+     res.status(500).json({
       success: false,
-      message: "Error creating ChoosePickupOrDelivery",
-    });
+      message: "Сонголт хадгалах үед алдаа гарлаа.",
+    });return
   }
 };
