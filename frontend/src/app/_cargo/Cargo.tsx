@@ -27,6 +27,7 @@ type Order = {
   statusHistory: StatusHistory[];
   __v: number;
   choose?: string | null;
+  delivery?:string | null
 };
 
 type DeliveryCounts = Record<StatusCategory, number>;
@@ -86,7 +87,8 @@ const Cargo = () => {
           acc[category] =
             category === "Бүгд"
               ? updatedOrders.length
-              : updatedOrders.filter((order) => order.status === category).length;
+              : updatedOrders.filter((order) => order.status === category)
+                  .length;
           return acc;
         },
         {
@@ -157,13 +159,9 @@ const Cargo = () => {
           filteredOrders.map((order) => (
             <div key={order._id}>
               <UserOrderCard
-                id={order._id}
-                trackingNumber={order.trackingNumber}
-                description={order.status}
-                createdAt={order.createdAt}
+                order={order}
                 activeCategory={activeCategory}
-                ref={getCargoOrderItems}
-     
+                onRefresh={getCargoOrderItems}
               />
             </div>
           ))
