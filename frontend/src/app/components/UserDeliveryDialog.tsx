@@ -20,7 +20,6 @@ type DeliveryAddress = {
   lng: number;
   lat: number;
   _id: string;
-  city: string;
   district: string;
   khoroo: string;
   detail: string;
@@ -80,7 +79,8 @@ const UserDeliveryDialog = ({ trackingNumber }: UserDeliveryDialogProps) => {
       <Dialog>
         <DialogTrigger asChild>
           <button className="w-full h-10 text-sm font-medium border border-gray-300/60 rounded-lg bg-gray-100 text-gray-800 hover:bg-gray-300 transition-colors">
-            🚚 Хүргүүлэх {/* <span>🚫 Одоогоор хүргэлт хийх боломжгүй байна.</span> */}
+            🚚 Хүргүүлэх{" "}
+            {/* <span>🚫 Одоогоор хүргэлт хийх боломжгүй байна.</span> */}
           </button>
         </DialogTrigger>
 

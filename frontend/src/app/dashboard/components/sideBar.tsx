@@ -1,7 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { BarChart3, Building2, HelpingHand, Star, Menu, X } from "lucide-react";
+import {
+  BarChart3,
+  Building2,
+  HelpingHand,
+  Star,
+  Menu,
+  X,
+  Truck,
+} from "lucide-react";
 import Logo from "@/components/ui/logoSh";
 
 const categories = [

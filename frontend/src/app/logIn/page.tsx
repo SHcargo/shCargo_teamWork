@@ -1,12 +1,19 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Mail, LockKeyhole, UserPlus2, Eye, EyeOff } from "lucide-react";
+import {
+  Mail,
+  LockKeyhole,
+  UserPlus2,
+  Eye,
+  EyeOff,
+  Loader2,
+} from "lucide-react";
 import { Field, Form, Formik } from "formik";
 import axios from "axios";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Logo from "@/components/ui/logoSh";
 import { Button } from "@/components/ui/button";
 import { useUser } from "../providers/UserProvider";
@@ -27,13 +34,17 @@ const Login = () => {
   const [otpEmail, setOtpEmail] = useState("");
   const [otpPassword, setOtpPassword] = useState("");
   const [resendCooldown, setResendCooldown] = useState(0);
-  const { getUser } = useUser();
+  const [loginSuccessful, setLoginSuccessful] = useState(false);
+  const { getUser, loading: userLoading } = useUser();
 
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
+  useEffect(() => {
+    if (loginSuccessful && !userLoading) {
+      router.push("/");
+    }
+  }, [loginSuccessful, userLoading, router]);
 
-  // Function for OTP resend cooldown
+  const togglePasswordVisibility = () => setShowPassword(!showPassword);
+
   const startResendCooldown = () => {
     setResendCooldown(60);
     const interval = setInterval(() => {
@@ -47,8 +58,94 @@ const Login = () => {
     }, 1000);
   };
 
+  // Handle OTP verification and login
+  const handleVerifyAndLogin = async () => {
+    if (otp.length !== 6) {
+      toast.error("6 оронтой код оруулна уу");
+      return;
+    }
+    try {
+      setLoading(true);
+      const loginResponse = await axios.post(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/login`,
+        {
+          email: otpEmail,
+          password: otpPassword,
+          otp: otp,
+        }
+      );
+      if (loginResponse?.data?.success && loginResponse.data.token) {
+        if (typeof window !== "undefined") {
+          localStorage.setItem("token", loginResponse.data.token);
+          localStorage.setItem("email", otpEmail);
+          localStorage.setItem("loginTime", new Date().toISOString());
+        }
+        toast.success("✅ Хэрэглэгч амжилттай нэвтэрлээ!");
+        setOtpSent(false);
+        await getUser();
+        setLoginSuccessful(true);
+      } else {
+        toast.error("Серверээс хариу ирсэн ч токен мэдээлэл алга байна!");
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const status = error.response?.status;
+        const errorMessage = error.response?.data?.message;
+        if (status === 400) {
+          toast.error(errorMessage || "Буруу хүсэлт илгээгдлээ");
+        } else if (status === 401) {
+          toast.error(errorMessage || "Нууц үг буруу байна");
+        } else if (status === 404) {
+          toast.error(errorMessage || "Хэрэглэгч олдсонгүй");
+        } else {
+          toast.error(errorMessage || "Нэвтрэх үед алдаа гарлаа");
+        }
+      } else {
+        toast.error("Сервертэй холбогдох боломжгүй байна");
+      }
+      console.error("Login error:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Handle OTP resend
+  const handleResendOTP = async () => {
+    if (resendCooldown > 0 || loading) return;
+    try {
+      setLoading(true);
+      await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/otp/send`, {
+        email: otpEmail,
+        purpose: "login",
+      });
+      toast.info("📧 Шинэ код илгээгдлээ!");
+      startResendCooldown();
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const errorMessage = error.response?.data?.message;
+        toast.error(errorMessage || "Код дахин илгээхэд алдаа гарлаа!");
+      } else {
+        toast.error("Код дахин илгээхэд алдаа гарлаа!");
+      }
+      console.error("OTP resend error:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="w-screen h-screen flex justify-center bg-[rgb(221,221,221)]">
+      {loginSuccessful && userLoading && (
+        <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-8 rounded-lg shadow-lg flex flex-col items-center">
+            <Loader2 className="w-12 h-12 text-black animate-spin mb-4" />
+            <p className="text-lg font-medium">
+              Хэрэглэгчийн мэдээлэл ачаалж байна...
+            </p>
+          </div>
+        </div>
+      )}
+
       <Formik
         initialValues={{
           email: "",
@@ -59,34 +156,47 @@ const Login = () => {
         onSubmit={async (values) => {
           try {
             setLoading(true);
-            // Step 1: Request OTP to be sent to the user's email
-            await axios
-              .post(`${process.env.NEXT_PUBLIC_BASE_URL}/otp/send`, {
+            // 1. Precheck email and password
+            const precheck = await axios.post(
+              `${process.env.NEXT_PUBLIC_BASE_URL}/auth/precheck`,
+              {
+                email: values.email,
+                password: values.password,
+              }
+            );
+            if (precheck.data.success) {
+              // 2. Send OTP only if precheck is successful
+              await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/otp/send`, {
                 email: values.email,
                 purpose: "login",
-              })
-              .catch((error) => {
-                if (error.response) {
-                  if (error.response.status === 404) {
-                    toast.error("Имэйл хаяг бүртгэлгүй байна!");
-                  } else {
-                    toast.error("Имэйл руу код илгээхэд алдаа гарлаа!");
-                  }
-                } else {
-                  toast.error("Сервертэй холбогдох боломжгүй байна!");
-                }
-                throw error;
               });
-
-            // Store email and password for OTP verification step
-            setOtpEmail(values.email);
-            setOtpPassword(values.password);
-            setOtpSent(true);
-            startResendCooldown();
-            toast.info("📧 Таны имэйл рүү баталгаажуулах код илгээгдлээ!");
+              setOtpEmail(values.email);
+              setOtpPassword(values.password);
+              setOtpSent(true);
+              startResendCooldown();
+              toast.info("📧 Таны имэйл рүү баталгаажуулах код илгээгдлээ!");
+            } else {
+              toast.error(
+                precheck.data.message || "Имэйл эсвэл нууц үг буруу байна!"
+              );
+            }
           } catch (error) {
-            console.log("Error sending OTP:", error);
-            // Error handling done in catch block above
+            if (axios.isAxiosError(error)) {
+              const status = error.response?.status;
+              const errorMessage = error.response?.data?.message;
+              if (status === 404) {
+                toast.error(errorMessage || "Имэйл хаяг бүртгэлгүй байна!");
+              } else if (status === 401) {
+                toast.error(errorMessage || "Нууц үг буруу байна!");
+              } else {
+                toast.error(
+                  errorMessage || "Имэйл руу код илгээхэд алдаа гарлаа!"
+                );
+              }
+            } else {
+              toast.error("Сервертэй холбогдох боломжгүй байна!");
+            }
+            console.error("Precheck or OTP send error:", error);
           } finally {
             setLoading(false);
           }
@@ -94,16 +204,15 @@ const Login = () => {
       >
         {({ errors, touched, isSubmitting }) => (
           <Form className="max-w-2xl w-full h-full bg-[#e9ecef] py-3 px-6 flex flex-col gap-6 text-base text-black font-medium cursor-default">
-            <div className="flex flex-col gap-1">
-              <div className="flex justify-center">
-                <Logo className="w-30 h-30 bg-black rounded-2xl" />
-              </div>
-              <h1 className="text-xl flex justify-center font-semibold">
-                Тавтай морил
-              </h1>
-              <p>Та утасны дугаар эсвэл мэйл хаягаараа нэвтрэнэ үү!</p>
+            <div className="flex justify-center mb-4">
+              <Logo className="w-24 h-24 bg-black rounded-2xl p-2" />
             </div>
-
+            <h1 className="text-2xl font-bold text-center text-gray-800 mb-2">
+              Тавтай морилно уу!
+            </h1>
+            <p className="text-center text-gray-500 mb-6">
+              Бүртгэлтэй мэйл хаягаа ашиглан нэвтэрнэ үү.
+            </p>
             <div className="flex flex-col gap-6">
               {/* Email Field */}
               <div className="w-full h-10 bg-white border-2 border-gray-300 rounded-lg flex items-center overflow-hidden">
@@ -122,7 +231,6 @@ const Login = () => {
                   {errors.email}
                 </div>
               )}
-
               {/* Password Field */}
               <div className="w-full h-10 bg-white border-2 border-gray-300 rounded-lg flex items-center overflow-hidden">
                 <div className="w-12 flex justify-center items-center">
@@ -154,16 +262,13 @@ const Login = () => {
                 </div>
               )}
             </div>
-
-            {/* Submit Button */}
             <button
               type="submit"
               className="font-semibold cursor-pointer py-2.5 text-white bg-black hover:bg-[#303030] rounded-lg"
-              disabled={isSubmitting}
+              disabled={isSubmitting || loading}
             >
-              {isSubmitting ? "Илгээж байна..." : "Нэвтрэх"}
+              {isSubmitting || loading ? "Илгээж байна..." : "Нэвтрэх"}
             </button>
-
             {/* OTP Verification Modal */}
             {otpSent && (
               <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30">
@@ -178,7 +283,6 @@ const Login = () => {
                     type="text"
                     value={otp}
                     onChange={(e) => {
-                      // Only allow numbers and limit to 6 digits
                       const value = e.target.value
                         .replace(/[^\d]/g, "")
                         .slice(0, 6);
@@ -191,112 +295,26 @@ const Login = () => {
                   <div className="flex flex-col gap-4">
                     <div className="flex gap-2 justify-between">
                       <Button
-                        onClick={async () => {
-                          try {
-                            setLoading(true);
-
-                            // If OTP verification succeeds, then attempt login
-                            try {
-                              const loginResponse = await axios.post(
-                                `${process.env.NEXT_PUBLIC_BASE_URL}/login`,
-                                {
-                                  email: otpEmail,
-                                  password: otpPassword,
-                                  otp: otp,
-                                }
-                              );
-
-                              // Handle successful login
-                              if (
-                                loginResponse &&
-                                loginResponse.data &&
-                                loginResponse.data.token
-                              ) {
-                                // Store auth token and user info
-                                if (typeof window !== "undefined") {
-                                  localStorage.setItem(
-                                    "token",
-                                    loginResponse.data.token
-                                  );
-                                  localStorage.setItem("email", otpEmail);
-                                  localStorage.setItem(
-                                    "loginTime",
-                                    new Date().toISOString()
-                                  );
-                                }
-
-                                toast.success(
-                                  "✅ Хэрэглэгч амжилттай нэвтэрлээ!"
-                                );
-                                setOtpSent(false);
-                                router.push("/");
-                                await getUser();
-                              } else {
-                                toast.error("Токен мэдээлэл алга байна!");
-                              }
-                            } catch (loginError) {
-                              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                              const error = loginError as any;
-                              if (error.response) {
-                                if (error.response.status === 400) {
-                                  toast.error(
-                                    "Нэг удаагын нууц үг баталгаажуулах шаардлагатай!"
-                                  );
-                                } else if (error.response.status === 401) {
-                                  toast.error("Нууц үг буруу байна!");
-                                } else if (error.response.status === 404) {
-                                  toast.error("Хэрэглэгч олдсонгүй!");
-                                } else {
-                                  toast.error("Нэвтрэх үед алдаа гарлаа!");
-                                }
-                              } else {
-                                toast.error(
-                                  "Сервертэй холбогдох боломжгүй байна!"
-                                );
-                              }
-                            }
-                          } catch (error) {
-                            console.error("Authentication error:", error);
-                            // Specific error handling already done in catch blocks above
-                          } finally {
-                            setLoading(false);
-                          }
-                        }}
+                        onClick={handleVerifyAndLogin}
                         disabled={loading || otp.length !== 6}
-                        className="flex-1"
+                        className="flex-1 cursor-pointer"
                       >
                         {loading ? "Баталгаажуулж байна..." : "Баталгаажуулах"}
                       </Button>
                       <Button
                         variant="outline"
                         onClick={() => setOtpSent(false)}
-                        className="flex-1"
+                        className="flex-1 cursor-pointer"
                       >
                         Буцах
                       </Button>
                     </div>
-
                     <div className="text-sm text-center border-t pt-3 mt-2">
                       <Button
                         variant="link"
                         disabled={resendCooldown > 0 || loading}
-                        onClick={async () => {
-                          try {
-                            setLoading(true);
-                            await axios.post(
-                              `${process.env.NEXT_PUBLIC_BASE_URL}/otp/send-login-otp`,
-                              { email: otpEmail }
-                            );
-                            toast.info("📧 Шинэ код илгээгдлээ!");
-                            startResendCooldown();
-                          } catch (error) {
-                            toast.error("Код дахин илгээхэд алдаа гарлаа!");
-                            console.log(error);
-                          } finally {
-                            setLoading(false);
-                          }
-                        }}
-                        className="text-blue-500"
+                        onClick={handleResendOTP}
+                        className="text-blue-500 cursor-pointer"
                       >
                         {resendCooldown > 0
                           ? `Дахин код авах (${resendCooldown} секунд)`
@@ -307,7 +325,6 @@ const Login = () => {
                 </div>
               </div>
             )}
-
             {/* Forgot Password */}
             <div className="flex gap-1 text-sm mt-2">
               <p className="text-gray-500">Нууц үгээ мартсан бол</p>
@@ -318,7 +335,6 @@ const Login = () => {
                 энд дарна уу ?
               </span>
             </div>
-
             {/* Register Section */}
             <div className="mt-12 flex flex-col gap-4">
               <div className="border-b-2 pb-2">
