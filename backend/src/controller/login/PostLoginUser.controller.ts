@@ -26,6 +26,7 @@ export const PostLoginUserController = async (req: Request, res: Response) => {
       });
       return;
     }
+    console.log(otpRecord);
 
     // 2. Verify OTP
     const isValidOTP = await bcrypt.compare(otp, otpRecord.otp);
