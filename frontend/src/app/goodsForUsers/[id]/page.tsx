@@ -18,6 +18,8 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import UserDeliveryDialog from "@/app/components/UserDeliveryDialog";
+import GetFromCargoDialog from "@/app/components/GetFromCargoDialog";
 
 type StatusHistory = {
   status: string;
@@ -188,13 +190,8 @@ const GoodsForUsersDetail = () => {
           <p className="text-gray-500 text-center">Захиалга олдсонгүй.</p>
         )}
         <div className="grid grid-cols-2 gap-3">
-          <button className="w-full h-10 flex items-center justify-center text-sm font-medium text-black cursor-pointer border rounded-sm border-gray-300 p-4 bg-gray-100/10 shadow-md hover:bg-gray-300 transition-colors">
-            🏢 Салбараас авах
-          </button>
-
-          <button className="w-full h-10 flex items-center justify-center text-sm font-medium text-black cursor-pointer border rounded-sm border-gray-300 p-4 bg-gray-100/10 shadow-md hover:bg-gray-300 transition-colors">
-            🚚 Хүргүүлэх
-          </button>
+        <GetFromCargoDialog trackingNumber={order?.trackingNumber} />
+        <UserDeliveryDialog trackingNumber={order?.trackingNumber} />
         </div>
       </div>
     </div>

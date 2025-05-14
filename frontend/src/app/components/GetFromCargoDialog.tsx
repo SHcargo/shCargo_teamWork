@@ -13,7 +13,7 @@ import { useState } from "react";
 import { useUser } from "../providers/UserProvider";
 
 type UserDeliveryDialogProps = {
-  trackingNumber: string;
+  trackingNumber?: string;
 };
 
 const GetFromCargoDialog = ({ trackingNumber }: UserDeliveryDialogProps) => {
