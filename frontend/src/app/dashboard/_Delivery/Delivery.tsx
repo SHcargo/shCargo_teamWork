@@ -75,30 +75,34 @@ export const Delivery = () => {
                 </p>
               </div>
               {/* Address Section */}
-              {delivery.deliveryAddress.lat && delivery.deliveryAddress.lng ? (
-                <div className="mt-2">
-                  <a
-                    href={`https://www.google.com/maps?q=${delivery.deliveryAddress.lat},${delivery.deliveryAddress.lng}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-600 underline"
-                  >
-                    📍 View on Google Maps
-                  </a>
-                </div>
-              ) : (
-                <div className="text-sm text-gray-600 mt-2 space-y-1">
-                  <p>
-                    <strong>Дүүрэг:</strong> {delivery.deliveryAddress.district}
-                  </p>
-                  <p>
-                    <strong>Хороо:</strong> {delivery.deliveryAddress.khoroo}
-                  </p>
-                  <p>
-                    <strong>Тодорхой байдал (accuracy):</strong> {delivery.deliveryAddress.accuracy}
-                  </p>
-                </div>
-              )}
+              {delivery.deliveryAddress && delivery.deliveryAddress.lat && delivery.deliveryAddress.lng ? (
+  <div className="mt-2">
+    <a
+      href={`https://www.google.com/maps?q=${delivery.deliveryAddress.lat},${delivery.deliveryAddress.lng}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="text-blue-600 underline"
+    >
+      📍 View on Google Maps
+    </a>
+  </div>
+) : (
+  delivery.deliveryAddress && (
+    <div className="text-sm text-gray-600 mt-2 space-y-1">
+      <p>
+        <strong>Дүүрэг:</strong> {delivery.deliveryAddress.district}
+      </p>
+      <p>
+        <strong>Хороо:</strong> {delivery.deliveryAddress.khoroo}
+      </p>
+      <p>
+        <strong>Тодорхой байдал (accuracy):</strong>{" "}
+        {delivery.deliveryAddress.accuracy}
+      </p>
+    </div>
+  )
+)}
+
             </div>
           </div>
         ))

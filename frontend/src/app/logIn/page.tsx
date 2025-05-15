@@ -1,6 +1,6 @@
 "use client";
-
 import { useState, useEffect } from "react";
+
 import { useRouter } from "next/navigation";
 import {
   Mail,
@@ -11,9 +11,10 @@ import {
   Loader2,
 } from "lucide-react";
 import { Field, Form, Formik } from "formik";
-import * as Yup from "yup";
 import axios from "axios";
+import * as Yup from "yup";
 import { toast } from "react-toastify";
+import { useState, useEffect } from "react";
 import Logo from "@/components/ui/logoSh";
 import { Button } from "@/components/ui/button";
 import { useUser } from "../providers/UserProvider";
@@ -147,7 +148,11 @@ const Login = () => {
       )}
 
       <Formik
-        initialValues={{ email: "", password: "" }}
+        initialValues={{
+          email: "",
+          password: "",
+        }}
+        enableReinitialize
         validationSchema={loginValidationSchema}
         onSubmit={async (values) => {
           try {
@@ -155,7 +160,6 @@ const Login = () => {
             // 1. Precheck email and password
             const precheck = await axios.post(
               `${process.env.NEXT_PUBLIC_BASE_URL}/auth/precheck`,
-
               {
                 email: values.email,
                 password: values.password,

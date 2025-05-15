@@ -10,6 +10,7 @@ const itemsOrderSchema = new mongoose.Schema({
     required: true,
     ref: "users",
   },
+  delivery:{type : String },
   phoneNumber: {
     type: Number,
   },

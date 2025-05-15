@@ -13,6 +13,7 @@ export const checkChoosePickupOrDelivery = async (req: Request, res: Response) =
        res.status(200).json({
         success: false,
         message: "Энэ хэрэглэгч аль хэдийн хаяг сонгосон байна.",
+        address: existing.deliveryAddress
       });
       return
     }

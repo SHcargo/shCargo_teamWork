@@ -1,11 +1,10 @@
 /* eslint-disable @next/next/no-img-element */
-/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import { Button } from "@/components/ui/button";
 import { ChevronLeft } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useUser } from "../../providers/UserProvider";
 import axios from "axios";
 import {
@@ -35,21 +34,35 @@ type Order = {
   statusHistory: StatusHistory[];
   image?: string;
   trackingNumber?: string;
+  delivery?: string | null;
+  deliveryAddressId?: string; // энэ property-г нэмсэн гэж үзсэн
+};
+
+
+type DeliveryAddress = {
+  _id: string;
+  lat: number;
+  lng: number;
+  detail: string;
+  district: string;
+  khoroo: string;
+  accuracy: number;
+  userId: string;
 };
 
 const GoodsForUsersDetail = () => {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
   const value = useUser();
-
   const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [addresses, setAddresses] = useState<DeliveryAddress[]>([]);
 
-  const getCargoOrderItems = async () => {
+  const getCargoOrderItems = useCallback(async () => {
+    if (!value.userId || !id) return;
     setLoading(true);
     setError(null);
-    if (!value.userId || !id) return;
 
     try {
       const response = await axios.get(
@@ -63,11 +76,40 @@ const GoodsForUsersDetail = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [id, value.userId]);
+
+  const getAddress = useCallback(async () => {
+    if (!order?.trackingNumber) return;
+    try {
+      const checkResponse = await axios.get(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/choosePickupOrDelivery/${order.trackingNumber}`
+      );
+      const data = checkResponse.data?.address;
+
+      // Ensure data is an array or fallback to empty array
+      if (Array.isArray(data)) {
+        setAddresses(data);
+      } else if (data) {
+        setAddresses([data]);
+      } else {
+        setAddresses([]);
+      }
+    } catch (error) {
+      console.error("Error fetching address:", error);
+      setAddresses([]); // fallback to prevent map error
+    }
+  }, [order?.trackingNumber]);
 
   useEffect(() => {
     getCargoOrderItems();
-  }, [id, value.userId]);
+  }, [getCargoOrderItems]);
+
+  useEffect(() => {
+    if (order?.trackingNumber) {
+      getAddress();
+    }
+  }, [order?.trackingNumber, getAddress]);
+
 
   return (
     <div className="w-screen h-screen flex flex-col bg-gray-200 items-center">
@@ -85,7 +127,7 @@ const GoodsForUsersDetail = () => {
           </h1>
         </div>
 
-        {/* Loading */}
+        {/* Loading / Error / Order */}
         {loading ? (
           <div className="flex justify-center items-center h-40">
             <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-gray-700"></div>
@@ -94,17 +136,14 @@ const GoodsForUsersDetail = () => {
           <p className="text-red-500 text-center">{error}</p>
         ) : order ? (
           <div className="flex flex-col gap-4">
-            {/* Main Order Info */}
+            {/* Order Info */}
             <div className="flex flex-col sm:flex-row gap-6 items-start border rounded-sm border-gray-300 p-4 bg-white shadow-md">
-              {/* Image Dialog */}
               <AlertDialog>
-                <AlertDialogTrigger className="w-full sm:w-32 flex justify-center sm:justify-start mt-2">
+                <AlertDialogTrigger className="w-full sm:w-32">
                   {order.image ? (
                     <img
                       src={order.image}
-                      alt={`Order image${
-                        order.trackingNumber ? ` ${order.trackingNumber}` : ""
-                      }`}
+                      alt={`Order image ${order.trackingNumber || ""}`}
                       className="w-full sm:w-32 sm:h-32 object-cover rounded-md cursor-pointer"
                     />
                   ) : (
@@ -121,11 +160,7 @@ const GoodsForUsersDetail = () => {
                       {order.image ? (
                         <img
                           src={order.image}
-                          alt={`Order image${
-                            order.trackingNumber
-                              ? ` ${order.trackingNumber}`
-                              : ""
-                          }`}
+                          alt={`Order image ${order.trackingNumber || ""}`}
                           className="max-w-full max-h-[60vh] object-contain rounded-md"
                         />
                       ) : (
@@ -135,19 +170,17 @@ const GoodsForUsersDetail = () => {
                       )}
                     </AlertDialogDescription>
                   </AlertDialogHeader>
-
                   <AlertDialogFooter>
                     <AlertDialogCancel>Гарах</AlertDialogCancel>
                   </AlertDialogFooter>
                 </AlertDialogContent>
               </AlertDialog>
 
-              {/* Order Info */}
               <div className="flex flex-col gap-2 text-black">
                 <p>
                   <span className="font-semibold">Статус:</span> {order.status}
                 </p>
-                <p className="text-black">
+                <p>
                   <span className="font-semibold">Огноо:</span>{" "}
                   {new Date(order.createdAt).toLocaleString()}
                 </p>
@@ -172,7 +205,7 @@ const GoodsForUsersDetail = () => {
                       key={entry._id}
                       className="text-sm text-gray-700 flex justify-between items-center"
                     >
-                      <span className="font-medium  text-black">
+                      <span className="font-medium text-black">
                         {entry.status}
                       </span>
                       <span className="text-black text-sm">
@@ -185,14 +218,84 @@ const GoodsForUsersDetail = () => {
                 <p className="text-gray-500">Статусын түүх байхгүй.</p>
               )}
             </div>
+
+            {/* Delivery Section */}
+            {order.delivery ? (
+              <div className="w-full">
+                <div className="mb-2">
+                  ({order.delivery} хаяг)
+                </div>
+                <div>
+                  {order.delivery === "Хүргүүлэх" ? (
+                    <div className="space-y-4">
+                      {addresses.length > 0 ? (
+                        addresses.map((address) => (
+                          <div
+                            key={address._id}
+                            className="p-4 border border-gray-200 rounded-xl shadow-sm bg-gray-50 flex flex-col gap-4"
+                          >
+                            <div className="text-sm font-semibold text-gray-800">
+                              {address.detail ||
+                                "Хаягийн дэлгэрэнгүй мэдээлэл байхгүй"}
+                            </div>
+
+                            <div className="text-sm text-gray-600 space-y-1 flex gap-5">
+                              <div className="flex">
+                                <span className="font-medium">Дүүрэг: </span>
+                                <span>{address.district}</span>
+                              </div>
+                              <div className="flex">
+                                <span className="font-medium">Хороо: </span>
+                                <span>{address.khoroo}</span>
+                              </div>
+                            </div>
+                          </div>
+                        ))
+                      ) : (
+                        <p className="text-sm text-gray-500 italic">
+                          Хаягийн мэдээлэл олдсонгүй.
+                        </p>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="w-fit px-2">
+                      <a
+                        href="https://www.google.com/maps?q=47.9145,106.9225"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex gap-4 items-start"
+                      >
+                        <img
+                          src="/img.JPG"
+                          alt="Google Maps"
+                          className="h-30 w-30 rounded-md object-cover"
+                        />
+                        <div className="text-black text-sm max-w-xs">
+                          СБД Цирк-н баруун талд, миний дэлгүүрийн чанх хойно, 10-р
+                          байр.
+                          <div className="text-blue-600 underline mt-2">
+                            map дээр харах →
+                          </div>
+                        </div>
+                      </a>
+                    </div>
+                  )}
+                </div>
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 gap-3">
+                <GetFromCargoDialog
+                  trackingNumber={order.trackingNumber as string}
+                  ref={getAddress}
+                />
+                <UserDeliveryDialog
+                  trackingNumber={order.trackingNumber as string}
+                  ref={getAddress}
+                />
+              </div>
+            )}
           </div>
-        ) : (
-          <p className="text-gray-500 text-center">Захиалга олдсонгүй.</p>
-        )}
-        <div className="grid grid-cols-2 gap-3">
-        <GetFromCargoDialog trackingNumber={order?.trackingNumber} />
-        <UserDeliveryDialog trackingNumber={order?.trackingNumber} />
-        </div>
+        ) : null}
       </div>
     </div>
   );
