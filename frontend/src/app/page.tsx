@@ -15,7 +15,7 @@ export default function Home() {
   return (
     <div className="w-screen h-screen flex flex-col ">
       <Header />
-      <div className="w-screen h-auto flex justify-center relative top-[70px]">
+      <div className="w-screen h-full flex justify-center relative top-[70px]">
         {step === "home" && <Cargo />}
         {step === "location" && <Location setStep={setStep} />}
         {step === "cargo" && <Sales />}
