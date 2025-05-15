@@ -116,7 +116,7 @@ console.log(orders)
   }
 
   return (
-    <div className="flex flex-col h-screen w-full fixed max-w-2xl mx-auto p-4 bg-white overflow-hidden">
+    <div className="flex flex-col w-full fixed max-w-2xl mx-auto p-4 bg-white overflow-hidden z-10" style={{ height: "calc(100vh - 140px)" }}>
       {/* БАЙРШИЛ ХЭСЭГ */}
       <div className="mb-2 text-sm font-semibold text-gray-700">Байршил</div>
       <div className="flex gap-2 w-full overflow-x-auto mb-4">
@@ -138,7 +138,7 @@ console.log(orders)
       {/* БАРААНЫ ЖАГСААЛТ */}
       <div className="text-sm font-semibold text-gray-700 mb-2">Захиалгууд</div>
 
-      <div className="flex-1 overflow-y-auto bg-gray-50 rounded-xl p-2 shadow-inner">
+      <div className="flex-1 overflow-y-auto bg-gray-50 rounded-xl p-2 shadow-inner z-40">
         {filteredOrders.length === 0 ? (
           <p className="text-center text-gray-500">Захиалга олдсонгүй.</p>
         ) : (
@@ -152,7 +152,7 @@ console.log(orders)
             </div>
           ))
         )}
-        <div className="h-40" />
+        <div className="h-70" />
       </div>
 
       <Post refreshFn={getCargoOrderItems} />

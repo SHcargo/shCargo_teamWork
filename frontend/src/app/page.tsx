@@ -15,12 +15,14 @@ export default function Home() {
   return (
     <div className="w-screen h-screen flex flex-col ">
       <Header />
-      <div className="w-screen h-full flex justify-center relative top-[70px]">
+      <div className="flex-1" style={{ height: "calc(100vh - 140px)" }}>
+      <div className="w-screen flex justify-center relative top-[70px]" >
         {step === "home" && <Cargo />}
         {step === "location" && <Location setStep={setStep} />}
         {step === "cargo" && <Sales />}
         {step === "logIn" && <Auth />}
         {step === "profile" && <Profile />}
+      </div>
       </div>
 
       <NavBar setStep={setStep} step={step} />
