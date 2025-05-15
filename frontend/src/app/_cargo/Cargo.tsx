@@ -85,7 +85,6 @@ console.log(orders)
           Хаагдсан: 0,
         }
       );
-
       setDeliveryCounts(counts);
     } catch (error) {
       console.error("Error fetching cargo orders:", error);
