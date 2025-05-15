@@ -51,7 +51,6 @@ const Cargo = () => {
     "УБ-д ирсэн": 0,
     Хаагдсан: 0,
   });
-  const [addresses ,setAddresses] = useState()
 console.log(orders)
   const getCargoOrderItems = async (): Promise<void> => {
     setLoading(true);
@@ -117,7 +116,7 @@ console.log(orders)
   }
 
   return (
-    <div className="flex flex-col h-screen w-full max-w-2xl mx-auto p-4 bg-white overflow-hidden">
+    <div className="flex flex-col h-screen w-full fixed max-w-2xl mx-auto p-4 bg-white overflow-hidden">
       {/* БАЙРШИЛ ХЭСЭГ */}
       <div className="mb-2 text-sm font-semibold text-gray-700">Байршил</div>
       <div className="flex gap-2 w-full overflow-x-auto mb-4">
@@ -153,7 +152,7 @@ console.log(orders)
             </div>
           ))
         )}
-        <div className="h-10" />
+        <div className="h-40" />
       </div>
 
       <Post refreshFn={getCargoOrderItems} />
