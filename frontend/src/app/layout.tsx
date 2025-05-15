@@ -37,15 +37,15 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased `}
       >
         <SalesProvider>
-          {/* <AuthProvider> */}
-          {/* <AdminProvider> */}
-          <UserProvider>
-            <NotificationProvider>
-              <DeliveryAddressProvider>{children}</DeliveryAddressProvider>
-            </NotificationProvider>
-          </UserProvider>
-          {/* </AdminProvider> */}
-          {/* </AuthProvider> */}
+          <AuthProvider>
+            <AdminProvider>
+              <UserProvider>
+                <NotificationProvider>
+                  <DeliveryAddressProvider>{children}</DeliveryAddressProvider>
+                </NotificationProvider>
+              </UserProvider>
+            </AdminProvider>
+          </AuthProvider>
         </SalesProvider>
 
         <ToastContainer

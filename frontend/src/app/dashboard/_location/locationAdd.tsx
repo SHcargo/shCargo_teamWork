@@ -2,126 +2,159 @@
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
+import { Label } from "@/components/ui/label";
+import { useState } from "react";
 import axios from "axios";
-// import { useUser } from "@/app/providers/UserProvider";
+
+const CLOUDINARY_CLOUD_NAME = "dnxg6ckrh";
+const CLOUDINARY_UPLOAD_PRESET = "ml_default";
+const API_URL = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`;
 
 const LocationAdd = () => {
-  // const [location, setLocation] = useState();
-  const [existingLocation, setExistingLocation] = useState(false);
   const [formData, setFormData] = useState({
-    userPhoneNumber: "",
-    factoryPhoneNumber: "",
-    region: "",
-    location: "",
-    zipCode: "",
+    salbar: "",
+    detail: "",
+    dugaar: "",
+    workinHours: "",
+    weekend: "",
+    image: "", // Will store the Cloudinary URL
   });
 
-  // const { phoneNumber } = useUser();
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [uploading, setUploading] = useState(false);
 
-  useEffect(() => {
-    const getLocationData = async () => {
-      try {
-        const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/location`
-        );
-        const loc = response?.data.location[0];
-
-        if (loc) {
-          setExistingLocation(true);
-          setFormData({
-            userPhoneNumber: loc.userPhoneNumber || "",
-            factoryPhoneNumber: loc.factoryPhoneNumber || "",
-            region: loc.region || "",
-            location: loc.location || "",
-            zipCode: loc.zipCode || "",
-          });
-        }
-      } catch (error) {
-        console.error("Failed to fetch location:", error);
-      }
-    };
-
-    getLocationData();
-  }, []);
-
-  console.log(location);
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setImageFile(e.target.files[0]);
+    }
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const uploadImageToCloudinary = async (file: File) => {
+    const imgData = new FormData();
+    imgData.append("file", file);
+    imgData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+
+    try {
+      const res = await axios.post(API_URL, imgData);
+      return res.data.secure_url;
+    } catch (err) {
+      console.error("Image upload error:", err);
+      return null;
+    }
   };
 
   const handleSubmit = async () => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/location`, {
-        method: existingLocation ? "PUT" : "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
+      let imageUrl = "";
 
-      const data = await res.json();
+      if (imageFile) {
+        setUploading(true);
+        const uploaded = await uploadImageToCloudinary(imageFile);
+        setUploading(false);
 
-      if (res.ok) {
-        console.log("Location saved:", data.location);
-        // setStep("success");
-      } else {
-        alert(data.message || "Something went wrong");
+        if (!uploaded) {
+          alert("Image upload failed");
+          return;
+        }
+
+        imageUrl = uploaded;
       }
+
+      const submissionData = {
+        ...formData,
+        image: imageUrl,
+      };
+
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/help/salbar`,
+        submissionData
+      );
+
+      console.log("Location saved:", res.data.location);
+      // Optionally reset form or show success
     } catch (err) {
-      console.error("Error submitting form", err);
+      console.error("Error submitting form:", err);
+      alert("Something went wrong");
     }
   };
-
-  console.log(formData);
 
   return (
     <div className="w-full h-full p-4">
       <div className="w-[600px] h-auto border outline-1 p-4 rounded-sm space-y-8">
         <div className="border-b-2 p-2">
-          <p className="font-bold">ЭРЭЭН АГУУЛАХЫН ХАЯГ</p>
+          <p className="font-bold">САЛБАРЫН ХАЯГ</p>
         </div>
+
         <div>
-          <p>Хүлээн авагчийн утасны дугаар</p>
+          <p>Салбар</p>
           <Input
-            name="userPhoneNumber"
-            value={formData.userPhoneNumber}
+            name="salbar"
+            value={formData.salbar}
             onChange={handleChange}
           />
         </div>
+
+        <div>
+          <p>Дэлгэрэнгүй Хаяг</p>
+          <Input
+            name="detail"
+            value={formData.detail}
+            onChange={handleChange}
+          />
+        </div>
+
         <div>
           <p>Утасны дугаар</p>
           <Input
-            name="factoryPhoneNumber"
-            value={formData.factoryPhoneNumber}
+            name="dugaar"
+            value={formData.dugaar}
             onChange={handleChange}
           />
         </div>
+
         <div>
-          <p>Бүс нутаг</p>
+          <p>Aжиллах цагийн хуваарь</p>
           <Input
-            name="region"
-            value={formData.region}
+            name="workinHours"
+            value={formData.workinHours}
             onChange={handleChange}
           />
         </div>
+
         <div>
-          <p>Хаяг</p>
+          <p>Амралт</p>
           <Input
-            name="location"
-            value={formData.location}
+            name="weekend"
+            value={formData.weekend}
             onChange={handleChange}
           />
         </div>
-        <div>
-          <p>Зип код</p>
+
+        <div className="grid grid-cols-4 items-center gap-4">
+          <Label htmlFor="image" className="text-right">
+            Зураг
+          </Label>
           <Input
-            name="zipCode"
-            value={formData.zipCode}
-            onChange={handleChange}
+            id="image"
+            type="file"
+            accept="image/*"
+            className="col-span-3"
+            onChange={handleImageChange}
           />
         </div>
+
         <div>
-          <Button onClick={handleSubmit}>Confirm</Button>
+          <Button onClick={handleSubmit} disabled={uploading}>
+            {uploading ? "Uploading..." : "Confirm"}
+          </Button>
         </div>
       </div>
     </div>

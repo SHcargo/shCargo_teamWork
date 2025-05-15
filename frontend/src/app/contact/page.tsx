@@ -1,11 +1,11 @@
 "use client";
-// import { ChevronLeft } from "lucide-react";
-// import { Poster } from "../components/poster";
-// import { useRouter } from "next/navigation";
-// import { useState, useEffect } from "react";
+import { ChevronLeft } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const Contact = () => {
-  // const router = useRouter();
+  const router = useRouter();
+  const [location, setLocation] = useState({});
   // const [branch, setBranch] = useState<posterProps[]>([]);
   // const [loading , setLoading] = useState(true)
   // const branchData = () => {
@@ -42,11 +42,11 @@ const Contact = () => {
 
   return (
     <div className="w-screen h-screen flex items-center justify-center">
-      {/* <div className="max-w-2xl w-full h-full bg-[#e9ecef] p-4 flex flex-col gap-2 ">
+      <div className="max-w-2xl w-full h-full bg-[#e9ecef] p-4 flex flex-col gap-2 ">
         <div className="flex gap-4 mb-4">
           <button
             onClick={() => router.back()}
-            className="bg-[#5F2DF5] h-11 w-11 flex items-center justify-center rounded-lg"
+            className="bg-black h-11 w-11 flex items-center justify-center rounded-lg"
           >
             <ChevronLeft color="#fff" />
           </button>
@@ -55,13 +55,12 @@ const Contact = () => {
           </div>
         </div>
 
-        {branch.length > 0 ? (
+        {/* {branch.length > 0 ? (
           branch.map((data, index) => <Poster key={index} data={data} />)
         ) : (
           <p>not found</p>
-        )}
-      </div> */}
-      <h1>hello world</h1>
+        )} */}
+      </div>
     </div>
   );
 };
