@@ -116,7 +116,7 @@ console.log(orders)
   }
 
   return (
-    <div className="flex flex-col w-full fixed max-w-2xl mx-auto p-4 bg-white overflow-hidden z-10" style={{ height: "calc(100vh - 140px)" }}>
+    <div className="flex flex-col w-full fixed max-w-2xl mx-auto p-4 bg-white overflow-hidden z-10" style={{ height: "calc(100% - 140px)" }}>
       {/* БАЙРШИЛ ХЭСЭГ */}
       <div className="mb-2 text-sm font-semibold text-gray-700">Байршил</div>
       <div className="flex gap-2 w-full overflow-x-auto mb-4">
