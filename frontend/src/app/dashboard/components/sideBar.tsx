@@ -16,7 +16,7 @@ const categories = [
   { name: "Хэрэглэгчид", step: "users", icon: Star },
   { name: "Sales", step: "sales", icon: BarChart3 },
   { name: "Хаяг Холбох", step: "location", icon: Building2 },
-  { name: "Тусламж", step: "help", icon: HelpingHand },
+  // { name: "Тусламж", step: "help", icon: HelpingHand },
   { name: "Хүргэлт", step: "Delivery", icon: Truck },
 ];
 
