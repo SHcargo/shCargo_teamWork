@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import {
   Mail,
@@ -288,7 +288,7 @@ const Login = () => {
                     placeholder="6 оронтой код"
                     className="border p-2 rounded w-full mb-4"
                     maxLength={6}
-/>
+                  />
                   <div className="flex flex-col gap-4">
                     <div className="flex gap-2 justify-between">
                       <Button
