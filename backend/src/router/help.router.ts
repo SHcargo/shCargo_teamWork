@@ -1,5 +1,5 @@
 import express from "express";
-import CreateHelpCenterController from "../controller/help/CreateHelpCenterController";
+import CreateHelpCenterController from "../controller/help/CreateHelpCenter.Controller";
 import GetHelpCenterController from "../controller/help/GetHelp.controller";
 
 export const HelpRouter = express.Router();
