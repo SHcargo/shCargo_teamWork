@@ -152,7 +152,6 @@ console.log(orders)
             </div>
           ))
         )}
-        <div className="h-70" />
       </div>
 
       <Post refreshFn={getCargoOrderItems} />
