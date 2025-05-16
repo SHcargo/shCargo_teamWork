@@ -155,10 +155,7 @@ export const UserOrderCard = ({
 
       {order.delivery ? (
         <div className="w-full">
-          <div className="mb-2">
-            {" "}
-            ({order.delivery} хаяг)
-          </div>
+          <div className="mb-2"> ({order.delivery} хаяг)</div>
           <div>
             {order.delivery === "Хүргүүлэх" ? (
               <div className="space-y-4">
@@ -169,19 +166,35 @@ export const UserOrderCard = ({
                       className="p-4 border border-gray-200 rounded-xl shadow-sm bg-gray-50 flex flex-col gap-4"
                     >
                       <div className="text-sm font-semibold text-gray-800">
-                        {address.detail || "Хаягийн дэлгэрэнгүй мэдээлэл байхгүй"}
+                        {address.detail ||
+                          "Хаягийн дэлгэрэнгүй мэдээлэл байхгүй"}
                       </div>
 
-                      <div className="text-sm text-gray-600 space-y-1 flex gap-5">
-                        <div className="flex">
-                          <span className="font-medium">Дүүрэг: </span>
-                          <span>{address.district}</span>
-                        </div>
-                        <div className="flex">
-                          <span className="font-medium">Хороо: </span>
-                          <span>{address.khoroo}</span>
-                        </div>
+                      <div className="text-sm text-gray-600 space-y-1">
+                        <p>
+                          <strong>Дүүрэг:</strong> {address.district}
+                        </p>
+                        <p>
+                          <strong>Хороо:</strong> {address.khoroo}
+                        </p>
+                        <p>
+                          <strong>Тодорхой байдал (accuracy):</strong>{" "}
+                          {address.accuracy}
+                        </p>
                       </div>
+
+                      {address.lat && address.lng ? (
+                        <div className="mt-2">
+                          <a
+                            href={`https://www.google.com/maps?q=${address.lat},${address.lng}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-600 underline"
+                          >
+                            📍 Газрын зураг дээр харах
+                          </a>
+                        </div>
+                      ) : null}
                     </div>
                   ))
                 ) : (
